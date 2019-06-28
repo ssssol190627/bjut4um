@@ -9,7 +9,11 @@
 
 </head>
 <body>
+<<<<<<< HEAD
 	<form action="updatePassword" method="POST">
+=======
+	<form action="accountCenter.jsp" method="POST">
+>>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
 		<br>原密码：<br>
 		<input type="password" name="passwordOld" value="">
 		<br>密码：<br>

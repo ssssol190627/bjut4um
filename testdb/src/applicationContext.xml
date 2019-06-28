@@ -14,11 +14,19 @@
     		<!--加载驱动类-->
     		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
     		<!--数据库访问地址-->
+<<<<<<< HEAD
     		<property name="url" value="jdbc:mysql://localhost:3306/forum"></property>
     		<!--数据库访问用户名-->
     		<property name="username" value="root"></property>
     		<!--数据库访问密码-->
     		<property name="password" value="19980908"></property>
+=======
+    		<property name="url" value="jdbc:mysql://localhost:3306/forum?serverTimezone=GMT%2B8"></property>
+    		<!--数据库访问用户名-->
+    		<property name="username" value="root"></property>
+    		<!--数据库访问密码-->
+    		<property name="password" value="admin"></property>
+>>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
     	</bean>
     	<!-- spring 提供的数据库事务管理 -->
     	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

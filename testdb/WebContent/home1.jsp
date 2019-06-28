@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <!DOCTYPE html>
