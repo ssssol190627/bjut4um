@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	default-autowire="byName" default-lazy-init="true"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+    	<!--数据库数据源配置-->
+    	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    		<!--加载驱动类-->
+    		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+    		<!--数据库访问地址-->
+    		<property name="url" value="jdbc:mysql://localhost:3306/forum"></property>
+    		<!--数据库访问用户名-->
+    		<property name="username" value="root"></property>
+    		<!--数据库访问密码-->
+    		<property name="password" value="19980908"></property>
+    	</bean>
+    	<!-- spring 提供的数据库事务管理 -->
+    	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    		<property name="dataSource" ref="dataSource"></property>
+    		</bean>
+    	<tx:annotation-driven transaction-manager="txManager"/>
+    	<!-- 配置javaBean实体类 -->
+    	<bean id="UserBean" class="bean.User">
+    		<!--属性自动配置 -->
+    	</bean>
+    	<!--spring提供的数据库访问操作类 -->
+    	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"></bean>
+    	<!-- dao层类 -->
+    	<bean id="dao" class="dao.UserDao"></bean>
+    	<!-- 控制层类 ，这个配置无效-->
+    	<!--  <bean id="controller" class="controller.StudentController">
+    		<property name="dao" ref="dao"></property>
+    	</bean>-->
+    	
+    	
+ </beans>
