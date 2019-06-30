@@ -7,6 +7,8 @@ public class Board {
 	private String intro;
 	private Integer isExist;
 	
+	
+	
 	public Board() {}
 	
 	public Integer getBoardId() {

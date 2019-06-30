@@ -10,7 +10,6 @@
 </head>
 <body>
 	<div class="nav">
-<<<<<<< HEAD
 		<a href="userPreferences">改密码</a>
 		<a href="home1.jsp">回主页</a>
 	</div>
@@ -23,27 +22,5 @@
         </c:forEach> 
 	</div>
 	<h3 class="footer">我的回复</h3>
-		<div class="single_content">
-		<c:forEach items="${floored}" var="floor" >
-        	<tr>
-        	<a href="detailedfloor">${floor.floorcontent }${floor.floortime }</a>
-        	</tr>
-        </c:forEach> 
-	</div>
-=======
-		<a href="userPreferences.jsp">改密码</a>
-		<a href="home1.jsp">回主页</a>
-	</div>
-	<h3 class="footer">我的贴子</h3>
-	<div class="single_content">
-		<c:forEach items="${posted}" var="post" >
-        	<tr>
-        	<a href="detailedpost">${post.title }</a>
-        	</tr>
-        </c:forEach> 
-	</div>
-	<h3 class="footer">我的回复</h3>
-
->>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
 </body>
 </html>

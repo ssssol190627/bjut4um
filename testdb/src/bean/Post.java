@@ -7,10 +7,12 @@ public class Post {
 	private String title;
 	private Integer userid;
 	private String posttime;
+	private String newtime;
 	private String postcontent;
 	private Integer isGood;
 	private Integer isBanned;
 	private Integer isExist;
+	private Integer numpost;
 	
 	public Post() {}
 	
@@ -44,6 +46,12 @@ public class Post {
 	public void setPosttime(String posttime) {
 		this.posttime=posttime;
 	}
+	public String getNewtime() {
+		return newtime;
+	}
+	public void setNewtime(String newtime) {
+		this.newtime=newtime;
+	}
 	public String getPostcontent() {
 		return postcontent;
 	}
@@ -67,5 +75,11 @@ public class Post {
 	}
 	public void setIsExist(Integer isExist) {
 		this.isExist=isExist;
+	}
+	public Integer getNumpost() {
+		return numpost;
+	}
+	public void setNumpost(Integer numpost) {
+		this.numpost=numpost;
 	}
 }

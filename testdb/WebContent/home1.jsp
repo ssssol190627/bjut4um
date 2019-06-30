@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <!DOCTYPE html>
@@ -27,11 +23,11 @@
 			int boardSize=7;
 			String boardTitle[]={"情感天地","荒野求生","娱乐明星","追剧狂","爱小说","工大生活","工大学习"};
 			out.println("<nav>");
-			String boardHref[]={"board1.jsp","board1.jsp","board1.jsp","board1.jsp","board1.jsp","board1.jsp","board1.jsp"};
+			//String boardHref[]={"board1","board1","board1","board1","board1","board1","board1"};
 			for(int i=0;i<boardSize;i++){
 				//out.println("<span>");
 				//out.println("<nav>");
-				out.println("<a href="+boardHref[i]+" target=\"_blank\">"+boardTitle[i]+"</a>");
+				out.println("<a href=board\\"+i+" target=\"_blank\">"+boardTitle[i]+"</a>");
 				out.println("<br>");
 				//out.println("/<span>");
 			}
