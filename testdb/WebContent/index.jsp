@@ -13,7 +13,7 @@
 	<h1 class="header">欢迎来到主页</h1>
 	<div class="nav">
 		<a href="loginpage">登录</a>
-		<a href="register.jsp">注册</a>
+		<a href="register">注册</a>
 	</div>
 	<div class="board">
 		<span>
@@ -23,11 +23,11 @@
 			int boardSize=7;
 			String boardTitle[]={"情感天地","荒野求生","娱乐明星","追剧狂","爱小说","工大生活","工大学习"};
 			out.println("<nav>");
-			String boardHref[]={"board1.jsp","board1.jsp","board1.jsp","board1.jsp","board1.jsp","board1.jsp","board1.jsp"};
-			for(int i=0;i<boardSize;i++){
+			//String boardHref[]={"board1","board1","board1","board1","board1","board1","board1"};
+			for(int i=1;i<boardSize+1;i++){
 				//out.println("<span>");
 				//out.println("<nav>");
-				out.println("<a href="+boardHref[i]+" target=\"_blank\">"+boardTitle[i]+"</a>");
+				out.println("<a href=board\\"+i+" target=\"_blank\">"+boardTitle[i-1]+"</a>");
 				out.println("<br>");
 				//out.println("/<span>");
 			}

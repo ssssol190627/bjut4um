@@ -1,11 +1,14 @@
 package controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import org.springframework.web.context.request.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
@@ -13,17 +16,14 @@ import javax.servlet.http.*;
 import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.servlet.*;
 
-import bean.User;
-import bean.Post;
-<<<<<<< HEAD
-import bean.Floor;
+import bean.*;
 import dao.UserDao;
 
 @Controller
 public class UserController {
 	/**
      * 
-     * è·³è½¬ç™»å½•ç•Œé¢
+     * Ìø×ªµÇÂ¼½çÃæ
      * 
      */
     @RequestMapping(value = "/loginpage")
@@ -33,7 +33,7 @@ public class UserController {
     
 	/**
      * 
-     * ç™»å½•
+     * µÇÂ¼
      * 
      */
     @RequestMapping(value = "/login")
@@ -57,7 +57,7 @@ public class UserController {
 	
     /**
      * 
-     * è¿›å…¥ä¸ªäººä¸­å¿ƒç•Œé¢ï¼Œæ˜¾ç¤ºâ€œæˆ‘çš„å¸–å­â€ï¼Œâ€œæˆ‘çš„å›å¸–â€
+     * ½øÈë¸öÈËÖĞĞÄ½çÃæ£¬ÏÔÊ¾¡°ÎÒµÄÌû×Ó¡±£¬¡°ÎÒµÄ»ØÌû¡±
      * 
      */
     @RequestMapping(value = "/accountCenter")
@@ -68,14 +68,14 @@ public class UserController {
     	
     	List<Post>  post = dao.queryForPostedByUser(currentuser.getId());
     	List<Floor> floor = dao.queryForReplyedByUser(currentuser.getId());
-    	model.addAttribute("posted", post);
-    	model.addAttribute("floored", floor);
+    	session.setAttribute("posted", post);
+    	session.setAttribute("floored", floor);
     	return "accountCenter.jsp";
     }
     
     /**
      * 
-     * è¿›å…¥ä¿®æ”¹å¯†ç ç•Œé¢
+     * ½øÈëĞŞ¸ÄÃÜÂë½çÃæ
      * 
      */
     @RequestMapping(value = "/userPreferences")
@@ -85,7 +85,7 @@ public class UserController {
     
     /**
      * 
-     * ä¿®æ”¹å¯†ç 
+     * ĞŞ¸ÄÃÜÂë
      * 
      */
     @RequestMapping(value = "/updatePassword")
@@ -93,7 +93,7 @@ public class UserController {
     	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
     	User currentuser = (User)session.getAttribute("CurrentUser");
     	UserDao dao = (UserDao) context.getBean("dao");
-    	
+
     	if(!currentuser.getPassword().equals(passwordold)) {
     		return "userPreferences.jsp";
     	}
@@ -105,167 +105,210 @@ public class UserController {
     		return "userPreferences.jsp";
     	}
     }
-
+    
     /**
      * 
-     * ä»æ•°æ®åº“ä¸­è·å–å…¨éƒ¨å­¦ç”Ÿä¿¡æ¯ï¼Œå°†æ•°æ®è¿”å›ç»™ä¸»é¡µindex,jsp
+     * ·µ»ØÖ÷Ò³½çÃæ
      * 
      */
-   /* @RequestMapping(value = "/all")
-    public String queryAll(Model model) {
-	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	//ä»iocå®¹å™¨ä¸­è·å–dao
-	UserDao dao = (UserDao) context.getBean("dao");
-	model.addAttribute("Users", dao.queryAll());
-	model.addAttribute("tops", dao.topNum(3));
-	return "index.jsp";
-    }*/
-
-    /**
-     * é€šè¿‡å§“åæŸ¥æ‰¾å­¦ç”Ÿï¼Œä½¿ç”¨æ¨¡ç³ŠæŸ¥æ‰¾ï¼Œå°†ç»“æœè¿”å›ç»™index.jsp
-     * 
-     */
-    /*@RequestMapping(value = "/queryByName")
-    public String queryByName(String name, Model model) {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	//ä»iocå®¹å™¨ä¸­è·å–dao
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	model.addAttribute("Users", dao.queryByName(name));
-    	model.addAttribute("tops", dao.topNum(3));
-    	return "index.jsp";
-    }*/
-
-    /**
-     * æ·»åŠ æ–°å­¦ç”Ÿï¼Œå¹¶å°†ç»“æœè¿”å›ç»™allé¡µé¢ï¼Œç”±allè½¬å‘åˆ°ä¸»é¡µ
-     */
-   /* @RequestMapping(value = "/add")
-    public String addStu(String name, String javaScore, String htmlScore, String cssScore, Model model) {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	User User = new User();
-    	User.setUsername(name);
-    	User.setJavaScore(Double.parseDouble(javaScore));
-    	User.setHtmlScore(Double.parseDouble(htmlScore));
-    	User.setCssScore(Double.parseDouble(cssScore));
-    	boolean result = dao.addStu(User);
-    	if (result)
-    		model.addAttribute("msg", "<script>alert('æ·»åŠ æˆåŠŸï¼')</script>");
-    	else
-    		model.addAttribute("msg", "<script>alert('æ·»åŠ æˆåŠŸï¼')</script>");
-    	return "all";
-    }*/
-
-    /**
-     * é€šè¿‡idåˆ é™¤å­¦ç”Ÿ
-     */
-    @RequestMapping(value = "/deleteById")
-    public String deleteById(String id, Model model) {
-	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	UserDao dao = (UserDao) context.getBean("dao");
-	boolean result = dao.deleteStu(Integer.parseInt(id));
-	if (result)
-	    model.addAttribute("msg", "<script>alert('åˆ é™¤æˆåŠŸï¼')</script>");
-	else
-	    model.addAttribute("msg", "<script>alert('åˆ é™¤æˆåŠŸï¼')</script>");
-	return "all";
+    @RequestMapping(value = "/home1")
+    public String toHome1(HttpSession session) {
+    	if(session.getAttribute("CurrentUser")==null) {
+    		return "/index.jsp";
+    	}
+    	return "/home1.jsp";
     }
-
+    
     /**
      * 
-     * @param id
-     * @param name
-     * @param javaScore
-     * @param htmlScore
-     * @param cssScore
+     * ÍË³öµÇÂ¼
+     * 
      */
-    /*@RequestMapping(value = "/update")
-    public String updateStu(String id, String name, String javaScore, String htmlScore, String cssScore, Model model) {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	User User = new User();
-    	User.setId(Integer.parseInt(id));
-    	User.setUsername(name);
-    	User.setJavaScore(Double.parseDouble(javaScore));
-    	User.setHtmlScore(Double.parseDouble(htmlScore));
-    	User.setCssScore(Double.parseDouble(cssScore));
-    	boolean result = dao.updateStu(User);
-    	if (result)
-    		model.addAttribute("msg", msg("ä¿®æ”¹æˆåŠŸ"));
-    	else
-    		model.addAttribute("msg", msg("ä¿®æ”¹å¤±è´¥"));
-    	return "all";
-    }*/
-
+    @RequestMapping(value = "/quit")
+    public String QuitbyUser(HttpSession session) {
+    	session.invalidate();
+    	return "index.jsp";
+    }
+    
     /**
-     * è¦å¼¹å‡ºçš„é¡µé¢æ¶ˆæ¯
-     * @param msg
-=======
-import dao.UserDao;
-
-@Controller
-public class UserController {
-	/**
      * 
-     * è·³è½¬ç™»å½•ç•Œé¢
+     * Ìø×ª×¢²á½çÃæ
      * 
      */
-    @RequestMapping(value = "/loginpage")
-    public String toLoginpage() {
-    	return "login.jsp";
+    @RequestMapping(value = "/registerpage")
+    public String toRegister() {
+    	return "register.jsp";
     }
     
 	/**
      * 
-     * ç™»å½•
+     * ×¢²á
      * 
      */
-    @RequestMapping(value = "/login")
-    public String CheckLogin(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
+    @RequestMapping(value = "/checkingregister")
+    public String CheckRegister(@RequestParam("email") String email, @RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpSession session) {
     	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	List<User> user = dao.queryByName(username);
-    	if(user.isEmpty()) {
-    		return "login.jsp";
+    	if(!email.contains("bjut.edu.cn")) {
+    		model.addAttribute("checkemaillegal","this email address is not for bjut");
+    		return "register.jsp";
     	}
-    	if(user.get(0).getPassword().equals(password)) {
-    		model.addAttribute("CurrentUser", user.get(0));
-    		return "home1.jsp";
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	List<User> existedemail = dao.queryByEmail(email);
+    	if(!existedemail.isEmpty()) {
+    		model.addAttribute("checkemailexisted","this email address has already been registered");
+    		return "register.jsp";
+    	}
+    	List<User> existeduser = dao.queryByName(username);
+    	if(!existeduser.isEmpty()) {
+    		model.addAttribute("checkusernameexisted", "this name has been used");
+    		return "register.jsp";
     	}
     	else {
-    		return "login.jsp";
+    		User user= new User();
+    		List<User> lastuser = dao.forLastUser();
+    		Integer id = lastuser.get(0).getId()+1;
+    		user.setId(id);
+    		user.setUsername(username);
+    		user.setPassword(password);
+    		user.setEmail(email);
+    		user.setisExist(1);
+    		user.setisBoardAdmin(0);
+    		user.setisForumAdmin(0);
+    		boolean result = dao.addUser(user);
+        	if (result) {
+        		model.addAttribute("msg", "<script>alert('Ìí¼Ó³É¹¦£¡')</script>");
+    			return "home1.jsp";
+        	}
+        	else {
+        		return "register.jsp";
+        	}
     	}
+    }
+    
+    /**
+     * 
+     * Ìø×ªÌû×ÓÏÔÊ¾½çÃæ
+     * 
+     */
+    @RequestMapping(value = "/detailedpost/{postid}")
+    public String toPost(@PathVariable("postid") int postid, Model model, HttpSession session) {
+    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	List<Post> posted=dao.queryForPostedByUser(currentuser.getId());
+    	Post currentpost = posted.get(postid);
+    	List<User> postuser=dao.queryByID(currentpost.getUserid());
+    	List<Floor> floored = dao.queryForReplyedByPost(currentpost.getPostid());
+    	model.addAttribute("floors", floored);
+    	model.addAttribute("postuser", postuser.get(0));
+    	model.addAttribute("post", currentpost);
+    	return "/content001.jsp";
+    }
+    
+    /**
+     * 
+     * ¾Ù±¨
+     * 
+     */
+    @RequestMapping(value = "/detailedpost/report")
+    public String toReport(@RequestParam("postId") String postId, @RequestParam("floorId") String floorId, @RequestParam("reportType") String reporttype, @RequestParam("reportReason") String reportreason, Model model, HttpSession session) {
+    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	Integer postid = Integer.parseInt(postId);
+    	Integer floorid = Integer.parseInt(floorId);
+    	
+    	List<Post> posted = dao.queryForPostByPostId(postid);
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	Post post = new Post();
+    	post = posted.get(0);
+    	Report report = new Report();
+    	report.setBoardId(post.getBoardid());
+    	report.setPostId(postid);
+    	report.setFloorId(floorid);
+    	report.setUserId(currentuser.getId());
+    	report.setReportBrief(reporttype);
+    	report.setReportContent(reportreason);
+    	Date date = new Date();
+    	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
+    	report.setReportTime(dateFormat.format(date));
+    	report.setIsHandle(0);
+    	List<Report> lastreport = dao.forLastReport();
+    	Integer id;
+    	if(lastreport.size()==0) {
+    		id = 0;
+    	}else {
+    		id = lastreport.get(0).getReportId()+1;
+    	}
+		report.setReportId(id);
+		
+		boolean result = dao.addReport(report);
+    	if (result) {
+    		model.addAttribute("msg", "<script>alert('Ìí¼Ó³É¹¦£¡')</script>");
+			return "/content001.jsp";
+    	}
+    	else {
+    		return "/index.jsp";
+    	}
+    }
+    
+    /**
+     * 
+     * »ñÈ¡°å¿é
+     * 
+     */
+	@RequestMapping(value = "/board/{boardid}")
+    public String enterBoard(@PathVariable int boardid, Model model, HttpSession session,HttpServletRequest request) {
+    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	List<Board> bl = dao.queryBoardByBoardId(boardid);
+    	Board nowboard = bl.get(0);
+    	String boardname=nowboard.getBoardName();
+    	model.addAttribute("nowBoardName", boardname);
+    	model.addAttribute("nowBoardId", boardid);
+    	//String aa=session.getAttribute("NowBoard").toString();
+    	List<Post> post = dao.queryPostByBoardId(boardid);
+    	model.addAttribute("CurrentPost", post);  
+    	int pageNum=1;
+       	if(request.getQueryString()!=null) {
+       		pageNum=Integer.parseInt(request.getParameter("page").toString() );
+       	}
+		/*
+		 * if () { // ´æÔÚ id ²ÎÊı } String a=request.getParameter("page").toString();
+		 */
+		/*
+		 * if( request.getParameter("page").toString().equals("")) {
+		 * pageNum=Integer.parseInt(request.getParameter("page").toString() ); }
+		 */
+       	
+		  int pageSize=5; 
+		  Page p=dao.findAllPostWithPage(pageNum,pageSize,boardid);
+		  model.addAttribute("page", p); session.setAttribute("page", p);
+		 
+    	return "/board1.jsp";
     }
 	
     /**
      * 
-     * è¿›å…¥ä¸ªäººä¸­å¿ƒç•Œé¢ï¼Œæ˜¾ç¤ºâ€œæˆ‘çš„å¸–å­â€ï¼Œâ€œæˆ‘çš„å›å¸–â€
+     * ´Ó°å¿é½øÈëÏàÓ¦Ìû×ÓÖĞ
      * 
      */
-    @RequestMapping(value = "/accountCenter")
-    public String toAccountCenter(Model model, HttpSession session) {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	//ä»iocå®¹å™¨ä¸­è·å–dao
-    	User currentuser = (User)session.getAttribute("CurrentUser");
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	List<Post>  post = dao.queryForPostedByUser(currentuser.getId());
-    	model.addAttribute("posted", post);
-    	return "accountCenter.jsp";
+	@RequestMapping(value = "/board/{boardid}/post/{postid}")
+    public String enterPost(@PathVariable int boardid, Model model, HttpSession session) {
+    	  	
+    	return "/content001.jsp";
     }
-	
 
     /**
      * 
-     * ä»æ•°æ®åº“ä¸­è·å–å…¨éƒ¨å­¦ç”Ÿä¿¡æ¯ï¼Œå°†æ•°æ®è¿”å›ç»™ä¸»é¡µindex,jsp
+     * ´ÓÊı¾İ¿âÖĞ»ñÈ¡È«²¿Ñ§ÉúĞÅÏ¢£¬½«Êı¾İ·µ»Ø¸øÖ÷Ò³index,jsp
      * 
-     * @param model
-     * @return è¿”å›å€¼ç±»å‹ï¼š String
-     * @author janinus
      */
    /* @RequestMapping(value = "/all")
     public String queryAll(Model model) {
 	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	//ä»iocå®¹å™¨ä¸­è·å–dao
+	//´ÓiocÈİÆ÷ÖĞ»ñÈ¡dao
 	UserDao dao = (UserDao) context.getBean("dao");
 	model.addAttribute("Users", dao.queryAll());
 	model.addAttribute("tops", dao.topNum(3));
@@ -273,17 +316,13 @@ public class UserController {
     }*/
 
     /**
-     * é€šè¿‡å§“åæŸ¥æ‰¾å­¦ç”Ÿï¼Œä½¿ç”¨æ¨¡ç³ŠæŸ¥æ‰¾ï¼Œå°†ç»“æœè¿”å›ç»™index.jsp
+     * Í¨¹ıĞÕÃû²éÕÒÑ§Éú£¬Ê¹ÓÃÄ£ºı²éÕÒ£¬½«½á¹û·µ»Ø¸øindex.jsp
      * 
-     * @param name
-     * @param model
-     * @return è¿”å›å€¼ç±»å‹ï¼š String
-     * @author janinus
      */
     /*@RequestMapping(value = "/queryByName")
     public String queryByName(String name, Model model) {
     	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	//ä»iocå®¹å™¨ä¸­è·å–dao
+	//´ÓiocÈİÆ÷ÖĞ»ñÈ¡dao
     	UserDao dao = (UserDao) context.getBean("dao");
     	model.addAttribute("Users", dao.queryByName(name));
     	model.addAttribute("tops", dao.topNum(3));
@@ -291,14 +330,7 @@ public class UserController {
     }*/
 
     /**
-     * æ·»åŠ æ–°å­¦ç”Ÿï¼Œå¹¶å°†ç»“æœè¿”å›ç»™allé¡µé¢ï¼Œç”±allè½¬å‘åˆ°ä¸»é¡µ
-     * @param name
-     * @param javaScore
-     * @param htmlScore
-     * @param cssScore
-     * @param model
-     * @return è¿”å›å€¼ç±»å‹ï¼š String
-     * @author janinus
+     * Ìí¼ÓĞÂÑ§Éú£¬²¢½«½á¹û·µ»Ø¸øallÒ³Ãæ£¬ÓÉall×ª·¢µ½Ö÷Ò³
      */
    /* @RequestMapping(value = "/add")
     public String addStu(String name, String javaScore, String htmlScore, String cssScore, Model model) {
@@ -311,18 +343,14 @@ public class UserController {
     	User.setCssScore(Double.parseDouble(cssScore));
     	boolean result = dao.addStu(User);
     	if (result)
-    		model.addAttribute("msg", "<script>alert('æ·»åŠ æˆåŠŸï¼')</script>");
+    		model.addAttribute("msg", "<script>alert('Ìí¼Ó³É¹¦£¡')</script>");
     	else
-    		model.addAttribute("msg", "<script>alert('æ·»åŠ æˆåŠŸï¼')</script>");
+    		model.addAttribute("msg", "<script>alert('Ìí¼Ó³É¹¦£¡')</script>");
     	return "all";
     }*/
 
     /**
-     * é€šè¿‡idåˆ é™¤å­¦ç”Ÿ
-     * @param id
-     * @param model
-     * @return è¿”å›å€¼ç±»å‹ï¼š String
-     * @author janinus
+     * Í¨¹ıidÉ¾³ıÑ§Éú
      */
     @RequestMapping(value = "/deleteById")
     public String deleteById(String id, Model model) {
@@ -330,9 +358,9 @@ public class UserController {
 	UserDao dao = (UserDao) context.getBean("dao");
 	boolean result = dao.deleteStu(Integer.parseInt(id));
 	if (result)
-	    model.addAttribute("msg", "<script>alert('åˆ é™¤æˆåŠŸï¼')</script>");
+	    model.addAttribute("msg", "<script>alert('É¾³ı³É¹¦£¡')</script>");
 	else
-	    model.addAttribute("msg", "<script>alert('åˆ é™¤æˆåŠŸï¼')</script>");
+	    model.addAttribute("msg", "<script>alert('É¾³ı³É¹¦£¡')</script>");
 	return "all";
     }
 
@@ -343,9 +371,6 @@ public class UserController {
      * @param javaScore
      * @param htmlScore
      * @param cssScore
-     * @param model
-     * @return è¿”å›å€¼ç±»å‹ï¼š String
-     * @author janinus
      */
     /*@RequestMapping(value = "/update")
     public String updateStu(String id, String name, String javaScore, String htmlScore, String cssScore, Model model) {
@@ -359,16 +384,16 @@ public class UserController {
     	User.setCssScore(Double.parseDouble(cssScore));
     	boolean result = dao.updateStu(User);
     	if (result)
-    		model.addAttribute("msg", msg("ä¿®æ”¹æˆåŠŸ"));
+    		model.addAttribute("msg", msg("ĞŞ¸Ä³É¹¦"));
     	else
-    		model.addAttribute("msg", msg("ä¿®æ”¹å¤±è´¥"));
+    		model.addAttribute("msg", msg("ĞŞ¸ÄÊ§°Ü"));
     	return "all";
     }*/
 
     /**
-     * è¦å¼¹å‡ºçš„é¡µé¢æ¶ˆæ¯
+     * Òªµ¯³öµÄÒ³ÃæÏûÏ¢
      * @param msg
-     * @return è¿”å›å€¼ç±»å‹ï¼š String
+     * @return ·µ»ØÖµÀàĞÍ£º String
      * @author janinus
 >>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
      */

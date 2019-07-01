@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <!DOCTYPE html>
@@ -17,7 +13,9 @@
 	<h1 class="header">欢迎来到主页</h1>
 	<div class="nav">
 		<a href="accountCenter">个人中心</a>
-		<a href="home.jsp">退出登录</a>
+		<a href="boardAdmin.jsp">板块管理员入口</a>
+		<a href="superAdmin.jsp">超级管理员入口</a>
+		<a href="quit">退出登录</a>
 	</div>
 	<div class="board">
 		<span>
