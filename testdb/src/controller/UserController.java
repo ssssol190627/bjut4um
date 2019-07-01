@@ -3,6 +3,7 @@ package controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
 import org.springframework.web.context.request.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -131,6 +132,7 @@ public class UserController {
     }
     
     /**
+<<<<<<< HEAD
      * 
      * ��תע�����
      * 
@@ -395,6 +397,10 @@ public class UserController {
      * @param msg
      * @return ����ֵ���ͣ� String
      * @author janinus
+>>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
+=======
+     * 要弹出的页面消息
+     * @param msg
 >>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
      */
     public String msg(String msg) {

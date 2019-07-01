@@ -13,7 +13,7 @@
 	<h1 class="header">欢迎来到主页</h1>
 	<div class="nav">
 		<a href="loginpage">登录</a>
-		<a href="register">注册</a>
+		<a href="registerpage">注册</a>
 	</div>
 	<div class="board">
 		<span>
