@@ -23,7 +23,7 @@ import dao.UserDao;
 public class UserController {
 	/**
      * 
-     * Ìø×ªµÇÂ¼½çÃæ
+     * ï¿½ï¿½×ªï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½
      * 
      */
     @RequestMapping(value = "/loginpage")
@@ -33,7 +33,7 @@ public class UserController {
     
 	/**
      * 
-     * µÇÂ¼
+     * ï¿½ï¿½Â¼
      * 
      */
     @RequestMapping(value = "/login")
@@ -57,7 +57,7 @@ public class UserController {
 	
     /**
      * 
-     * ½øÈë¸öÈËÖÐÐÄ½çÃæ£¬ÏÔÊ¾¡°ÎÒµÄÌû×Ó¡±£¬¡°ÎÒµÄ»ØÌû¡±
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä½ï¿½ï¿½æ£¬ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒµÄ»ï¿½ï¿½ï¿½ï¿½ï¿½
      * 
      */
     @RequestMapping(value = "/accountCenter")
@@ -75,7 +75,7 @@ public class UserController {
     
     /**
      * 
-     * ½øÈëÐÞ¸ÄÃÜÂë½çÃæ
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      * 
      */
     @RequestMapping(value = "/userPreferences")
@@ -85,7 +85,7 @@ public class UserController {
     
     /**
      * 
-     * ÐÞ¸ÄÃÜÂë
+     * ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½
      * 
      */
     @RequestMapping(value = "/updatePassword")
@@ -108,7 +108,7 @@ public class UserController {
     
     /**
      * 
-     * ·µ»ØÖ÷Ò³½çÃæ
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½
      * 
      */
     @RequestMapping(value = "/home1")
@@ -121,7 +121,7 @@ public class UserController {
     
     /**
      * 
-     * ÍË³öµÇÂ¼
+     * ï¿½Ë³ï¿½ï¿½ï¿½Â¼
      * 
      */
     @RequestMapping(value = "/quit")
@@ -132,7 +132,7 @@ public class UserController {
     
     /**
      * 
-     * Ìø×ª×¢²á½çÃæ
+     * ï¿½ï¿½×ª×¢ï¿½ï¿½ï¿½ï¿½ï¿½
      * 
      */
     @RequestMapping(value = "/registerpage")
@@ -142,7 +142,7 @@ public class UserController {
     
 	/**
      * 
-     * ×¢²á
+     * ×¢ï¿½ï¿½
      * 
      */
     @RequestMapping(value = "/checkingregister")
@@ -177,7 +177,7 @@ public class UserController {
     		user.setisForumAdmin(0);
     		boolean result = dao.addUser(user);
         	if (result) {
-        		model.addAttribute("msg", "<script>alert('Ìí¼Ó³É¹¦£¡')</script>");
+        		model.addAttribute("msg", "<script>alert('ï¿½ï¿½Ó³É¹ï¿½ï¿½ï¿½')</script>");
     			return "home1.jsp";
         	}
         	else {
@@ -188,7 +188,7 @@ public class UserController {
     
     /**
      * 
-     * Ìø×ªÌû×ÓÏÔÊ¾½çÃæ
+     * ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
      * 
      */
     @RequestMapping(value = "/detailedpost/{postid}")
@@ -209,7 +209,7 @@ public class UserController {
     
     /**
      * 
-     * ¾Ù±¨
+     * ï¿½Ù±ï¿½
      * 
      */
     @RequestMapping(value = "/detailedpost/report")
@@ -245,7 +245,7 @@ public class UserController {
 		
 		boolean result = dao.addReport(report);
     	if (result) {
-    		model.addAttribute("msg", "<script>alert('Ìí¼Ó³É¹¦£¡')</script>");
+    		model.addAttribute("msg", "<script>alert('ï¿½ï¿½Ó³É¹ï¿½ï¿½ï¿½')</script>");
 			return "/content001.jsp";
     	}
     	else {
@@ -255,7 +255,7 @@ public class UserController {
     
     /**
      * 
-     * »ñÈ¡°å¿é
+     * ï¿½ï¿½È¡ï¿½ï¿½ï¿½
      * 
      */
 	@RequestMapping(value = "/board/{boardid}")
@@ -275,7 +275,7 @@ public class UserController {
        		pageNum=Integer.parseInt(request.getParameter("page").toString() );
        	}
 		/*
-		 * if () { // ´æÔÚ id ²ÎÊý } String a=request.getParameter("page").toString();
+		 * if () { // ï¿½ï¿½ï¿½ï¿½ id ï¿½ï¿½ï¿½ï¿½ } String a=request.getParameter("page").toString();
 		 */
 		/*
 		 * if( request.getParameter("page").toString().equals("")) {
@@ -291,7 +291,7 @@ public class UserController {
 	
     /**
      * 
-     * ´Ó°å¿é½øÈëÏàÓ¦Ìû×ÓÖÐ
+     * ï¿½Ó°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      * 
      */
 	@RequestMapping(value = "/board/{boardid}/post/{postid}")
@@ -302,13 +302,13 @@ public class UserController {
 
     /**
      * 
-     * ´ÓÊý¾Ý¿âÖÐ»ñÈ¡È«²¿Ñ§ÉúÐÅÏ¢£¬½«Êý¾Ý·µ»Ø¸øÖ÷Ò³index,jsp
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½Ð»ï¿½È¡È«ï¿½ï¿½Ñ§ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½Ò³index,jsp
      * 
      */
    /* @RequestMapping(value = "/all")
     public String queryAll(Model model) {
 	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	//´ÓiocÈÝÆ÷ÖÐ»ñÈ¡dao
+	//ï¿½ï¿½iocï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½È¡dao
 	UserDao dao = (UserDao) context.getBean("dao");
 	model.addAttribute("Users", dao.queryAll());
 	model.addAttribute("tops", dao.topNum(3));
@@ -316,13 +316,13 @@ public class UserController {
     }*/
 
     /**
-     * Í¨¹ýÐÕÃû²éÕÒÑ§Éú£¬Ê¹ÓÃÄ£ºý²éÕÒ£¬½«½á¹û·µ»Ø¸øindex.jsp
+     * Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ§ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½index.jsp
      * 
      */
     /*@RequestMapping(value = "/queryByName")
     public String queryByName(String name, Model model) {
     	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	//´ÓiocÈÝÆ÷ÖÐ»ñÈ¡dao
+	//ï¿½ï¿½iocï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½È¡dao
     	UserDao dao = (UserDao) context.getBean("dao");
     	model.addAttribute("Users", dao.queryByName(name));
     	model.addAttribute("tops", dao.topNum(3));
@@ -330,7 +330,7 @@ public class UserController {
     }*/
 
     /**
-     * Ìí¼ÓÐÂÑ§Éú£¬²¢½«½á¹û·µ»Ø¸øallÒ³Ãæ£¬ÓÉall×ª·¢µ½Ö÷Ò³
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Ñ§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½allÒ³ï¿½æ£¬ï¿½ï¿½all×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³
      */
    /* @RequestMapping(value = "/add")
     public String addStu(String name, String javaScore, String htmlScore, String cssScore, Model model) {
@@ -343,14 +343,14 @@ public class UserController {
     	User.setCssScore(Double.parseDouble(cssScore));
     	boolean result = dao.addStu(User);
     	if (result)
-    		model.addAttribute("msg", "<script>alert('Ìí¼Ó³É¹¦£¡')</script>");
+    		model.addAttribute("msg", "<script>alert('ï¿½ï¿½Ó³É¹ï¿½ï¿½ï¿½')</script>");
     	else
-    		model.addAttribute("msg", "<script>alert('Ìí¼Ó³É¹¦£¡')</script>");
+    		model.addAttribute("msg", "<script>alert('ï¿½ï¿½Ó³É¹ï¿½ï¿½ï¿½')</script>");
     	return "all";
     }*/
 
     /**
-     * Í¨¹ýidÉ¾³ýÑ§Éú
+     * Í¨ï¿½ï¿½idÉ¾ï¿½ï¿½Ñ§ï¿½ï¿½
      */
     @RequestMapping(value = "/deleteById")
     public String deleteById(String id, Model model) {
@@ -358,9 +358,9 @@ public class UserController {
 	UserDao dao = (UserDao) context.getBean("dao");
 	boolean result = dao.deleteStu(Integer.parseInt(id));
 	if (result)
-	    model.addAttribute("msg", "<script>alert('É¾³ý³É¹¦£¡')</script>");
+	    model.addAttribute("msg", "<script>alert('É¾ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½')</script>");
 	else
-	    model.addAttribute("msg", "<script>alert('É¾³ý³É¹¦£¡')</script>");
+	    model.addAttribute("msg", "<script>alert('É¾ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½')</script>");
 	return "all";
     }
 
@@ -384,16 +384,16 @@ public class UserController {
     	User.setCssScore(Double.parseDouble(cssScore));
     	boolean result = dao.updateStu(User);
     	if (result)
-    		model.addAttribute("msg", msg("ÐÞ¸Ä³É¹¦"));
+    		model.addAttribute("msg", msg("ï¿½Þ¸Ä³É¹ï¿½"));
     	else
-    		model.addAttribute("msg", msg("ÐÞ¸ÄÊ§°Ü"));
+    		model.addAttribute("msg", msg("ï¿½Þ¸ï¿½Ê§ï¿½ï¿½"));
     	return "all";
     }*/
 
     /**
-     * Òªµ¯³öµÄÒ³ÃæÏûÏ¢
+     * Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½Ï¢
      * @param msg
-     * @return ·µ»ØÖµÀàÐÍ£º String
+     * @return ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Í£ï¿½ String
      * @author janinus
 >>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
      */
@@ -401,4 +401,3 @@ public class UserController {
 	return "<script>alert('" + msg + "')</script>";
     }
 }
-

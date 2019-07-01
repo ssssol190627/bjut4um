@@ -14,11 +14,11 @@
     		<!--加载驱动类-->
     		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
     		<!--数据库访问地址-->
-    		<property name="url" value="jdbc:mysql://localhost:3306/forum"></property>
+    		<property name="url" value="jdbc:mysql://localhost:3306/forum?serverTimezone=GMT%2B8"></property>
     		<!--数据库访问用户名-->
     		<property name="username" value="root"></property>
     		<!--数据库访问密码-->
-    		<property name="password" value="19980908"></property>
+    		<property name="password" value="admin"></property>
     	</bean>
     	<!-- spring 提供的数据库事务管理 -->
     	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -36,7 +36,5 @@
     	<!-- 控制层类 ，这个配置无效-->
     	<!--  <bean id="controller" class="controller.StudentController">
     		<property name="dao" ref="dao"></property>
-    	</bean>-->
-    	
-    	
+    	</bean>-->    	
  </beans>
