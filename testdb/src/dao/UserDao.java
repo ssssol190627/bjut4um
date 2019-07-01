@@ -56,7 +56,7 @@ public class UserDao {
      * 
      */
     public List<Post> queryForPostedByUser(Integer id) {
-    	String sql = "select boardid,id,title,userid,posttime,postcontent,isGood,isBanned,isExist from post where userid = "+id ;
+    	String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost from post where userid =  '"+id +"'" ;
     	return jdbcTemplate.query(sql, new PostMapper());
     }
     
@@ -107,7 +107,7 @@ public class UserDao {
 		String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost from post where boardid = '" + boardid + "'";
 		return jdbcTemplate.query(sql, new PostMapper());
 	}
-
+	
 	/**
 	 * 通过板块名查询
 	 * 

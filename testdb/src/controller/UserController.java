@@ -59,24 +59,7 @@ public class UserController {
     	return "/board1.jsp";
     }
 	
-	/*
-	 * @RequestMapping(value = "/board/{boardid}/page/{pageNum}") public String
-	 * enterBoardByPage(@PathVariable int boardid,@PathVariable int pageNum, Model
-	 * model, HttpSession session,HttpServletRequest request) { ApplicationContext
-	 * context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	 * UserDao dao = (UserDao) context.getBean("dao"); List<Board> bl =
-	 * dao.queryBoardByBoardId(boardid); Board board = bl.get(0); String
-	 * boardname=board.getBoardName(); model.addAttribute("NowBoard", boardname);
-	 * //String aa=session.getAttribute("NowBoard").toString();
-	 * 
-	 * List<Post> post = dao.queryPostByBoardId(boardid);
-	 * model.addAttribute("CurrentPost", post); int pageSize=5; Page
-	 * p=dao.findAllPostWithPage(pageNum,pageSize,boardid);
-	 * model.addAttribute("page", p); session.setAttribute("page", p);
-	 * 
-	 * return "/board1.jsp"; }
-	 */
-	
+
 	@RequestMapping(value = "/board/{boardid}/post/{postid}")
 
     public String enterPost(@PathVariable int boardid, Model model, HttpSession session) {
@@ -168,84 +151,6 @@ public class UserController {
     	}
     }
 
-    /**
-     * 
-     * 从数据库中获取全部学生信息，将数据返回给主页index,jsp
-     * 
-     */
-   /* @RequestMapping(value = "/all")
-    public String queryAll(Model model) {
-	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	//从ioc容器中获取dao
-	UserDao dao = (UserDao) context.getBean("dao");
-	model.addAttribute("Users", dao.queryAll());
-	model.addAttribute("tops", dao.topNum(3));
-	return "index.jsp";
-    }*/
-
-    /**
-     * 通过姓名查找学生，使用模糊查找，将结果返回给index.jsp
-     * 
-     */
-    /*@RequestMapping(value = "/queryByName")
-    public String queryByName(String name, Model model) {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	//从ioc容器中获取dao
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	model.addAttribute("Users", dao.queryByName(name));
-    	model.addAttribute("tops", dao.topNum(3));
-    	return "index.jsp";
-    }*/
-
-    /**
-     * 添加新学生，并将结果返回给all页面，由all转发到主页
-     */
-   /* @RequestMapping(value = "/add")
-    public String addStu(String name, String javaScore, String htmlScore, String cssScore, Model model) {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	User User = new User();
-    	User.setUsername(name);
-    	User.setJavaScore(Double.parseDouble(javaScore));
-    	User.setHtmlScore(Double.parseDouble(htmlScore));
-    	User.setCssScore(Double.parseDouble(cssScore));
-    	boolean result = dao.addStu(User);
-    	if (result)
-    		model.addAttribute("msg", "<script>alert('添加成功！')</script>");
-    	else
-    		model.addAttribute("msg", "<script>alert('添加成功！')</script>");
-    	return "all";
-    }*/
-
-
-
-    /**
-     * 
-     * @param id
-     * @param name
-     * @param javaScore
-     * @param htmlScore
-     * @param cssScore
-     */
-    /*@RequestMapping(value = "/update")
-    public String updateStu(String id, String name, String javaScore, String htmlScore, String cssScore, Model model) {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	User User = new User();
-    	User.setId(Integer.parseInt(id));
-    	User.setUsername(name);
-    	User.setJavaScore(Double.parseDouble(javaScore));
-    	User.setHtmlScore(Double.parseDouble(htmlScore));
-    	User.setCssScore(Double.parseDouble(cssScore));
-    	boolean result = dao.updateStu(User);
-    	if (result)
-    		model.addAttribute("msg", msg("修改成功"));
-    	else
-    		model.addAttribute("msg", msg("修改失败"));
-    	return "all";
-    }*/
-
-     //@param msg
     public String msg(String msg) {
 	return "<script>alert('" + msg + "')</script>";
     }

@@ -15,11 +15,14 @@
 	</div>
 	<h3 class="footer">我的贴子</h3>
 	<div class="single_content">
+	<table border="1">
 		<c:forEach items="${posted}" var="post" >
         	<tr>
-        	<a href="detailedpost">${post.title }${post.posttime }</a>
+        	<td><a href="detailedpost">${post.title }</a></td>
+        	<td>${post.posttime }</td>
         	</tr>
         </c:forEach> 
+        </table>
 	</div>
 	<h3 class="footer">我的回复</h3>
 </body>
