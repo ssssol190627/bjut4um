@@ -3,7 +3,7 @@ package bean;
 public class Board {
 	
 	private Integer boardid;
-	private String boardname;
+	public String boardname;
 	private String intro;
 	private Integer isExist;
 	

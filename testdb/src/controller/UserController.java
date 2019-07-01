@@ -21,29 +21,67 @@ import bean.User;
 import bean.Post;
 import bean.Board;
 import bean.Floor;
+import bean.Page;
 import dao.UserDao;
 
 @Controller
 public class UserController {
+	
+	
 	@RequestMapping(value = "/board/{boardid}")
-    public String enterBoard(@PathVariable int boardid, Model model, HttpSession session) {
+    public String enterBoard(@PathVariable int boardid, Model model, HttpSession session,HttpServletRequest request) {
     	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
     	UserDao dao = (UserDao) context.getBean("dao");
     	List<Board> bl = dao.queryBoardByBoardId(boardid);
-    	Board board = bl.get(0);
-    	String boardname=board.getBoardName();
-    	model.addAttribute("NowBoard", boardname);
+    	Board nowboard = bl.get(0);
+    	String boardname=nowboard.getBoardName();
+    	model.addAttribute("nowBoardName", boardname);
+    	model.addAttribute("nowBoardId", boardid);
     	//String aa=session.getAttribute("NowBoard").toString();
     	List<Post> post = dao.queryPostByBoardId(boardid);
-    	model.addAttribute("CurrentPost", post);    	
+    	model.addAttribute("CurrentPost", post);  
+    	int pageNum=1;
+       	if(request.getQueryString()!=null) {
+       		pageNum=Integer.parseInt(request.getParameter("page").toString() );
+       	}
+		/*
+		 * if () { // 存在 id 参数 } String a=request.getParameter("page").toString();
+		 */
+		/*
+		 * if( request.getParameter("page").toString().equals("")) {
+		 * pageNum=Integer.parseInt(request.getParameter("page").toString() ); }
+		 */
+       	
+		  int pageSize=5; 
+		  Page p=dao.findAllPostWithPage(pageNum,pageSize,boardid);
+		  model.addAttribute("page", p); session.setAttribute("page", p);
+		 
     	return "/board1.jsp";
     }
+	
+	/*
+	 * @RequestMapping(value = "/board/{boardid}/page/{pageNum}") public String
+	 * enterBoardByPage(@PathVariable int boardid,@PathVariable int pageNum, Model
+	 * model, HttpSession session,HttpServletRequest request) { ApplicationContext
+	 * context = new ClassPathXmlApplicationContext("applicationContext.xml");
+	 * UserDao dao = (UserDao) context.getBean("dao"); List<Board> bl =
+	 * dao.queryBoardByBoardId(boardid); Board board = bl.get(0); String
+	 * boardname=board.getBoardName(); model.addAttribute("NowBoard", boardname);
+	 * //String aa=session.getAttribute("NowBoard").toString();
+	 * 
+	 * List<Post> post = dao.queryPostByBoardId(boardid);
+	 * model.addAttribute("CurrentPost", post); int pageSize=5; Page
+	 * p=dao.findAllPostWithPage(pageNum,pageSize,boardid);
+	 * model.addAttribute("page", p); session.setAttribute("page", p);
+	 * 
+	 * return "/board1.jsp"; }
+	 */
 	
 	@RequestMapping(value = "/board/{boardid}/post/{postid}")
 
     public String enterPost(@PathVariable int boardid, Model model, HttpSession session) {
     	  	
-    	return "/control001.jsp";
+    	return "/content001.jsp";
     }
 	/**
      * 

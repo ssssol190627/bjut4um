@@ -12,6 +12,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
 		<param-value>utf-8</param-value>
 	</init-param>
 </filter>
+
 <!-- 配置欢迎界面 -->
 <welcome-file-list>
     <welcome-file>/all</welcome-file>

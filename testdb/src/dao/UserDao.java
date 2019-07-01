@@ -116,7 +116,23 @@ public class UserDao {
 		String sql = "select id,name,intro,isExist from board where name = '" + name + "'";
 		return jdbcTemplate.query(sql, new BoardMapper());
 	}
-
+	
+	public List<Post> findThisPostPage(int startIndex,int pageSize,int boardid){
+		int EndIndex=startIndex+pageSize;
+		String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost from post where boardid = '" + boardid +"' limit "+startIndex+","+EndIndex;
+		return jdbcTemplate.query(sql, new PostMapper());
+	}
+	public Page<Post> findAllPostWithPage(int pageNum,int pageSize,int boardid){
+		List<Post> allPost=queryPostByBoardId(boardid);
+		int totalRecord = allPost.size();
+		
+		Page p=new Page(pageNum,2,totalRecord);
+		
+		int startIndex = p.getStartIndex();
+		p.setList(findThisPostPage(startIndex,pageSize,boardid));
+		
+		return p;
+	}
 	/**
 	 * 
 	 * BoardMapper数据库映射
