@@ -10,40 +10,30 @@
 </head>
 <body>
 	<div class="nav">
-<<<<<<< HEAD
+		<a href="applyBoard.jsp">申请板块/成为板块管理员</a>
+		<a href="adminMessage.jsp">站内信息</a>
 		<a href="userPreferences">改密码</a>
-		<a href="home1.jsp">回主页</a>
+		<a href="home1">回主页</a>
 	</div>
 	<h3 class="footer">我的贴子</h3>
 	<div class="single_content">
-		<c:forEach items="${posted}" var="post" >
+		<c:forEach items="${posted}" var="post" varStatus="postStatus">
+			<br>
         	<tr>
-        	<a href="detailedpost">${post.title }${post.posttime }</a>
+        	${postStatus.index }
+        	<a href="detailedpost/${postStatus.index }">${post.title }${post.posttime }</a>
         	</tr>
+        	<br>
         </c:forEach> 
 	</div>
 	<h3 class="footer">我的回复</h3>
 		<div class="single_content">
-		<c:forEach items="${floored}" var="floor" >
+		<c:forEach items="${floored}" var="floor" varStatus="postStatus" >
+			<br>
         	<tr>
         	<a href="detailedfloor">${floor.floorcontent }${floor.floortime }</a>
         	</tr>
+        	<br>
         </c:forEach> 
-	</div>
-=======
-		<a href="userPreferences.jsp">改密码</a>
-		<a href="home1.jsp">回主页</a>
-	</div>
-	<h3 class="footer">我的贴子</h3>
-	<div class="single_content">
-		<c:forEach items="${posted}" var="post" >
-        	<tr>
-        	<a href="detailedpost">${post.title }</a>
-        	</tr>
-        </c:forEach> 
-	</div>
-	<h3 class="footer">我的回复</h3>
-
->>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
 </body>
 </html>

@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>欢迎来到注册页面</h1>
-	<form action="home1.jsp">
+	<form action="checkingregister">
 		<br>工大邮箱：<br>
 		<input type="text" name="email" value="15010398335@emails.bjut.edu.cn">
 		<br>用户名：<br>
