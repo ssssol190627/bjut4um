@@ -9,10 +9,10 @@
 <body>
 	<h1 class="header">板块管理员管理页面</h1>
 	<div class="nav">
-		<a href="reportAdmin.jsp">管理举报信息</a>
+		<a href="reportAdmin">管理举报信息</a>
 		<a href="good.jsp">加精</a>
 		<a href="banAndDelete.jsp">封禁和删除</a>
-		<a href="home1.jsp">回主页</a>
+		<a href="home1">回主页</a>
 	</div>
 </body>
 </html>

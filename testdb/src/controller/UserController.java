@@ -1,9 +1,13 @@
 package controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.web.context.request.*;
+
+import com.mysql.cj.Query;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -41,6 +45,7 @@ public class UserController {
     	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
     	UserDao dao = (UserDao) context.getBean("dao");
+		List<Board> board = dao.queryAllBoard();
     	List<User> user = dao.queryByName(username);
     	if(user.isEmpty()) {
     		return "login.jsp";
@@ -48,6 +53,8 @@ public class UserController {
     	if(user.get(0).getPassword().equals(password)) {
     		model.addAttribute("CurrentUser", user.get(0));
     		session.setAttribute("CurrentUser", user.get(0));
+			model.addAttribute("AllBoard", board);
+			session.setAttribute("AllBoard", board);
     		return "home1.jsp";
     	}
     	else {
@@ -106,18 +113,24 @@ public class UserController {
     	}
     }
     
-    /**
-     * 
-     * 返回主页界面
-     * 
-     */
-    @RequestMapping(value = "/home1")
-    public String toHome1(HttpSession session) {
-    	if(session.getAttribute("CurrentUser")==null) {
-    		return "/index.jsp";
-    	}
-    	return "/home1.jsp";
-    }
+	/**
+	 * 
+	 * 返回主页界面
+	 * 
+	 */
+	@RequestMapping(value = "/home1")
+	public String toHome1(Model model, HttpSession session) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		UserDao dao = (UserDao) context.getBean("dao");
+		List<Board> board = dao.queryAllBoard();
+		if (session.getAttribute("CurrentUser") == null) {
+			return "/index.jsp";
+		} else {
+			model.addAttribute("AllBoard", board);
+			session.setAttribute("AllBoard", board);
+			return "/home1.jsp";
+		}
+	}
     
     /**
      * 
@@ -191,57 +204,84 @@ public class UserController {
      * 跳转帖子显示界面
      * 
      */
-    @RequestMapping(value = "/detailedpost/{postid}")
-    public String toPost(@PathVariable("postid") int postid, Model model, HttpSession session) {
+    @RequestMapping(value = "/post/{postid}")
+    public String toPost(@PathVariable("postid") int postid, Model model, HttpSession session, HttpServletRequest request) {
     	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
     	UserDao dao = (UserDao) context.getBean("dao");
     	
-    	User currentuser = (User)session.getAttribute("CurrentUser");
-    	List<Post> posted=dao.queryForPostedByUser(currentuser.getId());
-    	Post currentpost = posted.get(postid);
+    	int pageNum = 1;
+		if (request.getQueryString() != null) {
+			pageNum = Integer.parseInt(request.getParameter("page").toString());
+		}
+		int pageSize = 2;
+		Page p = dao.findAllFloorWithPage(pageNum, pageSize, postid);
+		model.addAttribute("page", p);
+		session.setAttribute("page", p);
+		int si = p.getStartIndex();
+		List<Floor> fl = p.getList();
+	 
+    	List<Post> posted=dao.queryForPostByPostId(postid); 
+    	Post currentpost = posted.get(0); 
     	List<User> postuser=dao.queryByID(currentpost.getUserid());
-    	List<Floor> floored = dao.queryForReplyedByPost(currentpost.getPostid());
-    	model.addAttribute("floors", floored);
+    	List<String> ul=new ArrayList();
+    	for (int i = 0; i < fl.size(); i++) {
+    		String thisuser = dao.queryByID(fl.get(i).getUserid()).get(0).getUsername();
+			ul.add(thisuser);
+		}
+    	
+    	//List<Floor> floored = dao.queryForReplyedByPost(currentpost.getPostid());
+    	model.addAttribute("floor", fl);
+    	session.setAttribute("floor", fl);
     	model.addAttribute("postuser", postuser.get(0));
+    	session.setAttribute("postuser", postuser.get(0));
+    	model.addAttribute("flooruser", ul);
+    	session.setAttribute("flooruser", ul);
     	model.addAttribute("post", currentpost);
+    	session.setAttribute("post", currentpost);
     	return "/content001.jsp";
-    }
+    } 
     
     /**
      * 
      * 举报
      * 
      */
-    @RequestMapping(value = "/detailedpost/report")
+    @RequestMapping(value = "/post/report")
     public String toReport(@RequestParam("postId") String postId, @RequestParam("floorId") String floorId, @RequestParam("reportType") String reporttype, @RequestParam("reportReason") String reportreason, Model model, HttpSession session) {
     	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
     	UserDao dao = (UserDao) context.getBean("dao");
     	Integer postid = Integer.parseInt(postId);
-    	Integer floorid = Integer.parseInt(floorId);
+    	Integer floorid;
+    	if(floorId.length()==0) {
+    		floorid = 0;
+    	}else {
+    		floorid = Integer.parseInt(floorId);
+    	}
+    	 
     	
-    	List<Post> posted = dao.queryForPostByPostId(postid);
+     	List<Post> posted = dao.queryForPostByPostId(postid);
     	User currentuser = (User)session.getAttribute("CurrentUser");
     	Post post = new Post();
     	post = posted.get(0);
     	Report report = new Report();
-    	report.setBoardId(post.getBoardid());
-    	report.setPostId(postid);
-    	report.setFloorId(floorid);
-    	report.setUserId(currentuser.getId());
-    	report.setReportBrief(reporttype);
-    	report.setReportContent(reportreason);
+    	report.setBoardid(post.getBoardid());
+    	report.setPostid(postid);
+    	report.setFloorid(floorid);
+    	report.setUserid(currentuser.getId());
+    	report.setReportbrief(reporttype);
+    	report.setReportcontent(reportreason);
     	Date date = new Date();
     	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
-    	report.setReportTime(dateFormat.format(date));
-    	report.setIsHandle(0);
+    	report.setReporttime(dateFormat.format(date));
+    	report.setIshandle(0);
     	List<Report> lastreport = dao.forLastReport();
     	Integer id;
     	if(lastreport.size()==0) {
     		id = 0;
     	}else {
-    		id = lastreport.get(0).getReportId()+1;
+    		id = lastreport.get(0).getReportid()+1;
     	}
-		report.setReportId(id);
+		report.setReportid(id);
 		
 		boolean result = dao.addReport(report);
     	if (result) {
@@ -254,40 +294,43 @@ public class UserController {
     }
     
     /**
-     * 
-     * 获取板块
-     * 
-     */
+	 * 
+	 * 进入板块
+	 * 
+	 */
 	@RequestMapping(value = "/board/{boardid}")
-    public String enterBoard(@PathVariable int boardid, Model model, HttpSession session,HttpServletRequest request) {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	List<Board> bl = dao.queryBoardByBoardId(boardid);
-    	Board nowboard = bl.get(0);
-    	String boardname=nowboard.getBoardName();
-    	model.addAttribute("nowBoardName", boardname);
-    	model.addAttribute("nowBoardId", boardid);
-    	//String aa=session.getAttribute("NowBoard").toString();
-    	List<Post> post = dao.queryPostByBoardId(boardid);
-    	model.addAttribute("CurrentPost", post);  
-    	int pageNum=1;
-       	if(request.getQueryString()!=null) {
-       		pageNum=Integer.parseInt(request.getParameter("page").toString() );
-       	}
-		/*
-		 * if () { // 存在 id 参数 } String a=request.getParameter("page").toString();
-		 */
-		/*
-		 * if( request.getParameter("page").toString().equals("")) {
-		 * pageNum=Integer.parseInt(request.getParameter("page").toString() ); }
-		 */
-       	
-		  int pageSize=5; 
-		  Page p=dao.findAllPostWithPage(pageNum,pageSize,boardid);
-		  model.addAttribute("page", p); session.setAttribute("page", p);
-		 
-    	return "/board1.jsp";
-    }
+	public String enterBoard(@PathVariable int boardid, Model model, HttpSession session, HttpServletRequest request) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		UserDao dao = (UserDao) context.getBean("dao");
+
+		int pageNum = 1;
+		if (request.getQueryString() != null) {
+			pageNum = Integer.parseInt(request.getParameter("page").toString());
+		}
+		int pageSize = 2;
+		Page p = dao.findAllPostWithPage(pageNum, pageSize, boardid);
+		model.addAttribute("page", p);
+		session.setAttribute("page", p);
+		int si = p.getStartIndex();
+		List<Post> pl = p.getList();
+		List<Board> bl = dao.queryBoardByBoardId(boardid);
+		Board nowboard = bl.get(0);
+		//List<User> ul;
+	   	List<String> ul=new ArrayList();
+    	for (int i = 0; i < pl.size(); i++) {
+    		String thisuser = dao.queryByID(pl.get(i).getUserid()).get(0).getUsername();
+			ul.add(thisuser);
+		}
+
+		// User user=queryUserNameById()
+		String boardname = nowboard.getBoardname();
+		model.addAttribute("nowBoardName", boardname);
+		model.addAttribute("nowBoardId", boardid);
+    	model.addAttribute("postuser", ul);
+    	session.setAttribute("postuser", ul);
+		model.addAttribute("CurrentPost", pl);
+		return "/board1.jsp";
+	}
 	
     /**
      * 
@@ -296,24 +339,83 @@ public class UserController {
      */
 	@RequestMapping(value = "/board/{boardid}/post/{postid}")
     public String enterPost(@PathVariable int boardid, Model model, HttpSession session) {
-    	  	
     	return "/content001.jsp";
+    }
+	
+    /**
+     * 
+     * 从主页进入板块管理员界面
+     * 
+     */
+	@RequestMapping(value = "/boardAdmin")
+    public String toBoardAdmin() {
+    	 return "/boardAdmin.jsp";
     }
 
     /**
      * 
-     * 从数据库中获取全部学生信息，将数据返回给主页index,jsp
+     * 从板块管理员界面进入管理举报信息界面
      * 
      */
-   /* @RequestMapping(value = "/all")
-    public String queryAll(Model model) {
-	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	//从ioc容器中获取dao
-	UserDao dao = (UserDao) context.getBean("dao");
-	model.addAttribute("Users", dao.queryAll());
-	model.addAttribute("tops", dao.topNum(3));
-	return "index.jsp";
-    }*/
+	@RequestMapping(value = "/reportAdmin")
+    public String toReportAdmin(Model model, HttpSession session) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	List<Report> reported = dao.queryAllReport();
+    	List<String> username = new ArrayList();
+    	for(int i=0;i<reported.size();i++) {
+    		List<User> user = dao.queryByID(reported.get(i).getUserid());
+    		username.add(user.get(0).getUsername());
+    	}
+		session.setAttribute("usernames", username); 
+    	session.setAttribute("reported", reported);
+    	 return "/reportAdmin.jsp";
+    }
+	
+    /**
+     * 
+     * 管理举报信息
+     * 
+     */
+	@RequestMapping(value = "/manageReport")
+    public String ManagingReport(@RequestParam("reportid") String reportId, @RequestParam("manage") String manage, Model model, HttpSession session) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	Integer reportid = Integer.parseInt(reportId);
+    	List<Report> reports = dao.queryReportByReportId(reportid);
+    	Report report = reports.get(0);
+    	
+    	if(manage.equals("ban")) {
+    		if(report.getFloorid()==0) {
+    			List<Post> banpost = dao.queryForPostByPostId(report.getPostid());
+    			banpost.get(0).setIsBanned(1);
+    			report.setIshandle(1);
+    			
+    		}else {
+    			List<Floor> banfloor = dao.queryFloorByFloorId(report.getFloorid());
+    			banfloor.get(0).setIsbanned(1);
+    			report.setIshandle(1);
+    		}
+    	}else if(manage.equals("delete")) {
+    		if(report.getFloorid()==0) {
+    			List<Post> banpost = dao.queryForPostByPostId(report.getPostid());
+    			banpost.get(0).setIsExist(0);
+    			report.setIshandle(2);
+    		}else {
+    			List<Floor> banfloor = dao.queryFloorByFloorId(report.getFloorid());
+    			banfloor.get(0).setIsexist(0);
+    			report.setIshandle(2);
+    		}
+    	}else {
+    		report.setIshandle(3);
+    	}
+    	dao.updateHandle(report);
+    	
+    	 return "/reportAdmin.jsp";
+    }
+
 
     /**
      * 通过姓名查找学生，使用模糊查找，将结果返回给index.jsp
@@ -395,7 +497,6 @@ public class UserController {
      * @param msg
      * @return 返回值类型： String
      * @author janinus
->>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
      */
     public String msg(String msg) {
 	return "<script>alert('" + msg + "')</script>";

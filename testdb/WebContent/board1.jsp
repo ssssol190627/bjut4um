@@ -18,11 +18,11 @@
 			<th>更新时间</th>
 			<th>回复数</th>
 		</tr>
-		<c:forEach items="${CurrentPost }" var="CurrentPost">
+		<c:forEach items="${CurrentPost }" var="CurrentPost" varStatus="loop">
 			<tr>
 				<td id="title${CurrentPost.title }"><a
-					href="/testdb/board/${CurrentPost.boardid}/post/${CurrentPost.postid}">${CurrentPost.title }</a></td>
-				<td id="userid${CurrentPost.userid }">${CurrentPost.userid }</td>
+					href="/testdb/post/${CurrentPost.postid}">${CurrentPost.title }</a></td>
+				<td id="username${postuser.get(loop.count-1) }">${postuser.get(loop.count-1) }</td>
 				<td id="posttime${CurrentPost.posttime}">${CurrentPost.posttime }</td>
 				<td id="newtime${CurrentPost.newtime }">${CurrentPost.newtime }</td>
 				<td id="numpost${CurrentPost.numpost}">${CurrentPost.numpost }</td>
