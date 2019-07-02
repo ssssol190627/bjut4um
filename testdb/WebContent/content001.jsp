@@ -64,7 +64,6 @@
  <div class="nav">
  	<a href="/testdb/home1">返回</a>
  </div>
-
     <div class="post">
  	<h3 class="postTitle">${post.title }</h3>
  	<div class="avatar">
