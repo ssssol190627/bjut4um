@@ -438,7 +438,7 @@ public class UserController {
     	}
     	dao.updateHandle(report);
     	
-    	 return "/reportAdmin.jsp";
+    	return "/reportAdmin";
     }
 
 
