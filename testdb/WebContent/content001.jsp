@@ -6,6 +6,7 @@
 <head>
 <meta charset="utf-8">
 <title>${post.title }</title>
+	<link rel="stylesheet" href="style_home.css" type="text/css"/>
 	<style> 
         .black_overlay{ 
             display: none; 
@@ -34,7 +35,6 @@
             overflow: auto; 
         } 
     </style>
-<link rel="stylesheet" href="style_home.css" type="text/css"/>
 	<script type="text/javascript">
 		function replyPost(postUser,postContent){			
 			var s="<%=session.getAttribute("CurrentUser")%>";
@@ -47,7 +47,7 @@
 				document.getElementById("replyContent").readOnly=false;
 			}
 		}
-		function replyFloor(floorUser,floorContent){
+		function replyFloor(loopCount,floorId,floorUser,floorContent){
 			var s="<%=session.getAttribute("CurrentUser")%>";
 			if(s=="null"){
 				alert("请先登录");
@@ -55,6 +55,7 @@
 			}
 			else{
 				document.getElementById("showReplyContent").textContent ="回复："+floorUser+":"+floorContent;
+				document.getElementById("floorId+"+loopCount).value =""+floorId;
 				document.getElementById("replyContent").readOnly=false;
 			}
 		}
@@ -108,7 +109,7 @@
         	<td id="replyingDate">${floor.floortime }</td>
         	<td id="content">${floor.floorcontent }</td>
             <td >
-        		<a id="clickToReplyFloor" href = "javascript:void(0)" onclick="replyFloor('${flooruser.get(loop.count-1)}','${floor.floorcontent }')">回复</a>|
+        		<a id="clickToReplyFloor" href = "javascript:void(0)" onclick="replyFloor('${loop.count}','${floor.floorid }','${flooruser.get(loop.count-1)}','${floor.floorcontent }')">回复</a>|
         		<a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">举报</a>
         	</td>
         	<div id="light" class="white_content">
@@ -121,7 +122,7 @@
 				<input type="radio" name="reportType" value="不实信息" /> 不实信息<br />
 				<input type="radio" name="reportType" value="内容抄袭" /> 内容抄袭
 				<input type="hidden" name="postId" value="${post.postid}" /> 
-				<input type="hidden" name="floorId" value="${floor.floorid }" /> 
+				<input type="hidden" name="floorId" id="floorId+${loop.count}"/> 
 				<br>举报原因：<br>
 				<input type="text" name="reportReason" value="">
 				<input type="submit" name="submit" value="确定" onclick ="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">

@@ -6,30 +6,58 @@
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta charset="utf-8">
 	<title>login</title>
-	<link rel="icon" href="../../favicon.ico">
-	
-	<!-- Bootstrap core CSS -->
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+	<!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>-->
 
     <!-- Custom styles for this template -->
+    <script>
+    	$(document).ready(function(){
+    		$(document).mousemove(function(e){
+    	    	 TweenLite.to($('body'), 
+    	        	.5, 
+    	        		{ css: 
+    	            		{
+    	                		backgroundPosition: ""+ parseInt(event.pageX/8) + "px "+parseInt(event.pageY/'12')+"px, "+parseInt(event.pageX/'15')+"px "+parseInt(event.pageY/'15')+"px, "+parseInt(event.pageX/'30')+"px "+parseInt(event.pageY/'30')+"px"
+    	            		}
+    	        		});
+    	  	});
+    	});
+    </script>
     <link rel="stylesheet" href="style_home.css" type="text/css" />
+	
 </head>
 <body>
-	<div class="login-container">
-    	<form class="form-signin" action="login">
-        	<h2 class="form-signin-heading">欢迎来到登录页面</h2>
-        	<label for="inputUsername" class="sr-only">用户名</label>
-        	<input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
-        	<label for="inputPassword" class="sr-only">密码</label>
-        	<input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-        	<br>
-        	<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-    	</form>
-    </div> <!-- /container -->    
+	<!--  <script src="http://mymaplist.com/js/vendor/TweenLite.min.js"></script>-->
+	
+	<div class="nav">
+	<h1>dkds;fd</h1>导航</div>
+	<div class="login-body">
+		<div class="container">
+    		<div class="vertical-offset-100">
+    			<div class="col-md-4 col-md-offset-4">
+    				<div class="panel panel-default">
+			  			<div class="panel-heading">
+			    			<h3 class="panel-title">欢迎来到登录页面</h3>
+			 			</div>
+			  		<div class="panel-body">
+			    	<form accept-charset="UTF-8" action="login">
+                    <fieldset>
+			    	  	<div class="form-group">
+			    		    <input class="form-control" placeholder="用户名" name="username" type="text">
+			    		</div>
+			    		<div class="form-group">
+			    			<input class="form-control" placeholder="密码" name="password" type="password">
+			    		</div>
+			    		<input class="btn btn-lg btn-success btn-block" type="submit" value="登录">
+			    	</fieldset>
+			   	 	</form>
+			    	</div>
+				</div>
+			</div>
+		</div>
+	</div>   
+	</div>
 </body>
 </html>
