@@ -17,15 +17,21 @@
 	</div>
 	<h3 class="footer">我的贴子</h3>
 	<div class="single_content">
+
 		<c:forEach items="${posted}" var="post" varStatus="postStatus">
 			<br>
+
         	<tr>
+
         	${postStatus.index }
         	<a href="/testdb/post/${post.postid }">${post.title }${post.posttime }</a>
+
         	</tr>
         	<br>
         </c:forEach> 
+        </table>
 	</div>
+
 	<h3 class="footer">我的回复</h3>
 		<div class="single_content">
 		<c:forEach items="${floored}" var="floor" varStatus="postStatus" >
@@ -35,5 +41,6 @@
         	</tr>
         	<br>
         </c:forEach> 
+
 </body>
 </html>

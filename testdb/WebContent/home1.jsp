@@ -28,6 +28,7 @@
 			</c:forEach>
 
 		</table>
+
 	</div>
 	<div class="latest_content">
 		<div class="single_content">
