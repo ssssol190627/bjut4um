@@ -49,7 +49,7 @@ public class Post {
 	public String getNewtime() {
 		return newtime;
 	}
-	public void setNewtime(String posttime) {
+	public void setNewtime(String newtime) {
 		this.newtime=newtime;
 	}
 	public String getPostcontent() {

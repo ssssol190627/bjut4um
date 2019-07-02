@@ -23,7 +23,7 @@ import javax.servlet.*;
 
 import bean.*;
 import dao.UserDao;
-
+import java.util.Date;
 @Controller
 public class UserController {
 	/**
@@ -303,7 +303,30 @@ public class UserController {
 	public String enterBoard(@PathVariable int boardid, Model model, HttpSession session, HttpServletRequest request) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		UserDao dao = (UserDao) context.getBean("dao");
-
+		if(request.getHeader("Referer").toString().equals("http://localhost:8080/testdb/addPost")) {
+			String newPostTitle=request.getParameter("title");
+			String newPostContent=request.getParameter("content");
+			if((!newPostTitle.isEmpty())&&(!newPostContent.isEmpty())) {
+				Post post=new Post();
+		    	Board board=(Board)session.getAttribute("nowBoard");
+		    	User user=(User)session.getAttribute("CurrentUser");
+		    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+		    	String nowtime=df.format(new Date());
+		    	post.setBoardid(board.getBoardid());
+		    	post.setTitle(newPostTitle);
+		    	post.setPostcontent(newPostContent);
+		    	post.setUserid(user.getId());
+		    	post.setPosttime(nowtime);
+		    	post.setNewtime(nowtime);
+		    	post.setIsBanned(0);
+		    	post.setIsGood(0);
+		    	post.setIsExist(1);
+		    	post.setNumpost(0);
+		    	post.setPostid(dao.queryForAllPost().size()+1);
+		    	dao.addPost(post);
+			}
+			
+		}
 		int pageNum = 1;
 		if (request.getQueryString() != null) {
 			pageNum = Integer.parseInt(request.getParameter("page").toString());
@@ -324,12 +347,13 @@ public class UserController {
 		}
 
 		// User user=queryUserNameById()
-		String boardname = nowboard.getBoardname();
-		model.addAttribute("nowBoardName", boardname);
-		model.addAttribute("nowBoardId", boardid);
+		//String boardname = nowboard.getBoardname();
+		model.addAttribute("nowBoard", nowboard);
+		session.setAttribute("nowBoard", nowboard);
     	model.addAttribute("postuser", ul);
     	session.setAttribute("postuser", ul);
 		model.addAttribute("CurrentPost", pl);
+		session.setAttribute("CurrentPost", pl);
 		return "/board1.jsp";
 	}
 	
@@ -494,19 +518,18 @@ public class UserController {
     }*/
 
     /**
-     * Ҫ������ҳ����Ϣ
-     * @param msg
-     * @return ����ֵ���ͣ� String
-     * @author janinus
-<<<<<<< HEAD
-=======
->>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
-=======
-     * 要弹出的页面消息
-     * @param msg
->>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
->>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
+     * 
+     *发表新帖
+     * 
      */
+    @RequestMapping(value = "/addPost")
+    public String addPost(Model model, HttpSession session) {
+    	
+    	return "addPost.jsp";
+    }
+    
+ 
+    
     public String msg(String msg) {
 	return "<script>alert('" + msg + "')</script>";
     }
