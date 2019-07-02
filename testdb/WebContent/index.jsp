@@ -19,6 +19,7 @@
 		<span>
 		
 		</span>
+
 		<%
 			int boardSize=7;
 			String boardTitle[]={"情感天地","荒野求生","娱乐明星","追剧狂","爱小说","工大生活","工大学习"};
