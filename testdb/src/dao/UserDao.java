@@ -101,6 +101,15 @@ public class UserDao {
     	return jdbcTemplate.query(sql, new PostMapper());
     }
     
+    /**
+     *查询所有帖子
+     * 
+     */
+    public List<Post> queryForAllPost() {
+    	String sql = "select * from post" ;
+    	return jdbcTemplate.query(sql, new PostMapper());
+    }
+    
     /** 
      * 获取最后一个举报
     * 
@@ -254,7 +263,17 @@ public class UserDao {
     	Object reportObj[] = new Object[] { report.getIshandle(), report.getReportid() };
     	return jdbcTemplate.update(sql, reportObj) == 1;
 	}
-
+	  /**
+     * 添加帖子
+     * 
+     */
+    public boolean addPost(Post post) {
+	String sql = "insert into post(boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost) values(?,?,?,?,?,?,?,?,?,?,?)";
+int a=0;
+	return jdbcTemplate.update(sql,
+		new Object[] { post.getBoardid(),post.getPostid(),post.getTitle(),post.getUserid(),post.getPosttime(),post.getNewtime(),post.getPostcontent(),post.getIsGood(),post.getIsBanned(),post.getIsExist(),post.getNumpost()},
+		new int[] { Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,  Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER }) == 1;
+    }
     /**
      * 删除学生
      * 
