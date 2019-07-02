@@ -254,6 +254,15 @@ public class UserDao {
     	Object reportObj[] = new Object[] { report.getIshandle(), report.getReportid() };
     	return jdbcTemplate.update(sql, reportObj) == 1;
 	}
+	
+	/**
+	 * 根据关键词模糊查询
+	 * 
+	 */
+    public List<Post> findBooksAjax(String name) {
+    	String sql = "select distinct title from post where title like \"%"+name+"%\"";
+    	return jdbcTemplate.query(sql, new PostTitleMapper());
+    }
 
     /**
      * 删除学生
@@ -343,6 +352,33 @@ public class UserDao {
     		User.setisForumAdmin(rs.getInt(7));
 
     		return User;
+    	}
+
+    }
+    
+    /**
+     * 
+     * PostTitleMapper数据库映射
+     * 
+     */
+    class PostTitleMapper implements RowMapper<Post> {
+
+    	public Post mapRow(ResultSet rs, int rowNum) throws SQLException {
+    		// TODO Auto-generated method stub
+    		Post Post = new Post();
+    		Post.setBoardid(0);
+    		Post.setPostid(0);
+    		Post.setTitle(rs.getString(1));
+    		Post.setUserid(0);
+    		Post.setPosttime("");
+    		Post.setNewtime("");
+    		Post.setPostcontent("");
+    		Post.setNumpost(0);
+    		Post.setIsGood(0);
+    		Post.setIsBanned(0);
+    		Post.setIsExist(0);
+
+    		return Post;
     	}
 
     }
