@@ -6,7 +6,6 @@
 <head>
 <meta charset="utf-8">
 <title>${post.title }</title>
-	<link rel="stylesheet" href="style_home.css" type="text/css"/>
 	<style> 
         .black_overlay{ 
             display: none; 
@@ -35,6 +34,7 @@
             overflow: auto; 
         } 
     </style>
+<link rel="stylesheet" href="style_home.css" type="text/css"/>
 	<script type="text/javascript">
 		function replyPost(postUser,postContent){			
 			var s="<%=session.getAttribute("CurrentUser")%>";
@@ -47,7 +47,7 @@
 				document.getElementById("replyContent").readOnly=false;
 			}
 		}
-		function replyFloor(loopCount,floorId,floorUser,floorContent){
+		function replyFloor(floorUser,floorContent){
 			var s="<%=session.getAttribute("CurrentUser")%>";
 			if(s=="null"){
 				alert("请先登录");
@@ -55,7 +55,6 @@
 			}
 			else{
 				document.getElementById("showReplyContent").textContent ="回复："+floorUser+":"+floorContent;
-				document.getElementById("floorId+"+loopCount).value =""+floorId;
 				document.getElementById("replyContent").readOnly=false;
 			}
 		}
@@ -65,6 +64,7 @@
  <div class="nav">
  	<a href="/testdb/home1">返回</a>
  </div>
+
     <div class="post">
  	<h3 class="postTitle">${post.title }</h3>
  	<div class="avatar">
@@ -109,7 +109,7 @@
         	<td id="replyingDate">${floor.floortime }</td>
         	<td id="content">${floor.floorcontent }</td>
             <td >
-        		<a id="clickToReplyFloor" href = "javascript:void(0)" onclick="replyFloor('${loop.count}','${floor.floorid }','${flooruser.get(loop.count-1)}','${floor.floorcontent }')">回复</a>|
+        		<a id="clickToReplyFloor" href = "javascript:void(0)" onclick="replyFloor('${flooruser.get(loop.count-1)}','${floor.floorcontent }')">回复</a>|
         		<a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">举报</a>
         	</td>
         	<div id="light" class="white_content">
@@ -122,7 +122,7 @@
 				<input type="radio" name="reportType" value="不实信息" /> 不实信息<br />
 				<input type="radio" name="reportType" value="内容抄袭" /> 内容抄袭
 				<input type="hidden" name="postId" value="${post.postid}" /> 
-				<input type="hidden" name="floorId" id="floorId+${loop.count}"/> 
+				<input type="hidden" name="floorId" value="${floor.floorid }" /> 
 				<br>举报原因：<br>
 				<input type="text" name="reportReason" value="">
 				<input type="submit" name="submit" value="确定" onclick ="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">
@@ -138,12 +138,13 @@
  
  </div>
  <div class="post a reply">
- 	<form action="content001.jsp" name="postAReply">
+ 	<form action="postReply" name="postAReply">
  		<p id="showReplyContent" name="showReplyContent" ></p>
+ 		<p style="display:none;">232342424</p>
  		<textarea name="replyContent" style="width:200px;height:50px;" placeholder="这里写内容"></textarea>
  		<input type="submit" name="回复"/>
- 		<input type="hidden" name="postId" value="${Temp}" /> 
-		<input type="hidden" name="floorId" value="${Temp}" /> 
+ 		<input type="hidden" name="postId" value="${post.postid }" /> 
+ 		<input type="hidden" name="postId" value="<% %>>"/> 
  	</form>
  </div> 
  
