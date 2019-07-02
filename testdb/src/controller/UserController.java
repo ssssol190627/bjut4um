@@ -416,96 +416,81 @@ public class UserController {
     	
     	 return "/reportAdmin.jsp";
     }
-
-
+	
     /**
-     * ͨ����������ѧ����ʹ��ģ�����ң���������ظ�index.jsp
+     * 
+     * 回复
      * 
      */
-    /*@RequestMapping(value = "/queryByName")
-    public String queryByName(String name, Model model) {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	//��ioc�����л�ȡdao
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	model.addAttribute("Users", dao.queryByName(name));
-    	model.addAttribute("tops", dao.topNum(3));
-    	return "index.jsp";
-    }*/
-
-    /**
-     * 添加新学生，并将结果返回给all页面，由all转发到主页
-     */
-   /* @RequestMapping(value = "/add")
-    public String addStu(String name, String javaScore, String htmlScore, String cssScore, Model model) {
+	@RequestMapping(value = "/post/postReply")
+    public String addPostReply(HttpSession session, @RequestParam("postId") String postId, @RequestParam("replyContent") String replycontent) {
     	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
     	UserDao dao = (UserDao) context.getBean("dao");
-    	User User = new User();
-    	User.setUsername(name);
-    	User.setJavaScore(Double.parseDouble(javaScore));
-    	User.setHtmlScore(Double.parseDouble(htmlScore));
-    	User.setCssScore(Double.parseDouble(cssScore));
-    	boolean result = dao.addStu(User);
-    	if (result)
-    		model.addAttribute("msg", "<script>alert('��ӳɹ���')</script>");
-    	else
-    		model.addAttribute("msg", "<script>alert('��ӳɹ���')</script>");
-    	return "all";
-    }*/
-
+    	
+    	Integer postid = Integer.parseInt(postId);
+    	//Integer floorid = Integer.parseInt(floorId);
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	
+    	List<Post> posted = dao.queryForPostByPostId(postid);
+    	Post post = posted.get(0);
+    	List<Floor> floored = dao.forLastFloor(postid);
+    	Floor lastfloor = floored.get(0);
+    	
+    	Floor newfloor = new Floor();
+    	newfloor.setBoardid(post.getBoardid());
+    	newfloor.setPostid(postid);
+    	newfloor.setFloorid(lastfloor.getFloorid()+1);
+    	newfloor.setAnsfloorid(0);
+    	newfloor.setUserid(currentuser.getId());
+    	newfloor.setFloorcontent(replycontent);
+    	Date date = new Date();
+    	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
+    	newfloor.setFloortime(dateFormat.format(date));
+    	newfloor.setIsbanned(0);
+    	newfloor.setIsgood(0);
+    	newfloor.setIsexist(1);
+    	
+		boolean result = dao.addFloor(newfloor);
+		return "/content001.jsp";
+    }
+	
     /**
-     * 通过id删除学生
+     * 从个人主页进入申请界面
+     * 
      */
-    @RequestMapping(value = "/deleteById")
-    public String deleteById(String id, Model model) {
-	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	UserDao dao = (UserDao) context.getBean("dao");
-	boolean result = dao.deleteStu(Integer.parseInt(id));
-	if (result)
-	    model.addAttribute("msg", "<script>alert('ɾ���ɹ���')</script>");
-	else
-	    model.addAttribute("msg", "<script>alert('ɾ���ɹ���')</script>");
-	return "all";
+	@RequestMapping(value = "/applyBoard")
+    public String toApplyBoard() {
+    	 return "/applyBoard.jsp";
+    }
+	
+    /**
+     * 申请一个新的板块
+     * 
+     */
+	@RequestMapping(value = "/applyNewboard")
+    public String toapplyNewBoard(HttpSession session, @RequestParam("boardname") String boardname, @RequestParam("boardreason") String boardreason) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	List<Applyingboard> applying = dao.forLastApplyingboard();
+    	Integer applyingid;
+    	if(applying.size()==0) {
+    		applyingid = 0;
+    	}else {
+    		applyingid = applying.get(0).getApplyingid()+1;
+    	}
+    	Applyingboard applyingboard = new Applyingboard();
+    	applyingboard.setApplyingid(applyingid);
+    	applyingboard.setBoardname(boardname);
+    	applyingboard.setApplyingreason(boardreason);
+    	applyingboard.setUserid(currentuser.getId());
+    	
+    	boolean result = dao.addApplyingboard(applyingboard);    	
+    	 return "/applyBoard.jsp";
     }
 
     /**
-     * 
-     * @param id
-     * @param name
-     * @param javaScore
-     * @param htmlScore
-     * @param cssScore
-     */
-    /*@RequestMapping(value = "/update")
-    public String updateStu(String id, String name, String javaScore, String htmlScore, String cssScore, Model model) {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	User User = new User();
-    	User.setId(Integer.parseInt(id));
-    	User.setUsername(name);
-    	User.setJavaScore(Double.parseDouble(javaScore));
-    	User.setHtmlScore(Double.parseDouble(htmlScore));
-    	User.setCssScore(Double.parseDouble(cssScore));
-    	boolean result = dao.updateStu(User);
-    	if (result)
-    		model.addAttribute("msg", msg("�޸ĳɹ�"));
-    	else
-    		model.addAttribute("msg", msg("�޸�ʧ��"));
-    	return "all";
-    }*/
-
-    /**
-     * Ҫ������ҳ����Ϣ
-     * @param msg
-     * @return ����ֵ���ͣ� String
-     * @author janinus
-<<<<<<< HEAD
-=======
->>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
-=======
-     * 要弹出的页面消息
-     * @param msg
->>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
->>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
      */
     public String msg(String msg) {
 	return "<script>alert('" + msg + "')</script>";

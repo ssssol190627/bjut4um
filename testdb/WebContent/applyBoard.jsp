@@ -20,31 +20,10 @@
  	
  </div>
  <div class="post">
- 	<!-- <h3 class="postTitle">为客户的产品量身制作合格的包装箱</h3>
- 	<div class="avatar">
- 		<img alt="" src="images/tu1.jpg" height="50" width="50">
- 		<p class="username">wang77</p>
- 		<p class="postingDate">2019/06/20 23:03:07</p>
- 		<p class="reqport">举报</p>
- 	</div>
- 	<p class="footer">我有个问题，大家可以讲一讲如何为客户定制合格的包装箱吗？</p>
- 	
- 	<%
-		//判断cookie的id 与贴子id是否一样，一样out.println("修改");
-	%>
- </div>
- <div class="reply">
-  	<div class="avatar">
- 		<img alt="" src="images/tu1.jpg" height="50" width="50">
- 		<p class="username">feifei</p>
- 		<p class="replyingDate">2019/06/20 23:05:07</p>
- 		<p class="reqport">举报</p>
- 	</div>
-     <p class="replyContent">必须要做好的包装盒！！！</p> -->
      <h3 class="post a reply">申请板块</h3>
-     <form action="userPreference.jsp" name="applyBoard">
+     <form action="applyNewboard" name="applyBoard">
         <input type="text" name="boardname" value="板块名">
-        <textarea name="a" style="width:200px;height:50px;">申请理由</textarea>
+        <textarea name="boardreason" style="width:200px;height:50px;">申请理由</textarea>
         <input type="submit">提交申请</input>
     </form>
     
