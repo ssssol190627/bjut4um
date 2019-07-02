@@ -1,6 +1,8 @@
 package dao;
 
 import java.sql.ResultSet;
+
+
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
@@ -395,7 +397,6 @@ public class UserDao {
 
     		return Floor;
     	}
-
     }
     
     /**
@@ -420,7 +421,6 @@ public class UserDao {
 
     		return Report;
     	}
-
     }
 
 }

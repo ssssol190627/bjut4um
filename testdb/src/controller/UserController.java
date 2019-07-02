@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.springframework.web.context.request.*;
 
 import com.mysql.cj.Query;
@@ -27,7 +28,7 @@ import dao.UserDao;
 public class UserController {
 	/**
      * 
-     * 跳转登录界面
+     * ��ת��¼����
      * 
      */
     @RequestMapping(value = "/loginpage")
@@ -37,7 +38,7 @@ public class UserController {
     
 	/**
      * 
-     * 登录
+     * ��¼
      * 
      */
     @RequestMapping(value = "/login")
@@ -64,7 +65,7 @@ public class UserController {
 	
     /**
      * 
-     * 进入个人中心界面，显示“我的帖子”，“我的回帖”
+     * ����������Ľ��棬��ʾ���ҵ����ӡ������ҵĻ�����
      * 
      */
     @RequestMapping(value = "/accountCenter")
@@ -82,7 +83,7 @@ public class UserController {
     
     /**
      * 
-     * 进入修改密码界面
+     * �����޸��������
      * 
      */
     @RequestMapping(value = "/userPreferences")
@@ -92,7 +93,7 @@ public class UserController {
     
     /**
      * 
-     * 修改密码
+     * �޸�����
      * 
      */
     @RequestMapping(value = "/updatePassword")
@@ -112,7 +113,7 @@ public class UserController {
     		return "userPreferences.jsp";
     	}
     }
-    
+
 	/**
 	 * 
 	 * 返回主页界面
@@ -418,13 +419,13 @@ public class UserController {
 
 
     /**
-     * 通过姓名查找学生，使用模糊查找，将结果返回给index.jsp
+     * ͨ����������ѧ����ʹ��ģ�����ң���������ظ�index.jsp
      * 
      */
     /*@RequestMapping(value = "/queryByName")
     public String queryByName(String name, Model model) {
     	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-	//从ioc容器中获取dao
+	//��ioc�����л�ȡdao
     	UserDao dao = (UserDao) context.getBean("dao");
     	model.addAttribute("Users", dao.queryByName(name));
     	model.addAttribute("tops", dao.topNum(3));
@@ -445,9 +446,9 @@ public class UserController {
     	User.setCssScore(Double.parseDouble(cssScore));
     	boolean result = dao.addStu(User);
     	if (result)
-    		model.addAttribute("msg", "<script>alert('添加成功！')</script>");
+    		model.addAttribute("msg", "<script>alert('��ӳɹ���')</script>");
     	else
-    		model.addAttribute("msg", "<script>alert('添加成功！')</script>");
+    		model.addAttribute("msg", "<script>alert('��ӳɹ���')</script>");
     	return "all";
     }*/
 
@@ -460,9 +461,9 @@ public class UserController {
 	UserDao dao = (UserDao) context.getBean("dao");
 	boolean result = dao.deleteStu(Integer.parseInt(id));
 	if (result)
-	    model.addAttribute("msg", "<script>alert('删除成功！')</script>");
+	    model.addAttribute("msg", "<script>alert('ɾ���ɹ���')</script>");
 	else
-	    model.addAttribute("msg", "<script>alert('删除成功！')</script>");
+	    model.addAttribute("msg", "<script>alert('ɾ���ɹ���')</script>");
 	return "all";
     }
 
@@ -486,20 +487,27 @@ public class UserController {
     	User.setCssScore(Double.parseDouble(cssScore));
     	boolean result = dao.updateStu(User);
     	if (result)
-    		model.addAttribute("msg", msg("修改成功"));
+    		model.addAttribute("msg", msg("�޸ĳɹ�"));
     	else
-    		model.addAttribute("msg", msg("修改失败"));
+    		model.addAttribute("msg", msg("�޸�ʧ��"));
     	return "all";
     }*/
 
     /**
+     * Ҫ������ҳ����Ϣ
+     * @param msg
+     * @return ����ֵ���ͣ� String
+     * @author janinus
+<<<<<<< HEAD
+=======
+>>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
+=======
      * 要弹出的页面消息
      * @param msg
-     * @return 返回值类型： String
-     * @author janinus
+>>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
+>>>>>>> branch 'master' of https://github.com/ssssol190627/bjut4um.git
      */
     public String msg(String msg) {
 	return "<script>alert('" + msg + "')</script>";
     }
 }
-

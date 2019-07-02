@@ -35,8 +35,30 @@
         } 
     </style>
 <link rel="stylesheet" href="style_home.css" type="text/css"/>
-<SCRIPT language=javascript>
-</SCRIPT> 
+	<script type="text/javascript">
+		function replyPost(postUser,postContent){			
+			var s="<%=session.getAttribute("CurrentUser")%>";
+			if(s=="null"){
+				alert("请先登录");
+				document.getElementById("replyContent").readOnly=true;
+			}
+			else{
+				document.getElementById("showReplyContent").textContent ="回复："+postUser+":"+postContent;
+				document.getElementById("replyContent").readOnly=false;
+			}
+		}
+		function replyFloor(floorUser,floorContent){
+			var s="<%=session.getAttribute("CurrentUser")%>";
+			if(s=="null"){
+				alert("请先登录");
+				document.getElementById("replyContent").readOnly=true;
+			}
+			else{
+				document.getElementById("showReplyContent").textContent ="回复："+floorUser+":"+floorContent;
+				document.getElementById("replyContent").readOnly=false;
+			}
+		}
+	</script>
 </head>
 <body>
  <div class="nav">
@@ -49,7 +71,9 @@
  		<img alt="" src="images/tu1.jpg" height="50" width="50">
  		<p class="username">${postuser.username }</p>
  		<p class="postingDate">${post.posttime }</p>
- 		<p class="reply" onclick = "">回复</p>
+ 		<p class="footer">${post.postcontent }</p>
+ 		<p>
+ 		    <a id="clickToReplyPost" href = "javascript:void(0)" onclick="replyPost('${postuser.username }','${post.postcontent }')">回复</a>|
 			<a href = "javascript:void(0)" onclick = "document.getElementById('light0').style.display='block';document.getElementById('fade0').style.display='block'">举报</a>
  		</p> 
         <div id="light0" class="white_content">
@@ -70,7 +94,6 @@
 			</form>
 		</div> 
         <div id="fade0" class="black_overlay"></div>
- 	<p class="footer">${post.postcontent }</p>
  	
  	<%
 		//判断cookie的id 与贴子id是否一样，一样out.println("修改");
@@ -85,8 +108,10 @@
         	<td id="us">${flooruser.get(loop.count-1)}</td>
         	<td id="replyingDate">${floor.floortime }</td>
         	<td id="content">${floor.floorcontent }</td>
-            <td> <a onclick="reply_con(${floor.floorid})">回复</a> </td>
- 			<a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">举报</a>
+            <td >
+        		<a id="clickToReplyFloor" href = "javascript:void(0)" onclick="replyFloor('${flooruser.get(loop.count-1)}','${floor.floorcontent }')">回复</a>|
+        		<a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">举报</a>
+        	</td>
         	<div id="light" class="white_content">
         	<form action="report">
 				<br>举报类型：<br>
@@ -114,7 +139,8 @@
  </div>
  <div class="post a reply">
  	<form action="content001.jsp" name="postAReply">
- 		<textarea name="replyContent" style="width:200px;height:50px;">这里写内容</textarea>
+ 		<p id="showReplyContent" name="showReplyContent" ></p>
+ 		<textarea name="replyContent" style="width:200px;height:50px;" placeholder="这里写内容"></textarea>
  		<input type="submit" name="回复"/>
  		<input type="hidden" name="postId" value="${Temp}" /> 
 		<input type="hidden" name="floorId" value="${Temp}" /> 

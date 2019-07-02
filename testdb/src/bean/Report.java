@@ -1,4 +1,3 @@
-
 package bean;
 
 public class Report {
