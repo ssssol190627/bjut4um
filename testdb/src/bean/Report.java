@@ -13,58 +13,58 @@ public class Report {
 	
 	public Report() {}
 	
-	public Integer getReportId() {
+	public Integer getReportid() {
 		return reportid;
 	}
-	public void setReportId(Integer reportid) {
+	public void setReportid(Integer reportid) {
 		this.reportid=reportid;
 	}
-	public Integer getBoardId() {
+	public Integer getBoardid() {
 		return boardid;
 	}
-	public void setBoardId(Integer boardid) {
+	public void setBoardid(Integer boardid) {
 		this.boardid=boardid;
 	}
-	public Integer getPostId() {
+	public Integer getPostid() {
 		return postid;
 	}
-	public void setPostId(Integer postid) {
+	public void setPostid(Integer postid) {
 		this.postid=postid;
 	}
-	public Integer getFloorId() {
+	public Integer getFloorid() {
 		return floorid;
 	}
-	public void setFloorId(Integer floorid) {
+	public void setFloorid(Integer floorid) {
 		this.floorid=floorid;
 	}
-	public Integer getUserId() {
+	public Integer getUserid() {
 		return userid;
 	}
-	public void setUserId(Integer userid) {
+	public void setUserid(Integer userid) {
 		this.userid=userid;
 	}
-	public String getReportTime() {
+	public String getReporttime() {
 		return reporttime;
 	}
-	public void setReportTime(String reporttime) {
+	public void setReporttime(String reporttime) {
 		this.reporttime=reporttime;
 	}
-	public String getReportBrief() {
+	public String getReportbrief() {
 		return reportbrief;
 	}
-	public void setReportBrief(String reportbrief) {
+	public void setReportbrief(String reportbrief) {
 		this.reportbrief=reportbrief;
 	}
-	public String getReportContent() {
+	public String getReportcontent() {
 		return reportcontent;
 	}
-	public void setReportContent(String reportcontent) {
+	public void setReportcontent(String reportcontent) {
 		this.reportcontent=reportcontent;
 	}
-	public Integer getIsHandle() {
+	public Integer getIshandle() {
 		return ishandle;
 	}
-	public void setIsHandle(Integer ishandle) {
+	public void setIshandle(Integer ishandle) {
 		this.ishandle=ishandle;
 	}
 }

@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+
 import bean.*;
 
 
@@ -96,7 +97,7 @@ public class UserDao {
      * 
      */
     public List<Post> queryForPostByPostId(Integer id) {
-    	String sql = "select * from post where postid = "+id ;
+    	String sql = "select * from post where id = "+id ;
     	return jdbcTemplate.query(sql, new PostMapper());
     }
     
@@ -105,7 +106,7 @@ public class UserDao {
     * 
     */
    public List<Report> forLastReport() {
-	   String sql = "select * from report order by id desc LIMIT 1" ;
+	   String sql = "select * from report order by reportid desc LIMIT 1" ;
    		return jdbcTemplate.query(sql, new ReportMapper());
    }
     
@@ -137,8 +138,8 @@ public class UserDao {
     public boolean addReport(Report report) {
 	String sql = "insert into Report(reportid,boardid,postid,floorid,userid,reporttime,reportbrief,reportcontent,isHandle) values(?,?,?,?,?,?,?,?,?)";
 	return jdbcTemplate.update(sql,
-		new Object[] { report.getReportId(), report.getBoardId(), report.getPostId(), report.getFloorId(), report.getUserId(), report.getReportTime(), report.getReportBrief(), report.getReportContent(), report.getIsHandle()},
-		new int[] { Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.DATE, Types.VARCHAR, Types.VARCHAR, Types.INTEGER }) == 1;
+		new Object[] { report.getReportid(), report.getBoardid(), report.getPostid(), report.getFloorid(), report.getUserid(), report.getReporttime(), report.getReportbrief(), report.getReportcontent(), report.getIshandle()},
+		new int[] { Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER }) == 1;
     }
     
 	/**
@@ -168,11 +169,11 @@ public class UserDao {
 		return jdbcTemplate.query(sql, new BoardMapper());
 	}
 	
-	public List<Post> findThisPostPage(int startIndex,int pageSize,int boardid){
-		int EndIndex=startIndex+pageSize;
-		String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost from post where boardid = '" + boardid +"' limit "+startIndex+","+EndIndex;
+	public List<Post> findThisBoardPage(int startIndex,int pageSize,int boardid){
+		String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost from post where boardid = '" + boardid +"' limit "+startIndex+","+pageSize;
 		return jdbcTemplate.query(sql, new PostMapper());
 	}
+	
 	public Page<Post> findAllPostWithPage(int pageNum,int pageSize,int boardid){
 		List<Post> allPost=queryPostByBoardId(boardid);
 		int totalRecord = allPost.size();
@@ -180,7 +181,26 @@ public class UserDao {
 		Page p=new Page(pageNum,2,totalRecord);
 		
 		int startIndex = p.getStartIndex();
-		p.setList(findThisPostPage(startIndex,pageSize,boardid));
+		List<Post> thisPagePostList=findThisBoardPage(startIndex,pageSize,boardid);
+		p.setList(thisPagePostList);
+		
+		return p;
+	}
+	
+	public List<Floor> findThisPostPage(int startIndex,int pageSize,int postid){
+		String sql = "select * from floor where postid = '" + postid +"' limit "+startIndex+","+pageSize;
+		return jdbcTemplate.query(sql, new FloorMapper());
+	}
+	
+	public Page<Floor> findAllFloorWithPage(int pageNum,int pageSize,int postid){
+		List<Floor> allFloor=queryForReplyedByPost(postid);
+		int totalRecord = allFloor.size();
+		
+		Page p=new Page(pageNum,2,totalRecord);
+		
+		int startIndex = p.getStartIndex();
+		List<Floor> thisPagePostList=findThisPostPage(startIndex,pageSize,postid);
+		p.setList(thisPagePostList);
 		
 		return p;
 	}
@@ -192,11 +212,48 @@ public class UserDao {
 	 * @author miuu
 	 */
 	public List<Board> queryAllBoard() {
-		String sql = "select id,name,intro,isExist from board";
+		String sql = "select id,name,intro,isExist from board where id>0";
 		// 将查询结果映射到User类中，添加到list中，并返回
 		return jdbcTemplate.query(sql, new BoardMapper());
 	}
 	
+    /**
+	 * 查询所有举报
+	 * 
+	 */
+	public List<Report> queryAllReport() {
+		String sql = "select * from report";
+		// 将查询结果映射到User类中，添加到list中，并返回
+		return jdbcTemplate.query(sql, new ReportMapper());
+	}
+	
+	/**
+	 * 通过reportid查询举报
+	 * 
+	 */
+	public List<Report> queryReportByReportId(int reportid) {
+		String sql = "select * from report where reportid = " + reportid;
+		return jdbcTemplate.query(sql, new ReportMapper());
+	}
+	
+	/**
+	 * 通过floorid查询具体楼层
+	 * 
+	 */
+	public List<Floor> queryFloorByFloorId(int floorid) {
+		String sql = "select * from floor where id = " + floorid;
+		return jdbcTemplate.query(sql, new FloorMapper());
+	}
+	
+	/**
+	 * 通过floorid查询具体楼层
+	 * 
+	 */
+	public boolean updateHandle(Report report) {
+		String sql = "update Report set isHandle = ? where reportid = ?";
+    	Object reportObj[] = new Object[] { report.getIshandle(), report.getReportid() };
+    	return jdbcTemplate.update(sql, reportObj) == 1;
+	}
 
     /**
      * 删除学生
@@ -257,10 +314,10 @@ public class UserDao {
 		public Board mapRow(ResultSet rs, int rowNum) throws SQLException {
 			// TODO Auto-generated method stub
 			Board board = new Board();
-			board.setBoardId(rs.getInt(1));
-			board.setBoardName(rs.getString(2));
+			board.setBoardid(rs.getInt(1));
+			board.setBoardname(rs.getString(2));
 			board.setBoardintro(rs.getString(3));
-			board.setBoardExist(rs.getInt(4));
+			board.setBoardexist(rs.getInt(4));
 			return board;
 		}
 
@@ -327,20 +384,19 @@ public class UserDao {
     	public Floor mapRow(ResultSet rs, int rowNum) throws SQLException {
     		// TODO Auto-generated method stub
     		Floor Floor = new Floor();
-    		Floor.setBoardId(rs.getInt(1));
-    		Floor.setPostId(rs.getInt(2));
-    		Floor.setFloorId(rs.getInt(3));
-    		Floor.setAnsfloorId(rs.getInt(4));
-    		Floor.setUserId(rs.getInt(5));
+    		Floor.setBoardid(rs.getInt(1));
+    		Floor.setPostid(rs.getInt(2));
+    		Floor.setFloorid(rs.getInt(3));
+    		Floor.setAnsfloorid(rs.getInt(4));
+    		Floor.setUserid(rs.getInt(5));
     		Floor.setFloortime(rs.getString(6));
     		Floor.setFloorcontent(rs.getString(7));
-    		Floor.setIsGood(rs.getInt(8));
-    		Floor.setIsBanned(rs.getInt(9));
-    		Floor.setIsExist(rs.getInt(10));
+    		Floor.setIsgood(rs.getInt(8));
+    		Floor.setIsbanned(rs.getInt(9));
+    		Floor.setIsexist(rs.getInt(10));
 
     		return Floor;
     	}
-
     }
     
     /**
@@ -353,18 +409,18 @@ public class UserDao {
     	public Report mapRow(ResultSet rs, int rowNum) throws SQLException {
     		// TODO Auto-generated method stub
     		Report Report = new Report();
-    		Report.setReportId(rs.getInt(1));
-    		Report.setBoardId(rs.getInt(2));
-    		Report.setPostId(rs.getInt(3));
-    		Report.setFloorId(rs.getInt(4));
-    		Report.setUserId(rs.getInt(5));
-    		Report.setReportTime(rs.getString(6));
-    		Report.setReportBrief(rs.getString(7));
-    		Report.setReportContent(rs.getString(8));
-    		Report.setIsHandle(rs.getInt(9));
+    		Report.setReportid(rs.getInt(1));
+    		Report.setBoardid(rs.getInt(2));
+    		Report.setPostid(rs.getInt(3));
+    		Report.setFloorid(rs.getInt(4));
+    		Report.setUserid(rs.getInt(5));
+    		Report.setReporttime(rs.getString(6));
+    		Report.setReportbrief(rs.getString(7));
+    		Report.setReportcontent(rs.getString(8));
+    		Report.setIshandle(rs.getInt(9));
 
     		return Report;
     	}
-
     }
+
 }

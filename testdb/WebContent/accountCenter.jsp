@@ -21,7 +21,7 @@
 			<br>
         	<tr>
         	${postStatus.index }
-        	<a href="detailedpost/${postStatus.index }">${post.title }${post.posttime }</a>
+        	<a href="/testdb/post/${post.postid}">${post.title }${post.posttime }</a>
         	</tr>
         	<br>
         </c:forEach> 

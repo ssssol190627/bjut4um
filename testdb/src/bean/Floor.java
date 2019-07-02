@@ -15,34 +15,34 @@ public class Floor {
 	
 	public Floor() {}
 	
-	public Integer getBoardId() {
+	public Integer getBoardid() {
 		return boardid;
 	}
-	public void setBoardId(Integer boardid) {
+	public void setBoardid(Integer boardid) {
 		this.boardid=boardid;
 	}
-	public Integer getPostId() {
+	public Integer getPostid() {
 		return postid;
 	}
-	public void setPostId(Integer postid) {
+	public void setPostid(Integer postid) {
 		this.postid=postid;
 	}
-	public Integer getFloorId() {
+	public Integer getFloorid() {
 		return floorid;
 	}
-	public void setFloorId(Integer floorid) {
+	public void setFloorid(Integer floorid) {
 		this.floorid=floorid;
 	}
-	public Integer getAnsfloorId() {
+	public Integer getAnsfloorid() {
 		return ansfloorid;
 	}
-	public void setAnsfloorId(Integer ansfloorid) {
+	public void setAnsfloorid(Integer ansfloorid) {
 		this.ansfloorid=ansfloorid;
 	}
-	public Integer getUserId() {
+	public Integer getUserid() {
 		return userid;
 	}
-	public void setUserId(Integer userid) {
+	public void setUserid(Integer userid) {
 		this.userid=userid;
 	}
 	public String getFloortime() {
@@ -57,22 +57,22 @@ public class Floor {
 	public void setFloorcontent(String floorcontent) {
 		this.floorcontent = floorcontent;
 	}
-	public Integer getIsGood() {
+	public Integer getIsgood() {
 		return isGood;
 	}
-	public void setIsGood(Integer isGood) {
+	public void setIsgood(Integer isGood) {
 		this.isGood=isGood;
 	}
-	public Integer getIsBanned() {
+	public Integer getIsbanned() {
 		return isBanned;
 	}
-	public void setIsBanned(Integer isBanned) {
+	public void setIsbanned(Integer isBanned) {
 		this.isBanned=isBanned;
 	}
-	public Integer getIsExist() {
+	public Integer getIsexist() {
 		return isExist;
 	}
-	public void setIsExist(Integer isExist) {
+	public void setIsexist(Integer isExist) {
 		this.isExist=isExist;
 	}
 }

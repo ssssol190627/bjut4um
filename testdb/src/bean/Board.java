@@ -5,20 +5,20 @@ public class Board {
 	private Integer boardid;
 	private String boardname;
 	private String intro;
-	private Integer isExist;
+	private int isExist;
 	
 	public Board() {}
 	
-	public Integer getBoardId() {
+	public Integer getBoardid() {
 		return boardid;
 	}
-	public void setBoardId(Integer boardid) {
+	public void setBoardid(Integer boardid) {
 		this.boardid=boardid;
 	}
-	public String getBoardName() {
+	public String getBoardname() {
 		return boardname;
 	}
-	public void setBoardName(String boardname) {
+	public void setBoardname(String boardname) {
 		this.boardname=boardname;
 	}
 	public String getBoardintro() {
@@ -27,10 +27,10 @@ public class Board {
 	public void setBoardintro(String intro) {
 		this.intro=intro;
 	}
-	public Integer getBoardExist() {
+	public Integer getBoardexist() {
 		return isExist;
 	}
-	public void setBoardExist(Integer isExist) {
+	public void setBoardexist(Integer isExist) {
 		this.isExist=isExist;
 	}
 }
