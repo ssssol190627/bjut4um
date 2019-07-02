@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.*;
 import javax.security.auth.message.callback.PrivateKeyCallback.Request;
@@ -530,5 +533,42 @@ public class UserController {
     
     public String msg(String msg) {
 	return "<script>alert('" + msg + "')</script>";
+    }
+    
+    /**
+     * ajax查数据库
+     * @throws IOException 
+     */
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        response.setContentType("text/html;charset=utf-8");
+        request.setCharacterEncoding("utf-8");
+        //获取搜索框输入的内容
+        String name=request.getParameter("name");
+        //向server层调用相应的业务     
+        
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	List<Post> pl=dao.findBooksAjax(name);
+    	String res = "";
+    	for(int i=0;i<pl.size();i++) {
+    		if(i==0)
+    			res=pl.get(i).getTitle();
+    		else
+    			res=res+","+pl.get(i).getTitle();
+    	}
+        //返回结果
+        response.getWriter().write(res);
+    }
+
+    /**
+     * ajax查数据库_2
+     * @throws IOException 
+     */
+    @RequestMapping(value = "/findPostsAjaxServlet")
+    @ResponseBody
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        doGet(request, response);
     }
 }

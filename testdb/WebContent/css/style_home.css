@@ -40,6 +40,5 @@
     background: url(http://mymaplist.com/img/parallax/pinlayer2.png),url(http://mymaplist.com/img/parallax/pinlayer1.png),url(http://mymaplist.com/img/parallax/back.png);    
 }
 .vertical-offset-100{
-    padding:100px;
-    margin:100px;
+    padding-top:150px;
 }
