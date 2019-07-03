@@ -17,7 +17,12 @@
 </head>
 <body>
 	<div class="nav">
-		<a href="boardAdmin">返回</a>
+		<c:if test = "${CurrentUser.isForumAdmin == 1}">
+			<a href="superAdmin">返回</a>
+		</c:if>
+		<c:if test = "${CurrentUser.isForumAdmin != 1}">
+			<a href="boardAdmin">返回</a>
+		</c:if>
 	</div>
 	<table border="1">
 	<tr>

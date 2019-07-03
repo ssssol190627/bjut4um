@@ -36,22 +36,22 @@ public class User {
     public void setEmail(String email) {
     	this.email=email;
     }
-    public Integer getisExist() {
+    public Integer getIsExist() {
     	return isExist;
     }
-    public void setisExist(Integer isExist) {
+    public void setIsExist(Integer isExist) {
     	this.isExist=isExist;
     }
-    public Integer getisBoardAdmin() {
+    public Integer getIsBoardAdmin() {
     	return isBoardAdmin;
     }
-    public void setisBoardAdmin(Integer isBoardAdmin) {
+    public void setIsBoardAdmin(Integer isBoardAdmin) {
     	this.isBoardAdmin=isBoardAdmin;
     }
-    public Integer getisForumAdmin() {
+    public Integer getIsForumAdmin() {
     	return isForumAdmin;
     }
-    public void setisForumAdmin(Integer isForumAdmin) {
+    public void setIsForumAdmin(Integer isForumAdmin) {
     	this.isForumAdmin=isForumAdmin;
     }
 }

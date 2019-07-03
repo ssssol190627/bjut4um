@@ -183,7 +183,7 @@ public class UserDao {
     public boolean addUser(User user) {
 	String sql = "insert into user(id,username,password,email,isExist,isBroadAdmin,isForumAdmin) values(?,?,?,?,?,?,?)";
 	return jdbcTemplate.update(sql,
-		new Object[] { user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getisExist(), user.getisBoardAdmin(), user.getisForumAdmin()},
+		new Object[] { user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getIsExist(), user.getIsBoardAdmin(), user.getIsForumAdmin()},
 		new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER }) == 1;
     }
     
@@ -455,9 +455,9 @@ public class UserDao {
     		User.setUsername(rs.getString(2));
     		User.setPassword(rs.getString(3));
     		User.setEmail(rs.getString(4));
-    		User.setisExist(rs.getInt(5));
-    		User.setisBoardAdmin(rs.getInt(6));
-    		User.setisForumAdmin(rs.getInt(7));
+    		User.setIsExist(rs.getInt(5));
+    		User.setIsBoardAdmin(rs.getInt(6));
+    		User.setIsForumAdmin(rs.getInt(7));
 
     		return User;
     	}
