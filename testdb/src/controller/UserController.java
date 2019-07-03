@@ -492,7 +492,7 @@ public class UserController {
 			} 
 
 		}
-		if (currentuser.getisForumAdmin() != 0) {
+		if (currentuser.getIsBoardAdmin() != 0) {
 			List<Post> pl = dao.queryAllGoodPost();
 			model.addAttribute("goodPost", pl);
 			session.setAttribute("goodPost", pl);
@@ -504,8 +504,8 @@ public class UserController {
 			}
 			model.addAttribute("boardNameList", boardNameList);
 			session.setAttribute("userNameList", userNameList);
-		} else if (currentuser.getisBoardAdmin() != 0) {
-			List<Post> pl = dao.queryAllGoodPostInABoard(currentuser.getisBoardAdmin());
+		} else if (currentuser.getIsBoardAdmin() != 0) {
+			List<Post> pl = dao.queryAllGoodPostInABoard(currentuser.getIsBoardAdmin());
 			model.addAttribute("goodPost", pl);
 			session.setAttribute("goodPost", pl);
 			List<String> boardNameList = new ArrayList();
@@ -520,10 +520,6 @@ public class UserController {
 			return "home1.jsp";
 		}
 		return "good.jsp";
-	}
-
-	public String msg(String msg) {
-		return "<script>alert('" + msg + "')</script>";
 	}
 
 	public String msg(String msg) {

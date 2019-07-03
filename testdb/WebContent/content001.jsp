@@ -162,79 +162,74 @@
 				</div> 
         		<div id="fade" class="black_overlay"></div> 
         	</div> 	
-        </c:forEach>      
- </div>
- 	
+        </c:forEach>
+        <div class="media text-muted pt-3">
+        <%-- 构建分页导航 --%>
+        <c:if test="${page.totalPage > 1}">
+        	<a href="/testdb/post/${post.postid}/?page=1">首页&nbsp;</a>
+        </c:if>		
+		<%--如果当前页为第一页时，就没有上一页这个超链接显示 --%>
+		<c:if test="${page.totalPage > 1}">
+			<c:if test="${page.pageNum ==1}">
+				<c:forEach begin="${page.start}" end="${page.end}" step="1" var="i">
+					<c:if test="${page.pageNum == i}">
+                        ${i}&nbsp;
+                	</c:if>
+					<c:if test="${page.pageNum != i}">
+						<a href="/testdb/post/${post.postid}/?page=${i}">${i}&nbsp;</a>
+					</c:if>
+				</c:forEach>
+			</c:if>			
+			<a href="/testdb/post/${post.postid}/?page=${page.pageNum+1}">下一页&nbsp;</a>
+		</c:if>
+		<%--如果当前页不是第一页也不是最后一页，则有上一页和下一页这个超链接显示 --%>
+		<c:if test="${page.pageNum > 1 && page.pageNum < page.totalPage}">
+			<a href="/testdb/post/${post.postid}/?page=${page.pageNum-1}">上一页&nbsp;</a>
+			<c:forEach begin="${page.start}"
+				end="${page.end}" step="1" var="i">
+				<c:if test="${page.pageNum == i}">
+                        ${i}&nbsp;
+                </c:if>
+				<c:if test="${page.pageNum != i}">
+				<a href="/testdb/post/${post.postid}/?page=${i}">${i}&nbsp;</a>
+				</c:if>
+			</c:forEach>
+			<a href="/testdb/post/${post.postid}/?page=${page.pageNum+1}">下一页&nbsp;</a>
+		</c:if>
+		<%-- 如果当前页是最后一页，则只有上一页这个超链接显示，下一页没有 --%>
+		<c:if test="${page.totalPage > 1}">
+			<c:if test="${page.pageNum == page.totalPage}">
+				<a href="/testdb/post/${post.postid}/?page=${page.pageNum-1}">上一页&nbsp;</a>
+				<c:forEach begin="${page.start}"
+					end="${page.end}" step="1" var="i">
+					<c:if test="${page.pageNum == i}">
+                        ${i}&nbsp;
+                	</c:if>
+					<c:if test="${page.pageNum != i}">
+						<a href="/testdb/post/${post.postid}/?page=${i}">${i}&nbsp;</a>
+					</c:if>
+				</c:forEach>
+			</c:if>
+		</c:if>		
+		<%--尾页 --%>
+		<c:if test="${page.totalPage > 1}">
+			<a href="/testdb/post/${post.postid}/?page=${page.totalPage}">尾页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+		</c:if>			
+		${page.totalRecord}回复帖，共${page.totalPage }页
+		</div>
+	</div>      
  
- </div>
- <div class="post a reply">
- 	<form action="content001.jsp" name="postAReply">
- 		<p id="showReplyContent"></p>
- 		<textarea name="replyContent" style="width:200px;height:50px;" placeholder="这里写内容"></textarea>
- 		<input type="submit" name="回复"/>
- 		<input type="hidden" name="postId" value="${post.postid }" /> 
- 		<input type="hidden" name="postId" value="<% %>>"/> 
- 	</form>
- </div> 
+	<div class="my-3 p-3 bg-white rounded shadow-sm">
+		<form action="content001.jsp" name="postAReply">
+ 			<p id="showReplyContent"></p>
+ 			<textarea name="replyContent" style="width:200px;height:50px;" placeholder="这里写内容"></textarea>
+ 			<input type="submit" name="回复"/>
+ 			<input type="hidden" name="postId" value="${post.postid }" /> 
+ 			<input type="hidden" name="postId" value="<% %>>"/> 
+ 		</form>
+	</div> 	
  </main>
  
-	<%
-	
-	%>
-<%-- 构建分页导航 --%>
-	共有${page.totalRecord}个回复，共${page.totalPage }页，当前为${page.pageNum}页
-	<a href="/testdb/post/${post.postid}/?page=1">首页</a>
-	<%--如果当前页为第一页时，就没有上一页这个超链接显示 --%>
-	<c:if test="${page.pageNum ==1}">
-		<c:forEach begin="${page.start}" end="${page.end}" step="1" var="i">
-			<c:if test="${page.pageNum == i}">
-                        ${i}
-                    </c:if>
-			<c:if test="${page.pageNum != i}">
-				<a
-					href="/testdb/post/${post.postid}/?page=${i}">${i}</a>
-			</c:if>
-		</c:forEach>
-		<a
-			href="/testdb/post/${post.postid}/?page=${page.pageNum+1}">下一页</a>
-	</c:if>
-	<%--如果当前页不是第一页也不是最后一页，则有上一页和下一页这个超链接显示 --%>
-	<c:if
-		test="${page.pageNum > 1 && page.pageNum < page.totalPage}">
-		<a
-			href="/testdb/post/${post.postid}/?page=${page.pageNum-1}">上一页</a>
-		<c:forEach begin="${page.start}"
-			end="${page.end}" step="1" var="i">
-			<c:if test="${page.pageNum == i}">
-                        ${i}
-                    </c:if>
-			<c:if test="${page.pageNum != i}">
-				<a
-					href="/testdb/post/${post.postid}/?page=${i}">${i}</a>
-			</c:if>
-		</c:forEach>
-		<a
-			href="/testdb/post/${post.postid}/?page=${page.pageNum+1}">下一页</a>
-	</c:if>
-	<%-- 如果当前页是最后一页，则只有上一页这个超链接显示，下一页没有 --%>
-	<c:if
-		test="${page.pageNum == page.totalPage}">
-		<a
-			href="/testdb/post/${post.postid}/?page=${page.pageNum-1}">上一页</a>
-		<c:forEach begin="${page.start}"
-			end="${page.end}" step="1" var="i">
-			<c:if test="${page.pageNum == i}">
-                        ${i}
-                    </c:if>
-			<c:if test="${page.pageNum != i}">
-				<a
-					href="/testdb/post/${post.postid}/?page=${i}">${i}</a>
-			</c:if>
-		</c:forEach>
-	</c:if>
-	<%--尾页 --%>
-	<a
-		href="/testdb/post/${post.postid}/?page=${page.totalPage}">尾页</a>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
     <script src="https://getbootstrap.com/docs/4.1/assets/js/vendor/popper.min.js"></script>
