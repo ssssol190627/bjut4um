@@ -3,19 +3,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入 Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<title>管理举报信息</title>
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath }/css/style_home.css" type="text/css" />
+	<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+  	<script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+  	<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script> 
+  	<style> 
+		.accountCentercontainer{ font-size:14px} 
+	</style>
 </head>
 <body>
-	<div class="nav">
-		<a href="boardAdmin.jsp">返回</a>
-	</div>
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  		<ul class="navbar-nav">
+    		<li class="nav-item active">
+				<a class="nav-link" href="boardAdmin.jsp">返回</a>
+    		</li>
+  		</ul>
+	</nav>
+
 	<form action="boardAdmin.jsp">
 		<br>帖子关键词：<br>
 		<input type="text" name="searchToBanByKeyWord" value="searchToBanByKeyWord">
 		<input type="submit" name="submit" value="搜索">
 		<br>
 	</form>
+	
+	
 	<table border="1">
 	<tr>
 		<th>举报类型</th>

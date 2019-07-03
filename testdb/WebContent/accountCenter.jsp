@@ -65,8 +65,10 @@
 			</thead>
 			<tbody>
 				<c:forEach items="${floored}" var="floor" varStatus="postStatus" >
-					<td><a href="/testdb/post/${floor.postid }">${floor.floorcontent }</a></td>
-			       	<td>${floor.floortime }</td>
+					<tr>
+						<td><a href="/testdb/post/${floor.postid }">${floor.floorcontent }</a></td>
+				       	<td>${floor.floortime }</td>
+			       	</tr>
         		</c:forEach>	
 			</tbody>
         </table> 

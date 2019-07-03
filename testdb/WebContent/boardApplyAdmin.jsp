@@ -4,23 +4,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入 Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<title>管理举报信息</title>
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath }/css/style_home.css" type="text/css" />
+	<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+  	<script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+  	<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script> 
+  	<style> 
+		.accountCentercontainer{ font-size:14px} 
+	</style>
 </head>
 <body>
-	<div class="nav">
-		<a href="superAdmin.jsp">返回</a>
-	</div>
-	<table border="1">
-	<caption align="top">板块申请信息列表</caption>
-	<tr>
-	    <th>板块名</th>
-		<th>申请人</th>
-		<th>申请理由</th>
-		<th>申请时间</th>
-		<th>是否通过</th>
-	</tr>
-	<c:forEach items="${applyboards}" var="applyboard" varStatus="loop">
+
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  		<ul class="navbar-nav">
+    		<li class="nav-item active">
+				<a class="nav-link" href="superAdmin.jsp">返回</a>
+    		</li>
+  		</ul>
+	</nav>
+
+	<h3 class="footer">板块申请信息</h3>
+	<table class="table table-hover">
+		<thead>
+   			<tr>
+		       	 <th>板块名</th>
+				<th>申请人</th>
+				<th>申请理由</th>
+				<th>申请时间</th>
+				<th>是否通过</th>
+   			</tr>
+		</thead>
+		<tbody>
+		<c:forEach items="${applyboards}" var="applyboard" varStatus="loop">
 		<tr>
 		    <td>${applyboard.boardname }</td>
 		    <td>${username.get(loop.count-1) }</td>
@@ -40,16 +60,22 @@
 			</c:if>
    		</tr>
     </c:forEach>
+		</tbody> 
 	</table>
-	<table border="1">
-	<caption align="top">板块管理员申请信息列表</caption>
-	<tr>
-	    <th>板块名</th>
+
+
+	<h3 class="footer">板块管理员申请信息</h3>
+	<table class="table table-hover">
+		<thead>
+   			<tr>
+		      <th>板块名</th>
 		<th>申请人</th>
 		<th>申请理由</th>
 		<th>申请时间</th>
 		<th>是否通过</th>
-	</tr>
+   			</tr>
+		</thead>
+		<tbody>
 	<c:forEach items="${applyadmins}" var="applyadmin" varStatus="loop">
 		<tr>
 		    <td>${boardname.get(loop.count-1) }</td>
@@ -71,6 +97,8 @@
 			</c:if>
    		</tr>
     </c:forEach>
+		</tbody> 
 	</table>
+
 </body>
 </html>
