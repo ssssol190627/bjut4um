@@ -64,6 +64,7 @@
  <div class="nav">
  	<a href="/testdb/home1">返回</a>
  </div>
+
     <div class="post">
  	<h3 class="postTitle">${post.title }</h3>
  	<div class="avatar">
@@ -137,12 +138,13 @@
  
  </div>
  <div class="post a reply">
- 	<form action="content001.jsp" name="postAReply">
+ 	<form action="postReply" name="postAReply">
  		<p id="showReplyContent" name="showReplyContent" ></p>
+ 		<p style="display:none;">232342424</p>
  		<textarea name="replyContent" style="width:200px;height:50px;" placeholder="这里写内容"></textarea>
  		<input type="submit" name="回复"/>
- 		<input type="hidden" name="postId" value="${Temp}" /> 
-		<input type="hidden" name="floorId" value="${Temp}" /> 
+ 		<input type="hidden" name="postId" value="${post.postid }" /> 
+ 		<input type="hidden" name="postId" value="<% %>>"/> 
  	</form>
  </div> 
  

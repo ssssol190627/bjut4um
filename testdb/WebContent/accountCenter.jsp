@@ -10,7 +10,7 @@
 </head>
 <body>
 	<div class="nav">
-		<a href="applyBoard.jsp">申请板块/成为板块管理员</a>
+		<a href="applyBoard">申请板块/成为板块管理员</a>
 		<a href="adminMessage.jsp">站内信息</a>
 		<a href="userPreferences">改密码</a>
 		<a href="home1">回主页</a>
@@ -31,7 +31,7 @@
 		<c:forEach items="${floored}" var="floor" varStatus="postStatus" >
 			<br>
         	<tr>
-        	<a href="detailedfloor">${floor.floorcontent }${floor.floortime }</a>
+        	<a href="/testdb/post/${floor.postid }">${floor.floorcontent }${floor.floortime }</a>
         	</tr>
         	<br>
         </c:forEach> 

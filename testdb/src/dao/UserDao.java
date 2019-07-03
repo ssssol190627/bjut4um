@@ -66,12 +66,12 @@ public class UserDao {
 	}
 
 	/**
-	 * 通过用户名查询用户发的帖子
+	 * 获取最后一个层数
 	 * 
 	 */
-	public List<Post> queryForPostedByUser(Integer id) {
-		String sql = "select * from post where userid = " + id;
-		return jdbcTemplate.query(sql, new PostMapper());
+	public List<Floor> forLastFloor(int postid) {
+		String sql = "select * from floor where postid =" + postid + " order by id desc LIMIT 1";
+		return jdbcTemplate.query(sql, new FloorMapper());
 	}
 
 	/**
@@ -109,6 +109,15 @@ public class UserDao {
 	public boolean deleteGood(Post post) {
 		String sql = "UPDATE `post` SET `isGood` = '0' WHERE  (`id` = '" + post.getPostid() + "')";
 		return jdbcTemplate.update(sql) == 1;
+	}
+
+	/**
+	 * 通过用户名查询用户发的帖子
+	 * 
+	 */
+	public List<Post> queryForPostedByUser(Integer id) {
+		String sql = "select * from post where userid = " + id;
+		return jdbcTemplate.query(sql, new PostMapper());
 	}
 
 	/**
@@ -192,6 +201,20 @@ public class UserDao {
 						report.getIshandle() },
 				new int[] { Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR,
 						Types.VARCHAR, Types.VARCHAR, Types.INTEGER }) == 1;
+	}
+
+	/**
+	 * 添加回复楼层
+	 * 
+	 */
+	public boolean addFloor(Floor floor) {
+		String sql = "insert into floor(boardid,postid,id,ansfloorid,userid,floortime,floorcontent,isGood,isBanned,isExist) values(?,?,?,?,?,?,?,?,?,?)";
+		return jdbcTemplate.update(sql,
+				new Object[] { floor.getBoardid(), floor.getPostid(), floor.getFloorid(), floor.getAnsfloorid(),
+						floor.getUserid(), floor.getFloortime(), floor.getFloorcontent(), floor.getIsgood(),
+						floor.getIsbanned(), floor.getIsexist() },
+				new int[] { Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR,
+						Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER }) == 1;
 	}
 
 	/**
@@ -305,6 +328,7 @@ public class UserDao {
 	 */
 	public boolean updateHandle(Report report) {
 		String sql = "update Report set isHandle = ? where reportid = ?";
+//<<<<<<< HEAD
 		Object reportObj[] = new Object[] { report.getIshandle(), report.getReportid() };
 		return jdbcTemplate.update(sql, reportObj) == 1;
 	}
@@ -325,50 +349,27 @@ public class UserDao {
 	}
 
 	/**
-	 * 删除学生
+	 * 获取最后一个板块申请
 	 * 
-	 * @param id
-	 * @return 返回值类型： boolean
-	 * @author janinus
 	 */
-	public boolean deleteStu(Integer id) {
-		String sql = "delete from User where id = ?";
-		return jdbcTemplate.update(sql, id) == 1;
+
+	public List<Applyingboard> forLastApplyingboard() {
+		String sql = "select * from applyingboard order by applyingid desc LIMIT 1";
+		return jdbcTemplate.query(sql, new ApplyingboardMapper());
 	}
 
 	/**
-	 * 更新学生信息
+	 * 添加一个板块申请信息
 	 * 
-	 * @param User
-	 * @return 返回值类型： boolean
-	 * @author janinus
-	 */
-	/*
-	 * public boolean updateStu(User User) { String sql =
-	 * "update User set name=? ,javaScore=?,htmlScore = ? ,cssScore = ?,totalScore = ? where id = ?"
-	 * ; Object stuObj[] = new Object[] { User.getUsername(), User.getJavaScore(),
-	 * User.getHtmlScore(), User.getCssScore(),
-	 * User.getJavaScore()+User.getHtmlScore()+User.getCssScore(), User.getId() };
-	 * return jdbcTemplate.update(sql, stuObj) == 1; }
 	 */
 
-	/**
-	 * 返回总成绩前n名学生
-	 * 
-	 * @param num
-	 * @return 返回值类型： List<User>
-	 * @author janinus
-	 */
-	/*
-	 * public List<User> topNum(int num) { String sql =
-	 * "select id,name,javaScore+htmlScore+cssScore from User order by javaScore+htmlScore+cssScore desc ,name asc limit ?"
-	 * ; return jdbcTemplate.query(sql, new RowMapper<User>() {
-	 * 
-	 * @Override public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-	 * // TODO Auto-generated method stub User User = new User();
-	 * User.setId(rs.getInt(1)); User.setUsername(rs.getString(2));
-	 * User.setTotalScore(rs.getDouble(3)); return User; } }, num); }
-	 */
+	public boolean addApplyingboard(Applyingboard applyingboard) {
+		String sql = "insert into applyingboard(applyingid,boardname,applyingreason,userid) values(?,?,?,?)";
+		return jdbcTemplate.update(sql,
+				new Object[] { applyingboard.getApplyingid(), applyingboard.getBoardname(),
+						applyingboard.getApplyingreason(), applyingboard.getUserid() },
+				new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER }) == 1;
+	}
 
 	/**
 	 * 
@@ -463,6 +464,7 @@ public class UserDao {
 
 			return Floor;
 		}
+
 	}
 
 	/**
@@ -484,9 +486,25 @@ public class UserDao {
 			Report.setReportbrief(rs.getString(7));
 			Report.setReportcontent(rs.getString(8));
 			Report.setIshandle(rs.getInt(9));
-
 			return Report;
 		}
 	}
 
+	/**
+	 * 
+	 * ApplyingboardMapper数据库映射
+	 * 
+	 */
+	class ApplyingboardMapper implements RowMapper<Applyingboard> {
+		public Applyingboard mapRow(ResultSet rs, int rowNum) throws SQLException {
+			// TODO Auto-generated method stub 
+			Applyingboard Applyingboard = new Applyingboard();
+			Applyingboard.setApplyingid(rs.getInt(1));
+			Applyingboard.setBoardname(rs.getString(2));
+			Applyingboard.setApplyingreason(rs.getString(3));
+			Applyingboard.setUserid(rs.getInt(4));
+
+			return Applyingboard;
+		}
+	}
 }

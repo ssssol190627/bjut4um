@@ -444,72 +444,7 @@ public class UserController {
 		return "/reportAdmin";
 	}
 
-	/**
-	 * ͨ����������ѧ����ʹ��ģ�����ң���������ظ�index.jsp
-	 * 
-	 */
-	/*
-	 * @RequestMapping(value = "/queryByName") public String queryByName(String
-	 * name, Model model) { ApplicationContext context = new
-	 * ClassPathXmlApplicationContext("applicationContext.xml"); //��ioc�����л�ȡdao
-	 * UserDao dao = (UserDao) context.getBean("dao"); model.addAttribute("Users",
-	 * dao.queryByName(name)); model.addAttribute("tops", dao.topNum(3)); return
-	 * "index.jsp"; }
-	 */
 
-	/**
-	 * 添加新学生，并将结果返回给all页面，由all转发到主页
-	 */
-	/*
-	 * @RequestMapping(value = "/add") public String addStu(String name, String
-	 * javaScore, String htmlScore, String cssScore, Model model) {
-	 * ApplicationContext context = new
-	 * ClassPathXmlApplicationContext("applicationContext.xml"); UserDao dao =
-	 * (UserDao) context.getBean("dao"); User User = new User();
-	 * User.setUsername(name); User.setJavaScore(Double.parseDouble(javaScore));
-	 * User.setHtmlScore(Double.parseDouble(htmlScore));
-	 * User.setCssScore(Double.parseDouble(cssScore)); boolean result =
-	 * dao.addStu(User); if (result) model.addAttribute("msg",
-	 * "<script>alert('��ӳɹ���')</script>"); else model.addAttribute("msg",
-	 * "<script>alert('��ӳɹ���')</script>"); return "all"; }
-	 */
-
-	/**
-	 * 通过id删除学生
-	 */
-	@RequestMapping(value = "/deleteById")
-	public String deleteById(String id, Model model) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		UserDao dao = (UserDao) context.getBean("dao");
-		boolean result = dao.deleteStu(Integer.parseInt(id));
-		if (result)
-			model.addAttribute("msg", "<script>alert('ɾ���ɹ���')</script>");
-		else
-			model.addAttribute("msg", "<script>alert('ɾ���ɹ���')</script>");
-		return "all";
-	}
-
-	/**
-	 * 
-	 * @param id
-	 * @param name
-	 * @param javaScore
-	 * @param htmlScore
-	 * @param cssScore
-	 */
-	/*
-	 * @RequestMapping(value = "/update") public String updateStu(String id, String
-	 * name, String javaScore, String htmlScore, String cssScore, Model model) {
-	 * ApplicationContext context = new
-	 * ClassPathXmlApplicationContext("applicationContext.xml"); UserDao dao =
-	 * (UserDao) context.getBean("dao"); User User = new User();
-	 * User.setId(Integer.parseInt(id)); User.setUsername(name);
-	 * User.setJavaScore(Double.parseDouble(javaScore));
-	 * User.setHtmlScore(Double.parseDouble(htmlScore));
-	 * User.setCssScore(Double.parseDouble(cssScore)); boolean result =
-	 * dao.updateStu(User); if (result) model.addAttribute("msg", msg("�޸ĳɹ�"));
-	 * else model.addAttribute("msg", msg("�޸�ʧ��")); return "all"; }
-	 */
 
 	/**
 	 * 
