@@ -217,9 +217,11 @@ public class UserController {
     	UserDao dao = (UserDao) context.getBean("dao");
     	
     	int pageNum = 1;
-		if (request.getQueryString() != null) {
-			pageNum = Integer.parseInt(request.getParameter("page").toString());
-		}
+        String pageNumString=request.getParameter("page");
+        
+    	if (pageNumString != null) {
+    		pageNum = Integer.parseInt(pageNumString);
+    	}
 		int pageSize = 2;
 		Page p = dao.findAllFloorWithPage(pageNum, pageSize, postid);
 		model.addAttribute("page", p);
@@ -719,8 +721,8 @@ public class UserController {
     * 回复
     *
     */
-    @RequestMapping(value = "/post/postReply")
-    public String addPostReply(HttpSession session, @RequestParam("postId") String postId, @RequestParam("replyContent") String replycontent) {
+    @RequestMapping(value = "/post/{postid}/postReply")
+    public String addPostReply(HttpSession session, @RequestParam("postId") String postId, @RequestParam("replyContent") String replycontent,Model model, HttpServletRequest request) {
     ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
     UserDao dao = (UserDao) context.getBean("dao");
     Integer postid = Integer.parseInt(postId);
@@ -744,6 +746,40 @@ public class UserController {
     newfloor.setIsgood(0);
     newfloor.setIsexist(1);
     boolean result = dao.addFloor(newfloor);
+    
+    int pageNum = 1;
+   
+    
+    String pageNumString=request.getParameter("nowPage");
+    
+	if (pageNumString != null) {
+		pageNum = Integer.parseInt(pageNumString);
+	}
+	int pageSize = 2;
+	Page p = dao.findAllFloorWithPage(pageNum, pageSize, postid);
+	model.addAttribute("page", p);
+	session.setAttribute("page", p);
+	List<Floor> fl = p.getList();
+
+	List<Post> posted2 = dao.queryForPostByPostId(postid);
+	Post currentpost = posted2.get(0);
+	List<User> postuser = dao.queryByID(currentpost.getUserid());
+	List<String> ul = new ArrayList();
+	for (int i = 0; i < fl.size(); i++) {
+		String thisuser = dao.queryByID(fl.get(i).getUserid()).get(0).getUsername();
+		ul.add(thisuser);
+	}
+
+	// List<Floor> floored = dao.queryForReplyedByPost(currentpost.getPostid());
+	model.addAttribute("floor", fl);
+	session.setAttribute("floor", fl);
+	model.addAttribute("postuser", postuser.get(0));
+	session.setAttribute("postuser", postuser.get(0));
+	model.addAttribute("flooruser", ul);
+	session.setAttribute("flooruser", ul);
+	model.addAttribute("post", currentpost);
+	session.setAttribute("post", currentpost);
+	
     return "/content001.jsp";
     }
 

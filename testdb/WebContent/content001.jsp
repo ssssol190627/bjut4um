@@ -55,7 +55,7 @@
 				document.getElementById("replyContent").readOnly=false;
 			}
 		}
-		function replyFloor(floorUser,floorContent){
+		function replyFloor(loopCount,replyFloor,floorUser,floorContent){
 			var s="<%=session.getAttribute("CurrentUser")%>";
 			if(s=="null"){
 				alert("请先登录");
@@ -219,15 +219,22 @@
 		</div>
 	</div>      
  
-	<div class="my-3 p-3 bg-white rounded shadow-sm">
-		<form action="postReply" name="postAReply">
- 			<p id="showReplyContent"></p>
- 			<textarea name="replyContent" style="width:200px;height:50px;" placeholder="这里写内容"></textarea>
- 			<input type="submit" name="回复"/>
+ 
+ 	<div class="panel panel-success">
+	    <div class="panel-heading">
+	        <p class="panel-title" id="showReplyContent">回复：</p>
+	    </div>
+	    <div class="panel-body">
+	      <form action="/testdb/post/${post.postid }/postReply" name="postAReply">
+	      	<textarea class="form-control" name="replyContent" id="log" placeholder="这里写内容" style="width: 100%; height: 200px ;overflow: auto;word-break: break-all; resize: none;"></textarea>
+	      	<input type="submit" name="回复"/>
  			<input type="hidden" name="postId" value="${post.postid }" /> 
- 		</form>
-	</div> 	
+ 			<input type="hidden" name="nowPage" value="${page.pageNum }" /> 
+	      </form>
+	    </div>
+	</div>	
  </main>
+ 
  
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
