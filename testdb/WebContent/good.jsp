@@ -64,15 +64,15 @@
 	<div class="nav">
 		<a href="boardAdmin.jsp">返回</a>
 	</div>
-	<form action="boardAdmin.jsp">
+	<form action="/testdb/good">
 		<br>帖子关键词：<br>
 		<input type="text" name="searchPostByKeyWord" placeholder="searchPostByKeyWord" class="inputtable" >
 		<input type="submit" name="submit" value="搜索">
 		<br>
 	</form>
 	<div id="context1" style="background-color:white; border: 1px solid red;width:128px;display:none" ></div>
-		
-			
+
+
 	<table border="1">
 		<tr>
 			<th>所属板块</th>
@@ -81,20 +81,21 @@
 			<th>发帖人</th>
 			<th>是否加精</th>
 		</tr>
-		<tr>
-			<td>工大生活</td>
-			<td>食堂美食汇总</td>
-			<td>rt！</td>
-			<th>工大小锤</th>
-			<th>
-				<form action="/testdb/good">
-					<input type="hidden" name="isGoodNow" value="$goodPost.postid}">
-						<input type="submit" name="submit" value="去精"> <br>
-				</form>
-			</th>
-		</tr>
+		<c:forEach items="${searchedPost}" var="searchedPost" varStatus="loop">
+			<tr>
+				<td id="board${sboardNameList.get(loop.count-1) }">${sboardNameList.get(loop.count-1) }</td>
+				<td id="title${searchedPost.title }"><a href="  /testdb/post/${searchedPost.postid}">${searchedPost.title }</a></td>
+				<td id="content${searchedPost.postcontent }">${searchedPost.postcontent }</td>
+				<td id="user${suserNameList.get(loop.count-1) }">${suserNameList.get(loop.count-1) }</td>
+				<td>
+					<form action="/testdb/good" method="post">
+						<input type="hidden" name="isGoodNow" value="${searchedPost.postid}">
+						<input type="submit" name="submit" value="加精"> <br>
+					</form>
+				</td>
+		</c:forEach>
 	</table>
-<br>
+	<br>
 
 	<table border="1">
 		<caption align="top">已加精列表</caption>

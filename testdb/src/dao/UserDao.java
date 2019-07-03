@@ -419,6 +419,15 @@ public class UserDao {
 	   return jdbcTemplate.query(sql, new MessageMapper());
    }
    
+   /**
+    * 通过帖子title查询帖子
+    * 
+    */
+   public List<Post> queryForPostByPostTitle(String title) {
+   	String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost from post where title = '" + title + "'";
+   	return jdbcTemplate.query(sql, new PostMapper());
+   }
+   
     
 	/**
 	 * 
