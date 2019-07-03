@@ -6,10 +6,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>${nowBoardName}</title>
+<title>${nowBoard.boardname}</title>
 </head>
 <body>
-	<h2>${nowBoardName}</h2>
+<a href="/testdb/home1">返回主页</a>
+	<h2>${nowBoard.boardname}</h2>
+	<form method="post" action="/testdb/addPost">
+	<input type="submit" value="发布新帖" name="发布新帖"/>
+	</form>
 	<table border="1">
 		<tr>
 			<th>帖子标题</th>
@@ -32,7 +36,7 @@
 	</table>
 	<%-- 构建分页导航 --%>
 	共有${page.totalRecord}个帖子，共${page.totalPage }页，当前为${page.pageNum}页
-	<a href="/testdb/board/${nowBoardId}/?page=1">首页</a>
+	<a href="/testdb/board/${nowBoard.boardid}/?page=1">首页</a>
 	<%--如果当前页为第一页时，就没有上一页这个超链接显示 --%>
 	<c:if test="${page.pageNum ==1}">
 		<c:forEach begin="${page.start}" end="${page.end}" step="1" var="i">
@@ -41,17 +45,17 @@
                     </c:if>
 			<c:if test="${page.pageNum != i}">
 				<a
-					href="/testdb/board/${nowBoardId}/?page=${i}">${i}</a>
+					href="/testdb/board/${nowBoard.boardid}/?page=${i}">${i}</a>
 			</c:if>
 		</c:forEach>
 		<a
-			href="/testdb/board/${nowBoardId}/?page=${page.pageNum+1}">下一页</a>
+			href="/testdb/board/${nowBoard.boardid}/?page=${page.pageNum+1}">下一页</a>
 	</c:if>
 	<%--如果当前页不是第一页也不是最后一页，则有上一页和下一页这个超链接显示 --%>
 	<c:if
 		test="${page.pageNum > 1 && page.pageNum < page.totalPage}">
 		<a
-			href="/testdb/board/${nowBoardId}/?page=${page.pageNum-1}">上一页</a>
+			href="/testdb/board/${nowBoard.boardid}/?page=${page.pageNum-1}">上一页</a>
 		<c:forEach begin="${page.start}"
 			end="${page.end}" step="1" var="i">
 			<c:if test="${page.pageNum == i}">
@@ -59,17 +63,17 @@
                     </c:if>
 			<c:if test="${page.pageNum != i}">
 				<a
-					href="/testdb/board/${nowBoardId}/?page=${i}">${i}</a>
+					href="/testdb/board/${nowBoard.boardid}/?page=${i}">${i}</a>
 			</c:if>
 		</c:forEach>
 		<a
-			href="/testdb/board/${nowBoardId}/?page=${page.pageNum+1}">下一页</a>
+			href="/testdb/board/${nowBoard.boardid}/?page=${page.pageNum+1}">下一页</a>
 	</c:if>
 	<%-- 如果当前页是最后一页，则只有上一页这个超链接显示，下一页没有 --%>
 	<c:if
 		test="${page.pageNum == page.totalPage}">
 		<a
-			href="/testdb/board/${nowBoardId}/?page=${page.pageNum-1}">上一页</a>
+			href="/testdb/board/${nowBoard.boardid}/?page=${page.pageNum-1}">上一页</a>
 		<c:forEach begin="${page.start}"
 			end="${page.end}" step="1" var="i">
 			<c:if test="${page.pageNum == i}">
@@ -77,12 +81,12 @@
                     </c:if>
 			<c:if test="${page.pageNum != i}">
 				<a
-					href="/testdb/board/${nowBoardId}/?page=${i}">${i}</a>
+					href="/testdb/board/${nowBoard.boardid}/?page=${i}">${i}</a>
 			</c:if>
 		</c:forEach>
 	</c:if>
 	<%--尾页 --%>
 	<a
-		href="/testdb/board/${nowBoardId}/?page=${page.totalPage}">尾页</a>
+		href="/testdb/board/${nowBoard.boardid}/?page=${page.totalPage}">尾页</a>
 </body>
 </html>

@@ -2,7 +2,6 @@ package dao;
 
 import java.sql.ResultSet;
 
-
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
@@ -12,22 +11,61 @@ import org.springframework.jdbc.core.RowMapper;
 
 import bean.*;
 
-
 public class UserDao {
 
-    /**
-     * @Fields jdbcTemplate : TODO
-     */
+	/**
+	 * @Fields jdbcTemplate : TODO
+	 */
 
-    private JdbcTemplate jdbcTemplate;
+	private JdbcTemplate jdbcTemplate;
 
-    /**
-     * spring提供的类
-     * 
-     */
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-	this.jdbcTemplate = jdbcTemplate;
-    }
+	/**
+	 * spring提供的类
+	 * 
+	 */
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+
+
+
+	/**
+	 * 查询所有加精的帖子
+	 * 
+	 */
+	public List<Post> queryAllGoodPost() {
+		String sql = "select * from post where isGood = 1";
+		return jdbcTemplate.query(sql, new PostMapper());
+	}
+
+	/**
+	 * 查询某板块所有加精的帖子
+	 * 
+	 */
+	public List<Post> queryAllGoodPostInABoard(Integer boardid) {
+		String sql = "select * from post where isGood = 1 and boardid =" + boardid;
+		return jdbcTemplate.query(sql, new PostMapper());
+	}
+
+	/**
+	 * 帖子加精
+	 * 
+	 */
+	public boolean addGood(Post post) {
+		String sql = "UPDATE `post` SET `isGood` = '1' WHERE  (`id` = '" + post.getPostid() + "')";
+		return jdbcTemplate.update(sql) == 1;
+	}
+
+	/**
+	 * 
+	 * 帖子去精
+	 * 
+	 */
+	public boolean deleteGood(Post post) {
+		String sql = "UPDATE `post` SET `isGood` = '0' WHERE  (`id` = '" + post.getPostid() + "')";
+		return jdbcTemplate.update(sql) == 1;
+	}
+
 
     /**
      * 通过用户名查询用户
@@ -110,6 +148,15 @@ public class UserDao {
     	return jdbcTemplate.query(sql, new PostMapper());
     }
     
+    /**
+     *查询所有帖子
+     * 
+     */
+    public List<Post> queryForAllPost() {
+    	String sql = "select * from post" ;
+    	return jdbcTemplate.query(sql, new PostMapper());
+    }
+    
     /** 
      * 获取最后一个举报
     * 
@@ -170,16 +217,17 @@ public class UserDao {
 		String sql = "select id,name,intro,isExist from board where id = '" + boardid + "'";
 		return jdbcTemplate.query(sql, new BoardMapper());
 	}
-	
+
 	/**
 	 * 通过板块id查询帖子
 	 * 
 	 */
 	public List<Post> queryPostByBoardId(int boardid) {
-		String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost from post where boardid = '" + boardid + "'";
+		String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost from post where boardid = '"
+				+ boardid + "'";
 		return jdbcTemplate.query(sql, new PostMapper());
 	}
-	
+
 	/**
 	 * 通过板块名查询
 	 * 
@@ -188,44 +236,45 @@ public class UserDao {
 		String sql = "select id,name,intro,isExist from board where name = '" + name + "'";
 		return jdbcTemplate.query(sql, new BoardMapper());
 	}
-	
-	public List<Post> findThisBoardPage(int startIndex,int pageSize,int boardid){
-		String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost from post where boardid = '" + boardid +"' limit "+startIndex+","+pageSize;
+
+	public List<Post> findThisBoardPage(int startIndex, int pageSize, int boardid) {
+		String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost from post where boardid = '"
+				+ boardid + "' limit " + startIndex + "," + pageSize;
 		return jdbcTemplate.query(sql, new PostMapper());
 	}
-	
-	public Page<Post> findAllPostWithPage(int pageNum,int pageSize,int boardid){
-		List<Post> allPost=queryPostByBoardId(boardid);
+
+	public Page<Post> findAllPostWithPage(int pageNum, int pageSize, int boardid) {
+		List<Post> allPost = queryPostByBoardId(boardid);
 		int totalRecord = allPost.size();
-		
-		Page p=new Page(pageNum,2,totalRecord);
-		
+
+		Page p = new Page(pageNum, 2, totalRecord);
+
 		int startIndex = p.getStartIndex();
-		List<Post> thisPagePostList=findThisBoardPage(startIndex,pageSize,boardid);
+		List<Post> thisPagePostList = findThisBoardPage(startIndex, pageSize, boardid);
 		p.setList(thisPagePostList);
-		
+
 		return p;
 	}
-	
-	public List<Floor> findThisPostPage(int startIndex,int pageSize,int postid){
-		String sql = "select * from floor where postid = '" + postid +"' limit "+startIndex+","+pageSize;
+
+	public List<Floor> findThisPostPage(int startIndex, int pageSize, int postid) {
+		String sql = "select * from floor where postid = '" + postid + "' limit " + startIndex + "," + pageSize;
 		return jdbcTemplate.query(sql, new FloorMapper());
 	}
-	
-	public Page<Floor> findAllFloorWithPage(int pageNum,int pageSize,int postid){
-		List<Floor> allFloor=queryForReplyedByPost(postid);
+
+	public Page<Floor> findAllFloorWithPage(int pageNum, int pageSize, int postid) {
+		List<Floor> allFloor = queryForReplyedByPost(postid);
 		int totalRecord = allFloor.size();
-		
-		Page p=new Page(pageNum,2,totalRecord);
-		
+
+		Page p = new Page(pageNum, 2, totalRecord);
+
 		int startIndex = p.getStartIndex();
-		List<Floor> thisPagePostList=findThisPostPage(startIndex,pageSize,postid);
+		List<Floor> thisPagePostList = findThisPostPage(startIndex, pageSize, postid);
 		p.setList(thisPagePostList);
-		
+
 		return p;
 	}
-	
-    /**
+
+	/**
 	 * 查询所有板块
 	 * 
 	 * @return 返回值类型： List<Board>
@@ -236,8 +285,8 @@ public class UserDao {
 		// 将查询结果映射到User类中，添加到list中，并返回
 		return jdbcTemplate.query(sql, new BoardMapper());
 	}
-	
-    /**
+
+	/**
 	 * 查询所有举报
 	 * 
 	 */
@@ -246,7 +295,7 @@ public class UserDao {
 		// 将查询结果映射到User类中，添加到list中，并返回
 		return jdbcTemplate.query(sql, new ReportMapper());
 	}
-	
+
 	/**
 	 * 通过reportid查询举报
 	 * 
@@ -255,7 +304,7 @@ public class UserDao {
 		String sql = "select * from report where reportid = " + reportid;
 		return jdbcTemplate.query(sql, new ReportMapper());
 	}
-	
+
 	/**
 	 * 通过floorid查询具体楼层
 	 * 
@@ -264,16 +313,44 @@ public class UserDao {
 		String sql = "select * from floor where id = " + floorid;
 		return jdbcTemplate.query(sql, new FloorMapper());
 	}
-	
+
 	/**
 	 * 通过floorid查询具体楼层
 	 * 
 	 */
 	public boolean updateHandle(Report report) {
 		String sql = "update Report set isHandle = ? where reportid = ?";
-    	Object reportObj[] = new Object[] { report.getIshandle(), report.getReportid() };
-    	return jdbcTemplate.update(sql, reportObj) == 1;
+		Object reportObj[] = new Object[] { report.getIshandle(), report.getReportid() };
+		return jdbcTemplate.update(sql, reportObj) == 1;
 	}
+
+	/**
+	 * 添加帖子
+	 * 
+	 */
+	public boolean addPost(Post post) {
+		String sql = "insert into post(boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost) values(?,?,?,?,?,?,?,?,?,?,?)";
+		int a = 0;
+		return jdbcTemplate.update(sql,
+				new Object[] { post.getBoardid(), post.getPostid(), post.getTitle(), post.getUserid(),
+						post.getPosttime(), post.getNewtime(), post.getPostcontent(), post.getIsGood(),
+						post.getIsBanned(), post.getIsExist(), post.getNumpost() },
+				new int[] { Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
+						Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER }) == 1;
+	}
+
+
+	   
+	
+	/**
+	 * 根据关键词模糊查询
+	 * 
+	 */
+    public List<Post> findBooksAjax(String name) {
+    	String sql = "select distinct title from post where title like \"%"+name+"%\"";
+    	return jdbcTemplate.query(sql, new PostTitleMapper());
+    }
+
 	
     /** 
      * 获取最后一个板块申请
@@ -284,62 +361,15 @@ public class UserDao {
    		return jdbcTemplate.query(sql, new ApplyingboardMapper());
    }
    
-   /** 
-    * 获取最后一个管理员申请
-   * 
-   */
-  public List<Applyingadmin> forLastApplyingadmin() {
-	   String sql = "select * from applyingadmin order by applyingid desc LIMIT 1" ;
-  		return jdbcTemplate.query(sql, new ApplyingadminMapper());
-  }
-   
    /**
     * 添加一个板块申请信息
     * 
     */
    public boolean addApplyingboard(Applyingboard applyingboard) {
-	String sql = "insert into applyingboard(applyingid,boardname,applyingreason,userid,applyingtime,ishandle) values(?,?,?,?,?,?)";
+	String sql = "insert into applyingboard(applyingid,boardname,applyingreason,userid) values(?,?,?,?)";
 	return jdbcTemplate.update(sql,
-		new Object[] { applyingboard.getApplyingid(), applyingboard.getBoardname(), applyingboard.getApplyingreason(), applyingboard.getUserid(), applyingboard.getApplytime(), applyingboard.getIshandle()},
-		new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.INTEGER }) == 1;
-   }
-   
-   /**
-    * 添加一个管理员申请信息
-    * 
-    */
-   public boolean addApplyingadmin(Applyingadmin applyingadmin) {
-	String sql = "insert into applyingadmin(applyingid,boardid,applyingreason,userid,applyingtime,ishandle) values(?,?,?,?,?,?)";
-	return jdbcTemplate.update(sql,
-		new Object[] { applyingadmin.getApplyingid(), applyingadmin.getBoardid(), applyingadmin.getApplyingreason(), applyingadmin.getUserid(), applyingadmin.getApplytime(), applyingadmin.getIshandle()},
-		new int[] { Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.INTEGER }) == 1;
-   }
-   
-   /**
-    * 通过用户ID查询已提交过的管理员申请
-    * 
-    */
-   public List<Applyingadmin> queryAdminByUserid(Integer userid){
-	   String sql = "select * from applyingadmin where userid = " + userid;
-	   return jdbcTemplate.query(sql, new ApplyingadminMapper());
-   }
-   
-   /**
-    * 通过用户ID查询已提交过的板块申请
-    * 
-    */
-   public List<Applyingboard> queryBoardByUserid(Integer userid){
-	   String sql = "select * from applyingboard where userid = " + userid;
-	   return jdbcTemplate.query(sql, new ApplyingboardMapper());
-   }
-   
-   /**
-    * 通过用户ID查询系统信息
-    * 
-    */
-   public List<Message> queryMessageByUserid(Integer userid){
-	   String sql = "select * from message where userid = " + userid;
-	   return jdbcTemplate.query(sql, new MessageMapper());
+		new Object[] { applyingboard.getApplyingid(), applyingboard.getBoardname(), applyingboard.getApplyingreason(), applyingboard.getUserid()},
+		new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER }) == 1;
    }
     
 	/**
@@ -361,6 +391,7 @@ public class UserDao {
 
 	}
 
+
     /**
      * 
      * UserMapper数据库映射
@@ -381,6 +412,33 @@ public class UserDao {
     		User.setisForumAdmin(rs.getInt(7));
 
     		return User;
+    	}
+
+    }
+    
+    /**
+     * 
+     * PostTitleMapper数据库映射
+     * 
+     */
+    class PostTitleMapper implements RowMapper<Post> {
+
+    	public Post mapRow(ResultSet rs, int rowNum) throws SQLException {
+    		// TODO Auto-generated method stub
+    		Post Post = new Post();
+    		Post.setBoardid(0);
+    		Post.setPostid(0);
+    		Post.setTitle(rs.getString(1));
+    		Post.setUserid(0);
+    		Post.setPosttime("");
+    		Post.setNewtime("");
+    		Post.setPostcontent("");
+    		Post.setNumpost(0);
+    		Post.setIsGood(0);
+    		Post.setIsBanned(0);
+    		Post.setIsExist(0);
+
+    		return Post;
     	}
 
     }
@@ -460,6 +518,7 @@ public class UserDao {
     		return Report;
     	}
     }
+
     
     /**
      * 

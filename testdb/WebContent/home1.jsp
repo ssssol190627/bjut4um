@@ -6,7 +6,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>this is home</title>
+<title>BJUT4UM</title>
 <link rel="stylesheet" href="style_home.css" type="text/css" />
 </head>
 <body>

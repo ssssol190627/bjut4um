@@ -11,7 +11,7 @@
 	<div class="nav">
 		<a href="reportAdmin.jsp">管理举报信息</a>
 		<a href="boardApplyAdmin.jsp">管理板块信息</a>
-		<a href="good.jsp">加精</a>
+		<a href="/testdb/good">加精</a>
 		<a href="banAndDelete.jsp">封禁和删除</a>
 		<a href="banUser.jsp">封禁</a>
 		<a href="home1.jsp">回主页</a>
