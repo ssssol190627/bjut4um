@@ -309,8 +309,8 @@ public class UserDao {
 	 * 通过floorid查询具体楼层
 	 * 
 	 */
-	public List<Floor> queryFloorByFloorId(int floorid) {
-		String sql = "select * from floor where id = " + floorid;
+	public List<Floor> queryFloorByFloorIdandPostId(int floorid, int postid) {
+		String sql = "select * from floor where id = " + floorid + " and postid = " +postid;
 		return jdbcTemplate.query(sql, new FloorMapper());
 	}
 

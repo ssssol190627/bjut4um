@@ -137,7 +137,12 @@
             		<div class="d-flex justify-content-between align-items-center w-100">
               			<strong class="text-gray-dark" id="us">${flooruser.get(loop.count-1)}</strong>
             		</div>
-            		<span class="d-block" id="content">${floor.floorcontent }</span><br>
+            		<span class="d-block" id="content">
+            		<c:if test = "${floor.ansfloorid !=0 }">
+            		回复 [${ansname.get(loop.count-1) }] : 
+            		</c:if>
+            		${floor.floorcontent }
+            		</span><br>
             		${floor.floortime }
           		</div>
 	        	<small class="d-block text-right mt-3">

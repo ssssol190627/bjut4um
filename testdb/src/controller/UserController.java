@@ -235,6 +235,17 @@ public class UserController {
 			String thisuser = dao.queryByID(fl.get(i).getUserid()).get(0).getUsername();
 			ul.add(thisuser);
 		}
+		
+		List<String> ansusername = new ArrayList();
+		for (int i = 0; i < fl.size(); i++) {
+			List<Floor> ansfloored = dao.queryFloorByFloorIdandPostId(fl.get(i).getFloorid(), postid);
+			Floor ansfloor = ansfloored.get(0);
+			List<User> ansusered = dao.queryByID(ansfloor.getUserid());
+			User ansuser = ansusered.get(0);
+			ansusername.add(ansuser.getUsername());
+		}
+		
+		session.setAttribute("ansname", ansusername);
 
 		// List<Floor> floored = dao.queryForReplyedByPost(currentpost.getPostid());
 		model.addAttribute("floor", fl);
@@ -427,7 +438,7 @@ public class UserController {
 				report.setIshandle(1);
 
 			} else {
-				List<Floor> banfloor = dao.queryFloorByFloorId(report.getFloorid());
+				List<Floor> banfloor = dao.queryFloorByFloorIdandPostId(report.getFloorid(), report.getPostid());
 				banfloor.get(0).setIsbanned(1);
 				report.setIshandle(1);
 			}
@@ -437,7 +448,7 @@ public class UserController {
 				banpost.get(0).setIsExist(0);
 				report.setIshandle(2);
 			} else {
-				List<Floor> banfloor = dao.queryFloorByFloorId(report.getFloorid());
+				List<Floor> banfloor = dao.queryFloorByFloorIdandPostId(report.getFloorid(), report.getPostid());
 				banfloor.get(0).setIsexist(0);
 				report.setIshandle(2);
 			}
@@ -855,6 +866,17 @@ public class UserController {
     		String thisuser = dao.queryByID(fl.get(i).getUserid()).get(0).getUsername();
     		ul.add(thisuser);
     	}
+    	
+    	List<String> ansusername = new ArrayList();
+		for (int i = 0; i < fl.size(); i++) {
+			List<Floor> ansfloored = dao.queryFloorByFloorIdandPostId(fl.get(i).getFloorid(), postid);
+			Floor ansfloor = ansfloored.get(0);
+			List<User> ansusered = dao.queryByID(ansfloor.getUserid());
+			User ansuser = ansusered.get(0);
+			ansusername.add(ansuser.getUsername());
+		}
+		
+		session.setAttribute("ansname", ansusername);
     	
     	// List<Floor> floored = dao.queryForReplyedByPost(currentpost.getPostid());
     	model.addAttribute("floor", fl);
