@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.*;
 import javax.security.auth.message.callback.PrivateKeyCallback.Request;
@@ -58,63 +61,64 @@ public class UserController {
 			session.setAttribute("CurrentUser", user.get(0));
 			model.addAttribute("AllBoard", board);
 			session.setAttribute("AllBoard", board);
-			return "home1.jsp";
-		} else {
-			return "login.jsp";
-		}
-	}
+    		return "home1.jsp";
+    	}
+    	else {
+    		return "login.jsp";
+    	}
+    }
+	
+    /**
+     * 
+     * ����������Ľ��棬��ʾ���ҵ����ӡ������ҵĻ�����
+     * 
+     */
+    @RequestMapping(value = "/accountCenter")
+    public String toAccountCenter(Model model, HttpSession session) {
+    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	List<Post>  post = dao.queryForPostedByUser(currentuser.getId());
+    	List<Floor> floor = dao.queryForReplyedByUser(currentuser.getId());
+    	session.setAttribute("posted", post);
+    	session.setAttribute("floored", floor);
+    	return "accountCenter.jsp";
+    }
+    
+    /**
+     * 
+     * �����޸��������
+     * 
+     */
+    @RequestMapping(value = "/userPreferences")
+    public String toUserPreferences() {
+    	return "userPreferences.jsp";
+    }
+    
+    /**
+     * 
+     * �޸�����
+     * 
+     */
+    @RequestMapping(value = "/updatePassword")
+    public String toUserPreferences(@RequestParam("passwordOld") String passwordold, @RequestParam("passwordNew") String passwordnew, Model model, HttpSession session) {
+    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	UserDao dao = (UserDao) context.getBean("dao");
 
-	/**
-	 * 
-	 * ����������Ľ��棬��ʾ���ҵ����ӡ������ҵĻ�����
-	 * 
-	 */
-	@RequestMapping(value = "/accountCenter")
-	public String toAccountCenter(Model model, HttpSession session) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		User currentuser = (User) session.getAttribute("CurrentUser");
-		UserDao dao = (UserDao) context.getBean("dao");
+    	if(!currentuser.getPassword().equals(passwordold)) {
+    		return "userPreferences.jsp";
+    	}
+    	currentuser.setPassword(passwordnew);
+    	boolean result = dao.updatePassword(currentuser);
+    	if(result) {
+    		return "accountCenter.jsp";
+    	}else {
+    		return "userPreferences.jsp";
+    	}
+    }
 
-		List<Post> post = dao.queryForPostedByUser(currentuser.getId());
-		List<Floor> floor = dao.queryForReplyedByUser(currentuser.getId());
-		session.setAttribute("posted", post);
-		session.setAttribute("floored", floor);
-		return "accountCenter.jsp";
-	}
-
-	/**
-	 * 
-	 * �����޸��������
-	 * 
-	 */
-	@RequestMapping(value = "/userPreferences")
-	public String toUserPreferences() {
-		return "userPreferences.jsp";
-	}
-
-	/**
-	 * 
-	 * �޸�����
-	 * 
-	 */
-	@RequestMapping(value = "/updatePassword")
-	public String toUserPreferences(@RequestParam("passwordOld") String passwordold,
-			@RequestParam("passwordNew") String passwordnew, Model model, HttpSession session) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		User currentuser = (User) session.getAttribute("CurrentUser");
-		UserDao dao = (UserDao) context.getBean("dao");
-
-		if (!currentuser.getPassword().equals(passwordold)) {
-			return "userPreferences.jsp";
-		}
-		currentuser.setPassword(passwordnew);
-		boolean result = dao.updatePassword(currentuser);
-		if (result) {
-			return "accountCenter.jsp";
-		} else {
-			return "userPreferences.jsp";
-		}
-	}
 
 	/**
 	 * 
@@ -134,85 +138,85 @@ public class UserController {
 			return "/home1.jsp";
 		}
 	}
-
+    
+    /**
+     * 
+     * 退出登录
+     * 
+     */
+    @RequestMapping(value = "/quit")
+    public String QuitbyUser(HttpSession session) {
+    	session.invalidate();
+    	return "index.jsp";
+    }
+    
+    /**
+     * 
+     * 跳转注册界面
+     * 
+     */
+    @RequestMapping(value = "/registerpage")
+    public String toRegister() {
+    	return "register.jsp";
+    }
+    
 	/**
-	 * 
-	 * 退出登录
-	 * 
-	 */
-	@RequestMapping(value = "/quit")
-	public String QuitbyUser(HttpSession session) {
-		session.invalidate();
-		return "index.jsp";
-	}
+     * 
+     * 注册
+     * 
+     */
+    @RequestMapping(value = "/checkingregister")
+    public String CheckRegister(@RequestParam("email") String email, @RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpSession session) {
+    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
-	/**
-	 * 
-	 * 跳转注册界面
-	 * 
-	 */
-	@RequestMapping(value = "/registerpage")
-	public String toRegister() {
-		return "register.jsp";
-	}
-
-	/**
-	 * 
-	 * 注册
-	 * 
-	 */
-	@RequestMapping(value = "/checkingregister")
-	public String CheckRegister(@RequestParam("email") String email, @RequestParam("username") String username,
-			@RequestParam("password") String password, Model model, HttpSession session) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-
-		if (!email.contains("bjut.edu.cn")) {
-			model.addAttribute("checkemaillegal", "this email address is not for bjut");
-			return "register.jsp";
-		}
-		UserDao dao = (UserDao) context.getBean("dao");
-		List<User> existedemail = dao.queryByEmail(email);
-		if (!existedemail.isEmpty()) {
-			model.addAttribute("checkemailexisted", "this email address has already been registered");
-			return "register.jsp";
-		}
-		List<User> existeduser = dao.queryByName(username);
-		if (!existeduser.isEmpty()) {
-			model.addAttribute("checkusernameexisted", "this name has been used");
-			return "register.jsp";
-		} else {
-			User user = new User();
-			List<User> lastuser = dao.forLastUser();
-			Integer id = lastuser.get(0).getId() + 1;
-			user.setId(id);
-			user.setUsername(username);
-			user.setPassword(password);
-			user.setEmail(email);
-			user.setisExist(1);
-			user.setisBoardAdmin(0);
-			user.setisForumAdmin(0);
-			boolean result = dao.addUser(user);
-			if (result) {
-				model.addAttribute("msg", "<script>alert('添加成功！')</script>");
-				return "home1.jsp";
-			} else {
-				return "register.jsp";
-			}
-		}
-	}
-
-	/**
-	 * 
-	 * 跳转帖子显示界面
-	 * 
-	 */
-	@RequestMapping(value = "/post/{postid}")
-	public String toPost(@PathVariable("postid") int postid, Model model, HttpSession session,
-			HttpServletRequest request) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		UserDao dao = (UserDao) context.getBean("dao");
-
-		int pageNum = 1;
+    	if(!email.contains("bjut.edu.cn")) {
+    		model.addAttribute("checkemaillegal","this email address is not for bjut");
+    		return "register.jsp";
+    	}
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	List<User> existedemail = dao.queryByEmail(email);
+    	if(!existedemail.isEmpty()) {
+    		model.addAttribute("checkemailexisted","this email address has already been registered");
+    		return "register.jsp";
+    	}
+    	List<User> existeduser = dao.queryByName(username);
+    	if(!existeduser.isEmpty()) {
+    		model.addAttribute("checkusernameexisted", "this name has been used");
+    		return "register.jsp";
+    	}
+    	else {
+    		User user= new User();
+    		List<User> lastuser = dao.forLastUser();
+    		Integer id = lastuser.get(0).getId()+1;
+    		user.setId(id);
+    		user.setUsername(username);
+    		user.setPassword(password);
+    		user.setEmail(email);
+    		user.setisExist(1);
+    		user.setisBoardAdmin(0);
+    		user.setisForumAdmin(0);
+    		boolean result = dao.addUser(user);
+        	if (result) {
+        		model.addAttribute("msg", "<script>alert('添加成功！')</script>");
+    			return "home1.jsp";
+        	}
+        	else {
+        		return "register.jsp";
+        	}
+    	}
+    }
+    
+    /**
+     * 
+     * 跳转帖子显示界面
+     * 
+     */
+    @RequestMapping(value = "/post/{postid}")
+    public String toPost(@PathVariable("postid") int postid, Model model, HttpSession session, HttpServletRequest request) {
+    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	int pageNum = 1;
 		if (request.getQueryString() != null) {
 			pageNum = Integer.parseInt(request.getParameter("page").toString());
 		}
@@ -365,25 +369,26 @@ public class UserController {
 	 * 
 	 */
 	@RequestMapping(value = "/board/{boardid}/post/{postid}")
-	public String enterPost(@PathVariable int boardid, Model model, HttpSession session) {
-		return "/content001.jsp";
-	}
 
-	/**
-	 * 
-	 * 从主页进入板块管理员界面
-	 * 
-	 */
+    public String enterPost(@PathVariable int boardid, Model model, HttpSession session) {
+    	return "/content001.jsp";
+    }
+	
+    /**
+     * 
+     * 从主页进入板块管理员界面
+     * 
+     */
 	@RequestMapping(value = "/boardAdmin")
-	public String toBoardAdmin() {
-		return "/boardAdmin.jsp";
-	}
+    public String toBoardAdmin() {
+    	 return "/boardAdmin.jsp";
+    }
 
-	/**
-	 * 
-	 * 从板块管理员界面进入管理举报信息界面
-	 * 
-	 */
+    /**
+     * 
+     * 从板块管理员界面进入管理举报信息界面
+     * 
+     */
 	@RequestMapping(value = "/reportAdmin")
 	public String toReportAdmin(Model model, HttpSession session) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -444,19 +449,9 @@ public class UserController {
 		return "/reportAdmin";
 	}
 
+	
 
-
-	/**
-	 * 
-	 * 发表新帖
-	 * 
-	 */
-	@RequestMapping(value = "/addPost")
-	public String addPost(Model model, HttpSession session) {
-
-		return "addPost.jsp";
-	}
-
+  
 	/**
 	 * 
 	 * 管理员加精
@@ -512,4 +507,149 @@ public class UserController {
 	public String msg(String msg) {
 		return "<script>alert('" + msg + "')</script>";
 	}
+	
+	/**
+     * 从个人主页进入申请界面
+     * 
+     */
+	@RequestMapping(value = "/applyBoard")
+    public String toApplyBoard(HttpSession session) { 
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	//search for applyingadmin && applyingboard
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	List<Applyingadmin> admined = dao.queryAdminByUserid(currentuser.getId());
+    	List<Applyingboard> boarded = dao.queryBoardByUserid(currentuser.getId());
+    	session.setAttribute("admined", admined);
+    	session.setAttribute("boarded", boarded);
+    	
+    	List<String> boardname = new ArrayList();
+    	for(int i=0;i<admined.size();i++) {
+    		List<Board> board = dao.queryBoardByBoardId(admined.get(i).getBoardid());
+    		boardname.add(board.get(0).getBoardname());
+    	}
+		session.setAttribute("boardnames", boardname);
+    	//write into session
+    	 return "/applyBoard.jsp";
+    }
+	
+    /**
+     * 申请一个新的板块
+     * 
+     */
+	@RequestMapping(value = "/applyNewboard")
+    public String toapplyNewBoard(HttpSession session, @RequestParam("boardname") String boardname, @RequestParam("boardreason") String boardreason) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	List<Applyingboard> applying = dao.forLastApplyingboard();
+    	Integer applyingid;
+    	if(applying.size()==0) {
+    		applyingid = 0;
+    	}else {
+    		applyingid = applying.get(0).getApplyingid()+1;
+    	}
+    	Applyingboard applyingboard = new Applyingboard();
+    	applyingboard.setApplyingid(applyingid);
+    	applyingboard.setBoardname(boardname);
+    	applyingboard.setApplyingreason(boardreason);
+    	applyingboard.setUserid(currentuser.getId());
+    	Date date = new Date();
+    	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
+    	applyingboard.setApplytime(dateFormat.format(date));
+    	applyingboard.setIshandle(0);
+    	
+    	boolean result = dao.addApplyingboard(applyingboard);    	
+    	 return "/applyBoard.jsp";
+    }
+	
+    /**
+     * 申请成为板块管理员
+     * 
+     */
+	@RequestMapping(value = "/applyforAdmin")
+    public String toApplyforAdmin(@RequestParam("boardname") String boardname, @RequestParam("applyreason") String applyreason,HttpSession session) {   
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	List<Applyingadmin> applying = dao.forLastApplyingadmin();
+    	List<Board> board = dao.queryByBoardName(boardname);
+    	Integer applyingid;
+    	if(applying.size()==0) {
+    		applyingid = 0;
+    	}else {
+    		applyingid = applying.get(0).getApplyingid()+1;
+    	}
+    	
+    	Applyingadmin newapply = new Applyingadmin();
+    	newapply.setApplyingid(applyingid);
+    	newapply.setBoardid(board.get(0).getBoardid());
+    	newapply.setApplyingreason(applyreason);
+    	newapply.setUserid(currentuser.getId());
+    	Date date = new Date();
+    	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
+    	newapply.setApplytime(dateFormat.format(date));
+    	newapply.setIshandle(0);
+    	
+    	boolean result = dao.addApplyingadmin(newapply); 
+    	
+    	 return "/applyBoard.jsp";
+    }
+	
+    /**
+     * 从个人主页进入站内消息界面
+     * 
+     */
+	@RequestMapping(value = "/adminMessage")
+    public String toAdminMessage(HttpSession session) { 
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	List<Message> usermessages = dao.queryMessageByUserid(currentuser.getId());
+    	
+    	session.setAttribute("usermessages", usermessages);
+		return "adminMessage.jsp";
+	}
+
+    
+    /**
+     * ajax查数据库
+     * @throws IOException 
+     */
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        response.setContentType("text/html;charset=utf-8");
+        request.setCharacterEncoding("utf-8");
+        //获取搜索框输入的内容
+        String name=request.getParameter("name");
+        //向server层调用相应的业务     
+        
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	List<Post> pl=dao.findBooksAjax(name);
+    	String res = "";
+    	for(int i=0;i<pl.size();i++) {
+    		if(i==0)
+    			res=pl.get(i).getTitle();
+    		else
+    			res=res+","+pl.get(i).getTitle();
+    	}
+        //返回结果
+        response.getWriter().write(res);
+    }
+
+    /**
+     * ajax查数据库_2
+     * @throws IOException 
+     */
+    @RequestMapping(value = "/findPostsAjaxServlet")
+    @ResponseBody
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        doGet(request, response);
+    }
 }

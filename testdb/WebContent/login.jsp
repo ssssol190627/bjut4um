@@ -7,9 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>login</title>
-	<!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 	 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>-->
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
     <!-- Custom styles for this template -->
     <script>
@@ -25,14 +25,12 @@
     	  	});
     	});
     </script>
-    <link rel="stylesheet" href="style_home.css" type="text/css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath }/css/style_home.css" type="text/css" />
 	
 </head>
 <body>
-	<!--  <script src="http://mymaplist.com/js/vendor/TweenLite.min.js"></script>-->
+	<script src="http://mymaplist.com/js/vendor/TweenLite.min.js"></script>
 	
-	<div class="nav">
-	<h1>dkds;fd</h1>导航</div>
 	<div class="login-body">
 		<div class="container">
     		<div class="vertical-offset-100">
@@ -51,6 +49,7 @@
 			    			<input class="form-control" placeholder="密码" name="password" type="password">
 			    		</div>
 			    		<input class="btn btn-lg btn-success btn-block" type="submit" value="登录">
+			    		<input class="btn btn-lg btn-success btn-block" type="button" value="随便逛逛" onClick="javascript :history.back(-1);">
 			    	</fieldset>
 			   	 	</form>
 			    	</div>
