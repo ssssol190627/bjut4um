@@ -179,8 +179,8 @@
 						<a href="/testdb/post/${post.postid}/?page=${i}">${i}&nbsp;</a>
 					</c:if>
 				</c:forEach>
-			</c:if>			
-			<a href="/testdb/post/${post.postid}/?page=${page.pageNum+1}">下一页&nbsp;</a>
+				<a href="/testdb/post/${post.postid}/?page=${page.pageNum+1}">下一页&nbsp;</a>
+			</c:if>						
 		</c:if>
 		<%--如果当前页不是第一页也不是最后一页，则有上一页和下一页这个超链接显示 --%>
 		<c:if test="${page.pageNum > 1 && page.pageNum < page.totalPage}">
