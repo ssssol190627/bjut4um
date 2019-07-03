@@ -314,15 +314,62 @@ int a=0;
    		return jdbcTemplate.query(sql, new ApplyingboardMapper());
    }
    
+   /** 
+    * 获取最后一个管理员申请
+   * 
+   */
+  public List<Applyingadmin> forLastApplyingadmin() {
+	   String sql = "select * from applyingadmin order by applyingid desc LIMIT 1" ;
+  		return jdbcTemplate.query(sql, new ApplyingadminMapper());
+  }
+   
    /**
     * 添加一个板块申请信息
     * 
     */
    public boolean addApplyingboard(Applyingboard applyingboard) {
-	String sql = "insert into applyingboard(applyingid,boardname,applyingreason,userid) values(?,?,?,?)";
+	String sql = "insert into applyingboard(applyingid,boardname,applyingreason,userid,applyingtime,ishandle) values(?,?,?,?,?,?)";
 	return jdbcTemplate.update(sql,
-		new Object[] { applyingboard.getApplyingid(), applyingboard.getBoardname(), applyingboard.getApplyingreason(), applyingboard.getUserid()},
-		new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER }) == 1;
+		new Object[] { applyingboard.getApplyingid(), applyingboard.getBoardname(), applyingboard.getApplyingreason(), applyingboard.getUserid(), applyingboard.getApplytime(), applyingboard.getIshandle()},
+		new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.INTEGER }) == 1;
+   }
+   
+   /**
+    * 添加一个管理员申请信息
+    * 
+    */
+   public boolean addApplyingadmin(Applyingadmin applyingadmin) {
+	String sql = "insert into applyingadmin(applyingid,boardid,applyingreason,userid,applyingtime,ishandle) values(?,?,?,?,?,?)";
+	return jdbcTemplate.update(sql,
+		new Object[] { applyingadmin.getApplyingid(), applyingadmin.getBoardid(), applyingadmin.getApplyingreason(), applyingadmin.getUserid(), applyingadmin.getApplytime(), applyingadmin.getIshandle()},
+		new int[] { Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.INTEGER }) == 1;
+   }
+   
+   /**
+    * 通过用户ID查询已提交过的管理员申请
+    * 
+    */
+   public List<Applyingadmin> queryAdminByUserid(Integer userid){
+	   String sql = "select * from applyingadmin where userid = " + userid;
+	   return jdbcTemplate.query(sql, new ApplyingadminMapper());
+   }
+   
+   /**
+    * 通过用户ID查询已提交过的板块申请
+    * 
+    */
+   public List<Applyingboard> queryBoardByUserid(Integer userid){
+	   String sql = "select * from applyingboard where userid = " + userid;
+	   return jdbcTemplate.query(sql, new ApplyingboardMapper());
+   }
+   
+   /**
+    * 通过用户ID查询系统信息
+    * 
+    */
+   public List<Message> queryMessageByUserid(Integer userid){
+	   String sql = "select * from message where userid = " + userid;
+	   return jdbcTemplate.query(sql, new MessageMapper());
    }
     
 	/**
@@ -486,10 +533,56 @@ int a=0;
     		Applyingboard.setBoardname(rs.getString(2));
     		Applyingboard.setApplyingreason(rs.getString(3));
     		Applyingboard.setUserid(rs.getInt(4));
+    		Applyingboard.setApplytime(rs.getString(5));
+    		Applyingboard.setIshandle(rs.getInt(6));
 
     		return Applyingboard;
     	}
 
     }
+    
+    /**
+     * 
+     * ApplyingadminMapper数据库映射
+     * 
+     */
 
+    class ApplyingadminMapper implements RowMapper<Applyingadmin> {
+
+    	public Applyingadmin mapRow(ResultSet rs, int rowNum) throws SQLException {
+    		// TODO Auto-generated method stub
+    		Applyingadmin Applyingadmin = new Applyingadmin();
+    		Applyingadmin.setApplyingid(rs.getInt(1));
+    		Applyingadmin.setBoardid(rs.getInt(2));
+    		Applyingadmin.setApplyingreason(rs.getString(3));
+    		Applyingadmin.setUserid(rs.getInt(4));
+    		Applyingadmin.setApplytime(rs.getString(5));
+    		Applyingadmin.setIshandle(rs.getInt(6));
+
+    		return Applyingadmin;
+    	}
+
+    }
+    
+    /**
+     * 
+     * MessageMapper数据库映射
+     * 
+     */
+
+    class MessageMapper implements RowMapper<Message> {
+
+    	public Message mapRow(ResultSet rs, int rowNum) throws SQLException {
+    		// TODO Auto-generated method stub
+    		Message Message = new Message();
+    		Message.setMessageid(rs.getInt(1));
+    		Message.setUserid(rs.getInt(2));
+    		Message.setMessagetime(rs.getString(3));
+    		Message.setMessagecontent(rs.getString(4));
+    		Message.setAdminid(rs.getInt(5));
+
+    		return Message;
+    	}
+
+    }
 }

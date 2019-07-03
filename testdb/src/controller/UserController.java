@@ -486,7 +486,24 @@ public class UserController {
      * 
      */
 	@RequestMapping(value = "/applyBoard")
-    public String toApplyBoard() {
+    public String toApplyBoard(HttpSession session) { 
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	//search for applyingadmin && applyingboard
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	List<Applyingadmin> admined = dao.queryAdminByUserid(currentuser.getId());
+    	List<Applyingboard> boarded = dao.queryBoardByUserid(currentuser.getId());
+    	session.setAttribute("admined", admined);
+    	session.setAttribute("boarded", boarded);
+    	
+    	List<String> boardname = new ArrayList();
+    	for(int i=0;i<admined.size();i++) {
+    		List<Board> board = dao.queryBoardByBoardId(admined.get(i).getBoardid());
+    		boardname.add(board.get(0).getBoardname());
+    	}
+		session.setAttribute("boardnames", boardname);
+    	//write into session
     	 return "/applyBoard.jsp";
     }
 	
@@ -512,15 +529,70 @@ public class UserController {
     	applyingboard.setBoardname(boardname);
     	applyingboard.setApplyingreason(boardreason);
     	applyingboard.setUserid(currentuser.getId());
+    	Date date = new Date();
+    	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
+    	applyingboard.setApplytime(dateFormat.format(date));
+    	applyingboard.setIshandle(0);
     	
     	boolean result = dao.addApplyingboard(applyingboard);    	
     	 return "/applyBoard.jsp";
     }
 
     /**
+     * 申请成为板块管理员
+     * 
+     */
+	@RequestMapping(value = "/applyforAdmin")
+    public String toApplyforAdmin(@RequestParam("boardname") String boardname, @RequestParam("applyreason") String applyreason,HttpSession session) {   
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	List<Applyingadmin> applying = dao.forLastApplyingadmin();
+    	List<Board> board = dao.queryByBoardName(boardname);
+    	Integer applyingid;
+    	if(applying.size()==0) {
+    		applyingid = 0;
+    	}else {
+    		applyingid = applying.get(0).getApplyingid()+1;
+    	}
+    	
+    	Applyingadmin newapply = new Applyingadmin();
+    	newapply.setApplyingid(applyingid);
+    	newapply.setBoardid(board.get(0).getBoardid());
+    	newapply.setApplyingreason(applyreason);
+    	newapply.setUserid(currentuser.getId());
+    	Date date = new Date();
+    	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
+    	newapply.setApplytime(dateFormat.format(date));
+    	newapply.setIshandle(0);
+    	
+    	boolean result = dao.addApplyingadmin(newapply); 
+    	
+    	 return "/applyBoard.jsp";
+    }
+	
+    /**
+     * 从个人主页进入站内消息界面
+     * 
+     */
+	@RequestMapping(value = "/adminMessage")
+    public String toAdminMessage(HttpSession session) { 
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	List<Message> usermessages = dao.queryMessageByUserid(currentuser.getId());
+    	
+    	session.setAttribute("usermessages", usermessages);
+		return "adminMessage.jsp";
+	}
+
+    /**
      * 
      *发表新帖
      * 
+    /**
     /**
      */
     @RequestMapping(value = "/addPost")

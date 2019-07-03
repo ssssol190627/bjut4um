@@ -11,7 +11,7 @@
 <body>
 	<div class="nav">
 		<a href="applyBoard">申请板块/成为板块管理员</a>
-		<a href="adminMessage.jsp">站内信息</a>
+		<a href="adminMessage">站内信息</a>
 		<a href="userPreferences">改密码</a>
 		<a href="home1">回主页</a>
 	</div>
