@@ -419,6 +419,24 @@ public class UserDao {
 	   return jdbcTemplate.query(sql, new MessageMapper());
    }
    
+   /**
+    * 查询全部板块申请信息
+    * 
+    */
+   public List<Applyingboard> queryAllApplyBoard(){
+	   String sql = "select * from applyingboard ";
+		return jdbcTemplate.query(sql, new ApplyingboardMapper());
+   }
+   
+   /**
+    * 查询全部管理员申请信息
+    * 
+    */
+   public List<Applyingadmin> queryAllApplyAdmin(){
+	   String sql = "select * from applyingadmin ";
+		return jdbcTemplate.query(sql, new ApplyingadminMapper());
+   }
+   
     
 	/**
 	 * 
