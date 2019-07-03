@@ -216,8 +216,10 @@ public class UserController {
 		UserDao dao = (UserDao) context.getBean("dao");
 
 		int pageNum = 1;
-		if (request.getQueryString() != null) {
-			pageNum = Integer.parseInt(request.getParameter("page").toString());
+		String pageNumString = request.getParameter("page");
+
+		if (pageNumString != null) {
+			pageNum = Integer.parseInt(pageNumString);
 		}
 		int pageSize = 2;
 		Page p = dao.findAllFloorWithPage(pageNum, pageSize, postid);
@@ -461,20 +463,21 @@ public class UserController {
 		if (request.getHeader("Referer").toString().contains("good")) {
 			String isNotGoodAnymore = request.getParameter("isNotGoodAnymore");
 			String isGoodNow = request.getParameter("isGoodNow");
-			
+
 			if (isNotGoodAnymore != null) {
 				int notGoodPost = Integer.parseInt(isNotGoodAnymore);
 				dao.deleteGood(dao.queryForPostByPostId(notGoodPost).get(0));
 			}
 			if (isGoodNow != null) {
 				int goodPostId = Integer.parseInt(isGoodNow);
-				Post goodPost=dao.queryForPostByPostId(goodPostId).get(0);
+				Post goodPost = dao.queryForPostByPostId(goodPostId).get(0);
 				dao.addGood(goodPost);
-				int messageid=dao.queryAllMessage().size()+1;
+				int messageid = dao.queryAllMessage().size() + 1;
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
 				String nowtime = df.format(new Date());
-				String goodReason="";
-				Message message=new Message(messageid,goodPost.getUserid(),nowtime,goodReason,currentuser.getId());
+				String goodReason = "";
+				Message message = new Message(messageid, goodPost.getUserid(), nowtime, goodReason,
+						currentuser.getId());
 				dao.addMessage(message);
 			}
 		}
@@ -494,7 +497,7 @@ public class UserController {
 				session.setAttribute("sboardNameList", sboardNameList);
 				model.addAttribute("suserNameList", suserNameList);
 				session.setAttribute("suserNameList", suserNameList);
-				
+
 			}
 			List<Post> pl = dao.queryAllGoodPost();
 			model.addAttribute("goodPost", pl);
@@ -510,7 +513,7 @@ public class UserController {
 		} else if (currentuser.getisBoardAdmin() != 0) {
 			String searchPostByKeyWord = request.getParameter("searchPostByKeyWord");
 			if (searchPostByKeyWord != null) {
-				List<Post> pl = dao.queryForPostByPostTitleInABoard(searchPostByKeyWord,currentuser.getisBoardAdmin() );
+				List<Post> pl = dao.queryForPostByPostTitleInABoard(searchPostByKeyWord, currentuser.getisBoardAdmin());
 				model.addAttribute("searchedPost", pl);
 				session.setAttribute("searchedPost", pl);
 				List<String> sboardNameList = new ArrayList();
@@ -525,7 +528,7 @@ public class UserController {
 				session.setAttribute("suserNameList", suserNameList);
 
 			}
-			
+
 			List<Post> pl = dao.queryAllGoodPostInABoard(currentuser.getisBoardAdmin());
 			model.addAttribute("goodPost", pl);
 			session.setAttribute("goodPost", pl);
@@ -657,6 +660,117 @@ public class UserController {
 	}
 
 	/**
+	 * 返回超级管理员界面
+	 * 
+	 */
+	@RequestMapping(value = "/superAdmin")
+	public String toSuperAdmin(HttpSession session) {
+		return "superAdmin.jsp";
+	}
+
+	/**
+	 * 超级管理员管理板块信息
+	 * 
+	 */
+	@RequestMapping(value = "/boardApplyAdmin")
+	public String ManageBoardApply(HttpSession session) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		UserDao dao = (UserDao) context.getBean("dao");
+
+		List<Applyingboard> applyboard = dao.queryAllApplyBoard();
+		session.setAttribute("applyboards", applyboard);
+		List<String> username = new ArrayList();
+		for (int i = 0; i < applyboard.size(); i++) {
+			List<User> user = dao.queryByID(applyboard.get(i).getUserid());
+			username.add(user.get(0).getUsername());
+		}
+		session.setAttribute("username", username);
+
+		List<Applyingadmin> applyadmin = dao.queryAllApplyAdmin();
+		session.setAttribute("applyadmins", applyadmin);
+		List<String> boardname = new ArrayList();
+		for (int i = 0; i < applyadmin.size(); i++) {
+			List<Board> board = dao.queryBoardByBoardId(applyadmin.get(i).getBoardid());
+			boardname.add(board.get(0).getBoardname());
+		}
+		session.setAttribute("boardname", boardname);
+		List<String> username2 = new ArrayList();
+		for (int i = 0; i < applyadmin.size(); i++) {
+			List<User> user2 = dao.queryByID(applyadmin.get(i).getUserid());
+			username2.add(user2.get(0).getUsername());
+		}
+		session.setAttribute("username2", username2);
+		return "boardApplyAdmin.jsp";
+	}
+
+	/**
+	 *
+	 * 回复
+	 *
+	 */
+	@RequestMapping(value = "/post/{postid}/postReply")
+	public String addPostReply(HttpSession session, @RequestParam("postId") String postId,
+			@RequestParam("replyContent") String replycontent, Model model, HttpServletRequest request) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		UserDao dao = (UserDao) context.getBean("dao");
+		Integer postid = Integer.parseInt(postId);
+		// Integer floorid = Integer.parseInt(floorId);
+		User currentuser = (User) session.getAttribute("CurrentUser");
+		List<Post> posted = dao.queryForPostByPostId(postid);
+		Post post = posted.get(0);
+		List<Floor> floored = dao.forLastFloor(postid);
+		Floor lastfloor = floored.get(0);
+		Floor newfloor = new Floor();
+		newfloor.setBoardid(post.getBoardid());
+		newfloor.setPostid(postid);
+		newfloor.setFloorid(lastfloor.getFloorid() + 1);
+		newfloor.setAnsfloorid(0);
+		newfloor.setUserid(currentuser.getId());
+		newfloor.setFloorcontent(replycontent);
+		Date date = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
+		newfloor.setFloortime(dateFormat.format(date));
+		newfloor.setIsbanned(0);
+		newfloor.setIsgood(0);
+		newfloor.setIsexist(1);
+		boolean result = dao.addFloor(newfloor);
+
+		int pageNum = 1;
+
+		String pageNumString = request.getParameter("nowPage");
+
+		if (pageNumString != null) {
+			pageNum = Integer.parseInt(pageNumString);
+		}
+		int pageSize = 2;
+		Page p = dao.findAllFloorWithPage(pageNum, pageSize, postid);
+		model.addAttribute("page", p);
+		session.setAttribute("page", p);
+		List<Floor> fl = p.getList();
+
+		List<Post> posted2 = dao.queryForPostByPostId(postid);
+		Post currentpost = posted2.get(0);
+		List<User> postuser = dao.queryByID(currentpost.getUserid());
+		List<String> ul = new ArrayList();
+		for (int i = 0; i < fl.size(); i++) {
+			String thisuser = dao.queryByID(fl.get(i).getUserid()).get(0).getUsername();
+			ul.add(thisuser);
+		}
+
+		// List<Floor> floored = dao.queryForReplyedByPost(currentpost.getPostid());
+		model.addAttribute("floor", fl);
+		session.setAttribute("floor", fl);
+		model.addAttribute("postuser", postuser.get(0));
+		session.setAttribute("postuser", postuser.get(0));
+		model.addAttribute("flooruser", ul);
+		session.setAttribute("flooruser", ul);
+		model.addAttribute("post", currentpost);
+		session.setAttribute("post", currentpost);
+
+		return "/content001.jsp";
+	}
+
+	/**
 	 * ajax查数据库
 	 * 
 	 * @throws IOException
@@ -708,32 +822,56 @@ public class UserController {
 			String isDeleted = request.getParameter("isDeleted");
 			String searchPostByKeyWord = request.getParameter("searchPostByKeyWord");
 			String bdReason = request.getParameter("bdReason");
-			if (isBanned!=null) {
+			if (isBanned != null) {
 				int bannedPostId = Integer.parseInt(isBanned);
-				Post bannedPost=dao.queryForPostByPostId(bannedPostId).get(0);
+				Post bannedPost = dao.queryForPostByPostId(bannedPostId).get(0);
 				dao.setBanned(bannedPost);
-				int messageid=dao.queryAllMessage().size()+1;
+				int messageid = dao.queryAllMessage().size() + 1;
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
 				String nowtime = df.format(new Date());
-				Message message=new Message(messageid,bannedPost.getUserid(),nowtime,bdReason,currentuser.getId());
+				Message message = new Message(messageid, bannedPost.getUserid(), nowtime, bdReason,
+						currentuser.getId());
 				dao.addMessage(message);
 			}
-			if (isDeleted!=null) {
+			if (isDeleted != null) {
 				int deletedPostId = Integer.parseInt(isDeleted);
-				Post deletedPost=dao.queryForPostByPostId(deletedPostId).get(0);
+				Post deletedPost = dao.queryForPostByPostId(deletedPostId).get(0);
 				dao.setDeleted(deletedPost);
-				int messageid=dao.queryAllMessage().size()+1;
+				int messageid = dao.queryAllMessage().size() + 1;
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
 				String nowtime = df.format(new Date());
-				Message message=new Message(messageid,deletedPost.getUserid(),nowtime,bdReason,currentuser.getId());
+				Message message = new Message(messageid, deletedPost.getUserid(), nowtime, bdReason,
+						currentuser.getId());
 				dao.addMessage(message);
 			}
-		//如果是超级管理员
-		if (currentuser.getisForumAdmin() != 0) {
-			if (request.getHeader("Referer").toString().contains("banAndDelete")) {
-				
-				if (searchPostByKeyWord!=null) {
-					List<Post> pl = dao.queryForPostByPostTitle(searchPostByKeyWord);
+			// 如果是超级管理员
+			if (currentuser.getisForumAdmin() != 0) {
+				if (request.getHeader("Referer").toString().contains("banAndDelete")) {
+
+					if (searchPostByKeyWord != null) {
+						List<Post> pl = dao.queryForPostByPostTitle(searchPostByKeyWord);
+						model.addAttribute("searchedPost", pl);
+						session.setAttribute("searchedPost", pl);
+						List<String> sboardNameList = new ArrayList();
+						List<String> suserNameList = new ArrayList();
+						for (int i = 0; i < pl.size(); i++) {
+							sboardNameList.add(dao.queryBoardByBoardId(pl.get(i).getBoardid()).get(0).getBoardname());
+							suserNameList.add(dao.queryByID(pl.get(i).getUserid()).get(0).getUsername());
+						}
+						model.addAttribute("sboardNameList", sboardNameList);
+						session.setAttribute("sboardNameList", sboardNameList);
+						model.addAttribute("suserNameList", suserNameList);
+						session.setAttribute("suserNameList", suserNameList);
+					}
+				}
+
+			}
+			// 是板块管理员
+			else if (currentuser.getisBoardAdmin() != 0) {
+
+				if (searchPostByKeyWord != null) {
+					int boardid = currentuser.getisBoardAdmin();
+					List<Post> pl = dao.queryForPostByPostTitleInABoard(searchPostByKeyWord, boardid);
 					model.addAttribute("searchedPost", pl);
 					session.setAttribute("searchedPost", pl);
 					List<String> sboardNameList = new ArrayList();
@@ -746,34 +884,12 @@ public class UserController {
 					session.setAttribute("sboardNameList", sboardNameList);
 					model.addAttribute("suserNameList", suserNameList);
 					session.setAttribute("suserNameList", suserNameList);
-				} 
+				}
 			}
-			
-		}
-		//是板块管理员
-		else if (currentuser.getisBoardAdmin() != 0) {
-			
-				if (searchPostByKeyWord!=null) {
-					int boardid=currentuser.getisBoardAdmin();
-					List<Post> pl = dao.queryForPostByPostTitleInABoard(searchPostByKeyWord,boardid);
-					model.addAttribute("searchedPost", pl);
-					session.setAttribute("searchedPost", pl);
-					List<String> sboardNameList = new ArrayList();
-					List<String> suserNameList = new ArrayList();
-					for (int i = 0; i < pl.size(); i++) {
-						sboardNameList.add(dao.queryBoardByBoardId(pl.get(i).getBoardid()).get(0).getBoardname());
-						suserNameList.add(dao.queryByID(pl.get(i).getUserid()).get(0).getUsername());
-					}
-					model.addAttribute("sboardNameList", sboardNameList);
-					session.setAttribute("sboardNameList", sboardNameList);
-					model.addAttribute("suserNameList", suserNameList);
-					session.setAttribute("suserNameList", suserNameList);
-				} 
-			}
-		} 
-		else {
+		} else {
 			return "index.jsp";
 		}
 		return "banAndDelete.jsp";
 	}
+
 }
