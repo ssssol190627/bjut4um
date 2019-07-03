@@ -14,6 +14,7 @@
     <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <!-- Custom styles for this template -->
 	<link rel="stylesheet" href="https://getbootstrap.com/docs/4.1/examples/offcanvas/offcanvas.css" type="text/css" />
+	<link rel="stylesheet" href="${pageContext.request.contextPath }/css/style_home.css" type="text/css" />
 	<style> 
         .black_overlay{ 
             display: none; 
@@ -219,6 +220,17 @@
 		</div>
 	</div>      
  
+ 	<script>
+        window.onload = function() {
+            var btn = document.getElementById('course');
+            btn.onmouseover = function() {
+                $("#course").addClass('btn-info');
+            };
+            btn.onmouseout = function() {
+                $("#course").removeClass('btn-info')
+            };
+        };
+    </script>
  
  	<div class="panel panel-success">
 	    <div class="panel-heading">
@@ -226,8 +238,8 @@
 	    </div>
 	    <div class="panel-body">
 	      <form action="/testdb/post/${post.postid }/postReply" name="postAReply">
-	      	<textarea class="form-control" name="replyContent" id="log" placeholder="这里写内容" style="width: 100%; height: 200px ;overflow: auto;word-break: break-all; resize: none;"></textarea>
-	      	<input type="submit" name="回复"/>
+	      	<textarea class="form-control" name="replyContent" id="log" placeholder="这里写内容" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;"></textarea>
+	      	<input type="submit" id="course" name="回复" class="btn btn-inverse btn-default"/>
  			<input type="hidden" name="postId" value="${post.postid }" /> 
  			<input type="hidden" name="nowPage" value="${page.pageNum }" /> 
 	      </form>
