@@ -624,6 +624,40 @@ public class UserController {
 		return "superAdmin.jsp";
 	}
 
+    /**
+     * 超级管理员管理板块信息
+     * 
+     */
+	@RequestMapping(value = "/boardApplyAdmin")
+    public String ManageBoardApply(HttpSession session) { 
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	List<Applyingboard> applyboard = dao.queryAllApplyBoard();
+    	session.setAttribute("applyboards", applyboard);
+		List<String> username = new ArrayList();
+		for (int i = 0; i < applyboard.size(); i++) {
+			List<User> user = dao.queryByID(applyboard.get(i).getUserid());
+			username.add(user.get(0).getUsername());
+		}
+		session.setAttribute("username", username);
+		
+    	List<Applyingadmin> applyadmin = dao.queryAllApplyAdmin();
+    	session.setAttribute("applyadmins", applyadmin);
+		List<String> boardname = new ArrayList();
+		for (int i = 0; i < applyadmin.size(); i++) {
+			List<Board> board = dao.queryBoardByBoardId(applyadmin.get(i).getBoardid());
+			boardname.add(board.get(0).getBoardname());
+		}
+		session.setAttribute("boardname", boardname);
+		List<String> username2 = new ArrayList();
+		for (int i = 0; i < applyadmin.size(); i++) {
+			List<User> user2 = dao.queryByID(applyadmin.get(i).getUserid());
+			username2.add(user2.get(0).getUsername());
+		}
+		session.setAttribute("username2", username2);
+		return "boardApplyAdmin.jsp";
+	}
     
     /**
      * ajax查数据库

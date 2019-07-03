@@ -10,7 +10,7 @@
 	<h1 class="header">超级管理员管理页面</h1>
 	<div class="nav">
 		<a href="reportAdmin">管理举报信息</a>
-		<a href="boardApplyAdmin.jsp">管理板块信息</a>
+		<a href="boardApplyAdmin">管理板块信息</a>
 		<a href="/testdb/good">加精</a>
 		<a href="banAndDelete.jsp">封禁和删除</a>
 		<a href="banUser.jsp">封禁</a>
