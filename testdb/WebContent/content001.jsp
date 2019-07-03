@@ -42,6 +42,7 @@
             overflow: auto; 
         } 
     </style>
+<link rel="stylesheet" href="style_home.css" type="text/css"/>
 	<script type="text/javascript">
 		function replyPost(postUser,postContent){			
 			var s="<%=session.getAttribute("CurrentUser")%>";
@@ -54,7 +55,7 @@
 				document.getElementById("replyContent").readOnly=false;
 			}
 		}
-		function replyFloor(loopCount,floorId,floorUser,floorContent){
+		function replyFloor(floorUser,floorContent){
 			var s="<%=session.getAttribute("CurrentUser")%>";
 			if(s=="null"){
 				alert("请先登录");
@@ -62,7 +63,6 @@
 			}
 			else{
 				document.getElementById("showReplyContent").textContent ="回复："+floorUser+":"+floorContent;
-				document.getElementById("floorId+"+loopCount).value =""+floorId;
 				document.getElementById("replyContent").readOnly=false;
 			}
 		}
@@ -172,8 +172,8 @@
  		<p id="showReplyContent"></p>
  		<textarea name="replyContent" style="width:200px;height:50px;" placeholder="这里写内容"></textarea>
  		<input type="submit" name="回复"/>
- 		<input type="hidden" name="postId" value="${Temp}" /> 
-		<input type="hidden" name="floorId" value="${Temp}" /> 
+ 		<input type="hidden" name="postId" value="${post.postid }" /> 
+ 		<input type="hidden" name="postId" value="<% %>>"/> 
  	</form>
  </div> 
  </main>
