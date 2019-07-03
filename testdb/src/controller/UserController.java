@@ -192,9 +192,9 @@ public class UserController {
     		user.setUsername(username);
     		user.setPassword(password);
     		user.setEmail(email);
-    		user.setisExist(1);
-    		user.setisBoardAdmin(0);
-    		user.setisForumAdmin(0);
+    		user.setIsExist(1);
+    		user.setIsBoardAdmin(0);
+    		user.setIsForumAdmin(0);
     		boolean result = dao.addUser(user);
         	if (result) {
         		model.addAttribute("msg", "<script>alert('添加成功！')</script>");
@@ -474,7 +474,7 @@ public class UserController {
 				dao.addGood(dao.queryForPostByPostId(goodPost).get(0));
 			}
 		}
-		if (currentuser.getisForumAdmin() != 0) {
+		if (currentuser.getIsForumAdmin() != 0) {
 			List<Post> pl = dao.queryAllGoodPost();
 			model.addAttribute("goodPost", pl);
 			session.setAttribute("goodPost", pl);
@@ -486,8 +486,8 @@ public class UserController {
 			}
 			model.addAttribute("boardNameList", boardNameList);
 			session.setAttribute("userNameList", userNameList);
-		} else if (currentuser.getisBoardAdmin() != 0) {
-			List<Post> pl = dao.queryAllGoodPostInABoard(currentuser.getisBoardAdmin());
+		} else if (currentuser.getIsBoardAdmin() != 0) {
+			List<Post> pl = dao.queryAllGoodPostInABoard(currentuser.getIsBoardAdmin());
 			model.addAttribute("goodPost", pl);
 			session.setAttribute("goodPost", pl);
 			List<String> boardNameList = new ArrayList();
@@ -613,6 +613,15 @@ public class UserController {
     	
     	session.setAttribute("usermessages", usermessages);
 		return "adminMessage.jsp";
+	}
+	
+    /**
+     * 返回超级管理员界面
+     * 
+     */
+	@RequestMapping(value = "/superAdmin")
+    public String toSuperAdmin(HttpSession session) { 
+		return "superAdmin.jsp";
 	}
 
     
