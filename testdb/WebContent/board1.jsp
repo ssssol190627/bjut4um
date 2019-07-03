@@ -9,6 +9,7 @@
 <title>${nowBoard.boardname}</title>
 </head>
 <body>
+<a href="/testdb/home1">返回主页</a>
 	<h2>${nowBoard.boardname}</h2>
 	<form method="post" action="/testdb/addPost">
 	<input type="submit" value="发布新帖" name="发布新帖"/>

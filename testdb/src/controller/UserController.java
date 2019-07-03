@@ -27,36 +27,38 @@ import javax.servlet.*;
 import bean.*;
 import dao.UserDao;
 import java.util.Date;
+
 @Controller
 public class UserController {
 	/**
-     * 
-     * ��ת��¼����
-     * 
-     */
-    @RequestMapping(value = "/loginpage")
-    public String toLoginpage() {
-    	return "login.jsp";
-    }
-    
-	/**
-     * 
-     * ��¼
-     * 
-     */
-    @RequestMapping(value = "/login")
-    public String CheckLogin(@RequestParam("username") String username, @RequestParam("password") String password, Model model, HttpSession session) {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+	 * 
+	 * ��ת��¼����
+	 * 
+	 */
+	@RequestMapping(value = "/loginpage")
+	public String toLoginpage() {
+		return "login.jsp";
+	}
 
-    	UserDao dao = (UserDao) context.getBean("dao");
+	/**
+	 * 
+	 * ��¼
+	 * 
+	 */
+	@RequestMapping(value = "/login")
+	public String CheckLogin(@RequestParam("username") String username, @RequestParam("password") String password,
+			Model model, HttpSession session) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+
+		UserDao dao = (UserDao) context.getBean("dao");
 		List<Board> board = dao.queryAllBoard();
-    	List<User> user = dao.queryByName(username);
-    	if(user.isEmpty()) {
-    		return "login.jsp";
-    	}
-    	if(user.get(0).getPassword().equals(password)) {
-    		model.addAttribute("CurrentUser", user.get(0));
-    		session.setAttribute("CurrentUser", user.get(0));
+		List<User> user = dao.queryByName(username);
+		if (user.isEmpty()) {
+			return "login.jsp";
+		}
+		if (user.get(0).getPassword().equals(password)) {
+			model.addAttribute("CurrentUser", user.get(0));
+			session.setAttribute("CurrentUser", user.get(0));
 			model.addAttribute("AllBoard", board);
 			session.setAttribute("AllBoard", board);
     		return "home1.jsp";
@@ -116,6 +118,7 @@ public class UserController {
     		return "userPreferences.jsp";
     	}
     }
+
 
 	/**
 	 * 
@@ -189,9 +192,9 @@ public class UserController {
     		user.setUsername(username);
     		user.setPassword(password);
     		user.setEmail(email);
-    		user.setisExist(1);
-    		user.setisBoardAdmin(0);
-    		user.setisForumAdmin(0);
+    		user.setIsExist(1);
+    		user.setIsBoardAdmin(0);
+    		user.setIsForumAdmin(0);
     		boolean result = dao.addUser(user);
         	if (result) {
         		model.addAttribute("msg", "<script>alert('添加成功！')</script>");
@@ -223,81 +226,81 @@ public class UserController {
 		session.setAttribute("page", p);
 		int si = p.getStartIndex();
 		List<Floor> fl = p.getList();
-	 
-    	List<Post> posted=dao.queryForPostByPostId(postid); 
-    	Post currentpost = posted.get(0); 
-    	List<User> postuser=dao.queryByID(currentpost.getUserid());
-    	List<String> ul=new ArrayList();
-    	for (int i = 0; i < fl.size(); i++) {
-    		String thisuser = dao.queryByID(fl.get(i).getUserid()).get(0).getUsername();
+
+		List<Post> posted = dao.queryForPostByPostId(postid);
+		Post currentpost = posted.get(0);
+		List<User> postuser = dao.queryByID(currentpost.getUserid());
+		List<String> ul = new ArrayList();
+		for (int i = 0; i < fl.size(); i++) {
+			String thisuser = dao.queryByID(fl.get(i).getUserid()).get(0).getUsername();
 			ul.add(thisuser);
 		}
-    	
-    	//List<Floor> floored = dao.queryForReplyedByPost(currentpost.getPostid());
-    	model.addAttribute("floor", fl);
-    	session.setAttribute("floor", fl);
-    	model.addAttribute("postuser", postuser.get(0));
-    	session.setAttribute("postuser", postuser.get(0));
-    	model.addAttribute("flooruser", ul);
-    	session.setAttribute("flooruser", ul);
-    	model.addAttribute("post", currentpost);
-    	session.setAttribute("post", currentpost);
-    	return "/content001.jsp";
-    } 
-    
-    /**
-     * 
-     * 举报
-     * 
-     */
-    @RequestMapping(value = "/post/report")
-    public String toReport(@RequestParam("postId") String postId, @RequestParam("floorId") String floorId, @RequestParam("reportType") String reporttype, @RequestParam("reportReason") String reportreason, Model model, HttpSession session) {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	Integer postid = Integer.parseInt(postId);
-    	Integer floorid;
-    	if(floorId.length()==0) {
-    		floorid = 0;
-    	}else {
-    		floorid = Integer.parseInt(floorId);
-    	}
-    	 
-    	
-     	List<Post> posted = dao.queryForPostByPostId(postid);
-    	User currentuser = (User)session.getAttribute("CurrentUser");
-    	Post post = new Post();
-    	post = posted.get(0);
-    	Report report = new Report();
-    	report.setBoardid(post.getBoardid());
-    	report.setPostid(postid);
-    	report.setFloorid(floorid);
-    	report.setUserid(currentuser.getId());
-    	report.setReportbrief(reporttype);
-    	report.setReportcontent(reportreason);
-    	Date date = new Date();
-    	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
-    	report.setReporttime(dateFormat.format(date));
-    	report.setIshandle(0);
-    	List<Report> lastreport = dao.forLastReport();
-    	Integer id;
-    	if(lastreport.size()==0) {
-    		id = 0;
-    	}else {
-    		id = lastreport.get(0).getReportid()+1;
-    	}
+
+		// List<Floor> floored = dao.queryForReplyedByPost(currentpost.getPostid());
+		model.addAttribute("floor", fl);
+		session.setAttribute("floor", fl);
+		model.addAttribute("postuser", postuser.get(0));
+		session.setAttribute("postuser", postuser.get(0));
+		model.addAttribute("flooruser", ul);
+		session.setAttribute("flooruser", ul);
+		model.addAttribute("post", currentpost);
+		session.setAttribute("post", currentpost);
+		return "/content001.jsp";
+	}
+
+	/**
+	 * 
+	 * 举报
+	 * 
+	 */
+	@RequestMapping(value = "/post/report")
+	public String toReport(@RequestParam("postId") String postId, @RequestParam("floorId") String floorId,
+			@RequestParam("reportType") String reporttype, @RequestParam("reportReason") String reportreason,
+			Model model, HttpSession session) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		UserDao dao = (UserDao) context.getBean("dao");
+		Integer postid = Integer.parseInt(postId);
+		Integer floorid;
+		if (floorId.length() == 0) {
+			floorid = 0;
+		} else {
+			floorid = Integer.parseInt(floorId);
+		}
+
+		List<Post> posted = dao.queryForPostByPostId(postid);
+		User currentuser = (User) session.getAttribute("CurrentUser");
+		Post post = new Post();
+		post = posted.get(0);
+		Report report = new Report();
+		report.setBoardid(post.getBoardid());
+		report.setPostid(postid);
+		report.setFloorid(floorid);
+		report.setUserid(currentuser.getId());
+		report.setReportbrief(reporttype);
+		report.setReportcontent(reportreason);
+		Date date = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
+		report.setReporttime(dateFormat.format(date));
+		report.setIshandle(0);
+		List<Report> lastreport = dao.forLastReport();
+		Integer id;
+		if (lastreport.size() == 0) {
+			id = 0;
+		} else {
+			id = lastreport.get(0).getReportid() + 1;
+		}
 		report.setReportid(id);
-		
+
 		boolean result = dao.addReport(report);
-    	if (result) {
-    		model.addAttribute("msg", "<script>alert('添加成功！')</script>");
+		if (result) {
+			model.addAttribute("msg", "<script>alert('添加成功！')</script>");
 			return "/content001.jsp";
-    	}
-    	else {
-    		return "/index.jsp";
-    	}
-    }
-    
-    /**
+		} else {
+			return "/index.jsp";
+		}
+	}
+
+	/**
 	 * 
 	 * 进入板块
 	 * 
@@ -306,29 +309,29 @@ public class UserController {
 	public String enterBoard(@PathVariable int boardid, Model model, HttpSession session, HttpServletRequest request) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		UserDao dao = (UserDao) context.getBean("dao");
-		if(request.getHeader("Referer").toString().equals("http://localhost:8080/testdb/addPost")) {
-			String newPostTitle=request.getParameter("title");
-			String newPostContent=request.getParameter("content");
-			if((!newPostTitle.isEmpty())&&(!newPostContent.isEmpty())) {
-				Post post=new Post();
-		    	Board board=(Board)session.getAttribute("nowBoard");
-		    	User user=(User)session.getAttribute("CurrentUser");
-		    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-		    	String nowtime=df.format(new Date());
-		    	post.setBoardid(board.getBoardid());
-		    	post.setTitle(newPostTitle);
-		    	post.setPostcontent(newPostContent);
-		    	post.setUserid(user.getId());
-		    	post.setPosttime(nowtime);
-		    	post.setNewtime(nowtime);
-		    	post.setIsBanned(0);
-		    	post.setIsGood(0);
-		    	post.setIsExist(1);
-		    	post.setNumpost(0);
-		    	post.setPostid(dao.queryForAllPost().size()+1);
-		    	dao.addPost(post);
+		if (request.getHeader("Referer").toString().contains("addPost")) {
+			String newPostTitle = request.getParameter("title");
+			String newPostContent = request.getParameter("content");
+			if ((!newPostTitle.isEmpty()) && (!newPostContent.isEmpty())) {
+				Post post = new Post();
+				Board board = (Board) session.getAttribute("nowBoard");
+				User user = (User) session.getAttribute("CurrentUser");
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
+				String nowtime = df.format(new Date());
+				post.setBoardid(board.getBoardid());
+				post.setTitle(newPostTitle);
+				post.setPostcontent(newPostContent);
+				post.setUserid(user.getId());
+				post.setPosttime(nowtime);
+				post.setNewtime(nowtime);
+				post.setIsBanned(0);
+				post.setIsGood(0);
+				post.setIsExist(1);
+				post.setNumpost(0);
+				post.setPostid(dao.queryForAllPost().size() + 1);
+				dao.addPost(post);
 			}
-			
+
 		}
 		int pageNum = 1;
 		if (request.getQueryString() != null) {
@@ -342,30 +345,31 @@ public class UserController {
 		List<Post> pl = p.getList();
 		List<Board> bl = dao.queryBoardByBoardId(boardid);
 		Board nowboard = bl.get(0);
-		//List<User> ul;
-	   	List<String> ul=new ArrayList();
-    	for (int i = 0; i < pl.size(); i++) {
-    		String thisuser = dao.queryByID(pl.get(i).getUserid()).get(0).getUsername();
+		// List<User> ul;
+		List<String> ul = new ArrayList();
+		for (int i = 0; i < pl.size(); i++) {
+			String thisuser = dao.queryByID(pl.get(i).getUserid()).get(0).getUsername();
 			ul.add(thisuser);
 		}
 
 		// User user=queryUserNameById()
-		//String boardname = nowboard.getBoardname();
+		// String boardname = nowboard.getBoardname();
 		model.addAttribute("nowBoard", nowboard);
 		session.setAttribute("nowBoard", nowboard);
-    	model.addAttribute("postuser", ul);
-    	session.setAttribute("postuser", ul);
+		model.addAttribute("postuser", ul);
+		session.setAttribute("postuser", ul);
 		model.addAttribute("CurrentPost", pl);
 		session.setAttribute("CurrentPost", pl);
 		return "/board1.jsp";
 	}
-	
-    /**
-     * 
-     * 从板块进入相应帖子中
-     * 
-     */
+
+	/**
+	 * 
+	 * 从板块进入相应帖子中
+	 * 
+	 */
 	@RequestMapping(value = "/board/{boardid}/post/{postid}")
+
     public String enterPost(@PathVariable int boardid, Model model, HttpSession session) {
     	return "/content001.jsp";
     }
@@ -386,107 +390,147 @@ public class UserController {
      * 
      */
 	@RequestMapping(value = "/reportAdmin")
-    public String toReportAdmin(Model model, HttpSession session) {
+	public String toReportAdmin(Model model, HttpSession session) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	
-    	List<Report> reported = dao.queryAllReport();
-    	List<String> username = new ArrayList();
-    	for(int i=0;i<reported.size();i++) {
-    		List<User> user = dao.queryByID(reported.get(i).getUserid());
-    		username.add(user.get(0).getUsername());
-    	}
-		session.setAttribute("usernames", username); 
-    	session.setAttribute("reported", reported);
-    	 return "/reportAdmin.jsp";
-    }
-	
-    /**
-     * 
-     * 管理举报信息
-     * 
-     */
+		UserDao dao = (UserDao) context.getBean("dao");
+
+		List<Report> reported = dao.queryAllReport();
+		List<String> username = new ArrayList();
+		for (int i = 0; i < reported.size(); i++) {
+			List<User> user = dao.queryByID(reported.get(i).getUserid());
+			username.add(user.get(0).getUsername());
+		}
+		session.setAttribute("usernames", username);
+		session.setAttribute("reported", reported);
+		return "/reportAdmin.jsp";
+	}
+
+	/**
+	 * 
+	 * 管理举报信息
+	 * 
+	 */
 	@RequestMapping(value = "/manageReport")
-    public String ManagingReport(@RequestParam("reportid") String reportId, @RequestParam("manage") String manage, Model model, HttpSession session) {
+	public String ManagingReport(@RequestParam("reportid") String reportId, @RequestParam("manage") String manage,
+			Model model, HttpSession session) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	
-    	Integer reportid = Integer.parseInt(reportId);
-    	List<Report> reports = dao.queryReportByReportId(reportid);
-    	Report report = reports.get(0);
-    	
-    	if(manage.equals("ban")) {
-    		if(report.getFloorid()==0) {
-    			List<Post> banpost = dao.queryForPostByPostId(report.getPostid());
-    			banpost.get(0).setIsBanned(1);
-    			report.setIshandle(1);
-    			
-    		}else {
-    			List<Floor> banfloor = dao.queryFloorByFloorId(report.getFloorid());
-    			banfloor.get(0).setIsbanned(1);
-    			report.setIshandle(1);
-    		}
-    	}else if(manage.equals("delete")) {
-    		if(report.getFloorid()==0) {
-    			List<Post> banpost = dao.queryForPostByPostId(report.getPostid());
-    			banpost.get(0).setIsExist(0);
-    			report.setIshandle(2);
-    		}else {
-    			List<Floor> banfloor = dao.queryFloorByFloorId(report.getFloorid());
-    			banfloor.get(0).setIsexist(0);
-    			report.setIshandle(2);
-    		}
-    	}else {
-    		report.setIshandle(3);
-    	}
-    	dao.updateHandle(report);
-    	
-    	return "/reportAdmin";
-    }
+		UserDao dao = (UserDao) context.getBean("dao");
+
+		Integer reportid = Integer.parseInt(reportId);
+		List<Report> reports = dao.queryReportByReportId(reportid);
+		Report report = reports.get(0);
+
+		if (manage.equals("ban")) {
+			if (report.getFloorid() == 0) {
+				List<Post> banpost = dao.queryForPostByPostId(report.getPostid());
+				banpost.get(0).setIsBanned(1);
+				report.setIshandle(1);
+
+			} else {
+				List<Floor> banfloor = dao.queryFloorByFloorId(report.getFloorid());
+				banfloor.get(0).setIsbanned(1);
+				report.setIshandle(1);
+			}
+		} else if (manage.equals("delete")) {
+			if (report.getFloorid() == 0) {
+				List<Post> banpost = dao.queryForPostByPostId(report.getPostid());
+				banpost.get(0).setIsExist(0);
+				report.setIshandle(2);
+			} else {
+				List<Floor> banfloor = dao.queryFloorByFloorId(report.getFloorid());
+				banfloor.get(0).setIsexist(0);
+				report.setIshandle(2);
+			}
+		} else {
+			report.setIshandle(3);
+		}
+		dao.updateHandle(report);
+
+		return "/reportAdmin";
+	}
+
 	
-    /**
-     * 
-     * 回复
-     * 
-     */
-	@RequestMapping(value = "/post/postReply")
-    public String addPostReply(HttpSession session, @RequestParam("postId") String postId, @RequestParam("replyContent") String replycontent) {
-    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-    	UserDao dao = (UserDao) context.getBean("dao");
-    	
-    	Integer postid = Integer.parseInt(postId);
-    	//Integer floorid = Integer.parseInt(floorId);
-    	User currentuser = (User)session.getAttribute("CurrentUser");
-    	
-    	List<Post> posted = dao.queryForPostByPostId(postid);
-    	Post post = posted.get(0);
-    	List<Floor> floored = dao.forLastFloor(postid);
-    	Floor lastfloor = floored.get(0);
-    	
-    	Floor newfloor = new Floor();
-    	newfloor.setBoardid(post.getBoardid());
-    	newfloor.setPostid(postid);
-    	newfloor.setFloorid(lastfloor.getFloorid()+1);
-    	newfloor.setAnsfloorid(0);
-    	newfloor.setUserid(currentuser.getId());
-    	newfloor.setFloorcontent(replycontent);
-    	Date date = new Date();
-    	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
-    	newfloor.setFloortime(dateFormat.format(date));
-    	newfloor.setIsbanned(0);
-    	newfloor.setIsgood(0);
-    	newfloor.setIsexist(1);
-    	
-		boolean result = dao.addFloor(newfloor);
-		return "/content001.jsp";
-    }
+
+  
+	/**
+	 * 
+	 * 管理员加精
+	 * 
+	 */
+	@RequestMapping(value = "/good")
+	public String addGood(Model model, HttpSession session, HttpServletRequest request) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		User currentuser = (User) session.getAttribute("CurrentUser");
+		UserDao dao = (UserDao) context.getBean("dao");
+		if (request.getHeader("Referer").toString().contains("good")) {
+			String isNotGoodAnymore = request.getParameter("isNotGoodAnymore");
+			String isGoodNow = request.getParameter("isGoodNow");
+			if (!isNotGoodAnymore.isEmpty()) {
+				int notGoodPost=Integer.parseInt(isNotGoodAnymore);
+				dao.deleteGood(dao.queryForPostByPostId(notGoodPost).get(0));
+			}
+			else if(!isGoodNow.isEmpty()) {
+				int goodPost=Integer.parseInt(isGoodNow);
+				dao.addGood(dao.queryForPostByPostId(goodPost).get(0));
+			}
+		}
+		if (currentuser.getIsForumAdmin() != 0) {
+			List<Post> pl = dao.queryAllGoodPost();
+			model.addAttribute("goodPost", pl);
+			session.setAttribute("goodPost", pl);
+			List<String> boardNameList = new ArrayList();
+			List<String> userNameList = new ArrayList();
+			for (int i = 0; i < pl.size(); i++) {
+				boardNameList.add(dao.queryBoardByBoardId(pl.get(i).getBoardid()).get(0).getBoardname());
+				userNameList.add(dao.queryByID(pl.get(i).getUserid()).get(0).getUsername());
+			}
+			model.addAttribute("boardNameList", boardNameList);
+			session.setAttribute("userNameList", userNameList);
+		} else if (currentuser.getIsBoardAdmin() != 0) {
+			List<Post> pl = dao.queryAllGoodPostInABoard(currentuser.getIsBoardAdmin());
+			model.addAttribute("goodPost", pl);
+			session.setAttribute("goodPost", pl);
+			List<String> boardNameList = new ArrayList();
+			List<String> userNameList = new ArrayList();
+			for (int i = 0; i < pl.size(); i++) {
+				boardNameList.add(dao.queryBoardByBoardId(pl.get(i).getBoardid()).get(0).getBoardname());
+				userNameList.add(dao.queryByID(pl.get(i).getUserid()).get(0).getUsername());
+			}
+			model.addAttribute("boardNameList", boardNameList);
+			session.setAttribute("userNameList", userNameList);
+		} else {
+			return "home1.jsp";
+		}
+		return "good.jsp";
+	}
+
+	public String msg(String msg) {
+		return "<script>alert('" + msg + "')</script>";
+	}
 	
-    /**
+	/**
      * 从个人主页进入申请界面
      * 
      */
 	@RequestMapping(value = "/applyBoard")
-    public String toApplyBoard() {
+    public String toApplyBoard(HttpSession session) { 
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	//search for applyingadmin && applyingboard
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	List<Applyingadmin> admined = dao.queryAdminByUserid(currentuser.getId());
+    	List<Applyingboard> boarded = dao.queryBoardByUserid(currentuser.getId());
+    	session.setAttribute("admined", admined);
+    	session.setAttribute("boarded", boarded);
+    	
+    	List<String> boardname = new ArrayList();
+    	for(int i=0;i<admined.size();i++) {
+    		List<Board> board = dao.queryBoardByBoardId(admined.get(i).getBoardid());
+    		boardname.add(board.get(0).getBoardname());
+    	}
+		session.setAttribute("boardnames", boardname);
+    	//write into session
     	 return "/applyBoard.jsp";
     }
 	
@@ -512,28 +556,108 @@ public class UserController {
     	applyingboard.setBoardname(boardname);
     	applyingboard.setApplyingreason(boardreason);
     	applyingboard.setUserid(currentuser.getId());
+    	Date date = new Date();
+    	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
+    	applyingboard.setApplytime(dateFormat.format(date));
+    	applyingboard.setIshandle(0);
     	
     	boolean result = dao.addApplyingboard(applyingboard);    	
     	 return "/applyBoard.jsp";
     }
+	
+    /**
+     * 申请成为板块管理员
+     * 
+     */
+	@RequestMapping(value = "/applyforAdmin")
+    public String toApplyforAdmin(@RequestParam("boardname") String boardname, @RequestParam("applyreason") String applyreason,HttpSession session) {   
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	List<Applyingadmin> applying = dao.forLastApplyingadmin();
+    	List<Board> board = dao.queryByBoardName(boardname);
+    	Integer applyingid;
+    	if(applying.size()==0) {
+    		applyingid = 0;
+    	}else {
+    		applyingid = applying.get(0).getApplyingid()+1;
+    	}
+    	
+    	Applyingadmin newapply = new Applyingadmin();
+    	newapply.setApplyingid(applyingid);
+    	newapply.setBoardid(board.get(0).getBoardid());
+    	newapply.setApplyingreason(applyreason);
+    	newapply.setUserid(currentuser.getId());
+    	Date date = new Date();
+    	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
+    	newapply.setApplytime(dateFormat.format(date));
+    	newapply.setIshandle(0);
+    	
+    	boolean result = dao.addApplyingadmin(newapply); 
+    	
+    	 return "/applyBoard.jsp";
+    }
+	
+    /**
+     * 从个人主页进入站内消息界面
+     * 
+     */
+	@RequestMapping(value = "/adminMessage")
+    public String toAdminMessage(HttpSession session) { 
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	List<Message> usermessages = dao.queryMessageByUserid(currentuser.getId());
+    	
+    	session.setAttribute("usermessages", usermessages);
+		return "adminMessage.jsp";
+	}
+	
+    /**
+     * 返回超级管理员界面
+     * 
+     */
+	@RequestMapping(value = "/superAdmin")
+    public String toSuperAdmin(HttpSession session) { 
+		return "superAdmin.jsp";
+	}
 
     /**
+     * 超级管理员管理板块信息
      * 
-     *发表新帖
-     * 
-    /**
      */
-    @RequestMapping(value = "/addPost")
-    public String addPost(Model model, HttpSession session) {
+	@RequestMapping(value = "/boardApplyAdmin")
+    public String ManageBoardApply(HttpSession session) { 
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
     	
-    	return "addPost.jsp";
-    }
-    
- 
-    
-    public String msg(String msg) {
-	return "<script>alert('" + msg + "')</script>";
-    }
+    	List<Applyingboard> applyboard = dao.queryAllApplyBoard();
+    	session.setAttribute("applyboards", applyboard);
+		List<String> username = new ArrayList();
+		for (int i = 0; i < applyboard.size(); i++) {
+			List<User> user = dao.queryByID(applyboard.get(i).getUserid());
+			username.add(user.get(0).getUsername());
+		}
+		session.setAttribute("username", username);
+		
+    	List<Applyingadmin> applyadmin = dao.queryAllApplyAdmin();
+    	session.setAttribute("applyadmins", applyadmin);
+		List<String> boardname = new ArrayList();
+		for (int i = 0; i < applyadmin.size(); i++) {
+			List<Board> board = dao.queryBoardByBoardId(applyadmin.get(i).getBoardid());
+			boardname.add(board.get(0).getBoardname());
+		}
+		session.setAttribute("boardname", boardname);
+		List<String> username2 = new ArrayList();
+		for (int i = 0; i < applyadmin.size(); i++) {
+			List<User> user2 = dao.queryByID(applyadmin.get(i).getUserid());
+			username2.add(user2.get(0).getUsername());
+		}
+		session.setAttribute("username2", username2);
+		return "boardApplyAdmin.jsp";
+	}
     
     /**
      * ajax查数据库
