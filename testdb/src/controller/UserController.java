@@ -96,6 +96,17 @@ public class UserController {
     	return "userPreferences.jsp";
     }
     
+    
+    /**
+     * 
+     * �����޸��������
+     * 
+     */
+    @RequestMapping(value = "/addPost")
+    public String toAddPost() {
+    	return "addPost.jsp";
+    }
+    
     /**
      * 
      * �޸�����

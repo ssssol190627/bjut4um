@@ -4,62 +4,50 @@
 <html>
 
 <head>
-<meta charset="utf-8">
-<title>this is home</title>
-<link rel="stylesheet" href="style_home.css" type="text/css" />
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/docs/4.1/assets/img/favicons/favicon.ico">
+    <title>Bjut4um</title>
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <!-- Custom styles for this template -->
+	<link rel="stylesheet" href="https://getbootstrap.com/docs/4.1/examples/offcanvas/offcanvas.css" type="text/css" />
+	<link rel="stylesheet" href="${pageContext.request.contextPath }/css/style_home.css" type="text/css" />
+	<link rel="stylesheet" href="style_home.css" type="text/css" />
 </head>
 <body>
 
-	<h1 class="header">欢迎来到主页</h1>
-	<div class="nav">
-		<a href="loginpage">登录</a>
-		<a href="registerpage">注册</a>
+	 <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+		<a class="navbar-brand mr-auto mr-lg-0" href="index.jsp">Bjut4um</a>		
+      		<div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+        		<ul class="navbar-nav">
+					<li class="nav-item" style="position:fixed;right:100px;">
+	            		<a class="nav-link" href="loginpage">登录</a>
+	          		</li>   
+	          		<li class="nav-item" style="position:fixed;right:50px;">
+	            		<a class="nav-link" href="registerpage">注册</a>
+	          		</li> 
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="#">💗</a>
+	          		</li>   	
+        		</ul>
+      		</div>
+	</nav>
+	
+	
+	<h1 class="header">欢迎来到主页</h1>   
+    <div class="list-group">
+  		<a href="board\1" class="list-group-item">情感天地</a>
+  		<a href="board\2" class="list-group-item">荒野求生</a>
+  		<a href="board\3" class="list-group-item">娱乐明星</a>
+  		<a href="board\4" class="list-group-item">追剧狂</a>
+  		<a href="board\5" class="list-group-item">爱小说</a>
+  		<a href="board\6" class="list-group-item">工大生活</a>
+  		<a href="board\7" class="list-group-item">工大学习</a>
 	</div>
-	<div class="board">
-		<span>
-		
-		</span>
-		<%
-			int boardSize=7;
-			String boardTitle[]={"情感天地","荒野求生","娱乐明星","追剧狂","爱小说","工大生活","工大学习"};
-			out.println("<nav>");
-			//String boardHref[]={"board1","board1","board1","board1","board1","board1","board1"};
-			for(int i=1;i<boardSize+1;i++){
-				//out.println("<span>");
-				//out.println("<nav>");
-				out.println("<a href=board\\"+i+" target=\"_blank\">"+boardTitle[i-1]+"</a>");
-				out.println("<br>");
-				//out.println("/<span>");
-			}
-			out.println("</nav>");
-		%>
-	</div>
-	<div class="latest_content">
-			<div class="single_content">
-				<% 
-					//int i=100;
-					String title1="为客户的产品量身制作合格的包装箱";
-					String href1="content001.jsp";
-						out.println("<a href="+href1+" target=\"_blank\">"+title1+"</a>");
-				%>
-			</div>
-			<div class="single_content">
-				<% 
-					//int i=100;
-					String title2="为客户的产品量身制作合格的包装箱2";
-					String href2="content001.jsp";
-						out.println("<a href="+href2+" target=\"_blank\">"+title2+"</a>");
-				%>
-			</div>
-			<div class="single_content">
-				<% 
-					//int i=100;
-					String title3="为客户的产品量身制作合格的包装箱3";
-					String href3="content001.jsp";
-						out.println("<a href="+href3+" target=\"_blank\">"+title3+"</a>");
-				%>
-			</div>
-	</div>
+
 	<h3 class="footer">
 		Copyright bjut4um.cn
 	</h3>
