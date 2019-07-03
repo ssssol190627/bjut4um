@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,20 +20,31 @@
 		<th>申请时间</th>
 		<th>是否通过</th>
 	</tr>
-	<tr>
-		<td>工大生活</td>
-		<td>工大小锤</td>
-		<td>分享生活点滴</td>
-		<th>2019/06/20 23:05:07</th>
-		<th>
-		<form action="superAdmin.jsp">
-			<input type="radio" name="newBoard" value="newBoard">
-			通过<br>
-			<input type="submit" name="submit" value="确定">
-			<br>
-		</form>
-		</th>
-	</tr>
+	<c:forEach items="${applyboards}" var="applyboard" varStatus="loop">
+		<tr>
+		    <td>${applyboard.boardname }</td>
+		    <td>${username.get(loop.count-1) }</td>
+		    <td>${applyboard.applyingreason }</td>
+		    <td>${applyboard.applytime }</td>
+		    <c:if test = "${applyboard.ishandle == 0 }">
+		    	<td>
+					<form action="manageApplyboard">
+						<input type="radio" name="newBoard" value="allow">通过<br>
+						<input type="radio" name="newBoard" value="refuse">驳回<br>
+						<input type="hidden" name="applyid" value="${applyboard.applyingid }" />   
+						<input type="submit" name="submit" value="确定">
+					<br>
+					</form>
+				</td>
+			</c:if>
+			<c:if test = "${applyboard.ishandle == 1 }">
+				<td>已通过</td>
+			</c:if>
+			<c:if test = "${applyboard.ishandle == 2 }">
+				<td>已驳回</td>
+			</c:if>
+   		</tr>
+    </c:forEach>
 	</table>
 	<table border="1">
 	<caption align="top">板块管理员申请信息列表</caption>
@@ -43,20 +55,28 @@
 		<th>申请时间</th>
 		<th>是否通过</th>
 	</tr>
-	<tr>
-		<td>工大生活</td>
-		<td>好有趣最好吃</td>
-		<td>工大学生自媒体运营者</td>
-		<th>2019/06/20 23:05:07</th>
-		<th>
-		<form action="boardAdmin.jsp">
-			<input type="radio" name="newBoardAdministrator" value="newBoardAdministrator">
-			通过<br>
-			<input type="submit" name="submit" value="确定">
-			<br>
-		</form>
-		</th>
-	</tr>
+	<c:forEach items="${applyadmins}" var="applyadmin" varStatus="loop">
+		<tr>
+		    <td>${boardname.get(loop.count-1) }</td>
+		    <td>${username2.get(loop.count-1) }</td>
+		    <td>${applyadmin.applyingreason }</td>
+		    <td>${applyadmin.applytime }</td>
+		    <c:if test = "${applyadmin.ishandle == 0 }">
+		    	<td>
+					<form action="manageApplyAdmin">
+						<input type="radio" name="newAdmin" value="allow">通过<br>
+						<input type="radio" name="newAdmin" value="refuse">驳回<br>
+						<input type="hidden" name="applyid" value="${applyadmin.applyingid }" />   
+						<input type="submit" name="submit" value="确定">
+						<br>
+					</form>
+				</td>
+			</c:if>
+			<c:if test = "${applyadmin.ishandle == 1 }">
+				<td>已通过</td>
+			</c:if>
+   		</tr>
+    </c:forEach>
 	</table>
 </body>
 </html>

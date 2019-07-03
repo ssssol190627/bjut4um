@@ -69,7 +69,7 @@ public class UserDao {
 	 * 
 	 */
 	public List<User> queryByName(String name) {
-		String sql = "select id,username,password,email,isExist,isBroadAdmin,isForumAdmin from user where username = '"
+		String sql = "select id,username,password,email,isExist,isBoardAdmin,isForumAdmin from user where username = '"
 				+ name + "'";
 		return jdbcTemplate.query(sql, new UserMapper());
 	}
@@ -79,7 +79,7 @@ public class UserDao {
 	 * 
 	 */
 	public List<User> queryByEmail(String email) {
-		String sql = "select id,username,password,email,isExist,isBroadAdmin,isForumAdmin from user where email = '"
+		String sql = "select id,username,password,email,isExist,isBoardAdmin,isForumAdmin from user where email = '"
 				+ email + "'";
 		return jdbcTemplate.query(sql, new UserMapper());
 	}
@@ -181,10 +181,10 @@ public class UserDao {
 	 * 
 	 */
 	public boolean addUser(User user) {
-		String sql = "insert into user(id,username,password,email,isExist,isBroadAdmin,isForumAdmin) values(?,?,?,?,?,?,?)";
+		String sql = "insert into user(id,username,password,email,isExist,isBoardAdmin,isForumAdmin) values(?,?,?,?,?,?,?)";
 		return jdbcTemplate.update(sql,
-				new Object[] { user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getisExist(),
-						user.getisBoardAdmin(), user.getisForumAdmin() },
+				new Object[] { user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getIsExist(),
+						user.getIsBoardAdmin(), user.getIsForumAdmin() },
 				new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER,
 						Types.INTEGER }) == 1;
 	}
@@ -317,13 +317,23 @@ public class UserDao {
 	 * 通过floorid查询具体楼层
 	 * 
 	 */
-	public List<Floor> queryFloorByFloorId(int floorid) {
-		String sql = "select * from floor where id = " + floorid;
+	public List<Floor> queryFloorByFloorIdandPostId(int floorid, int postid) {
+		String sql = "select * from floor where id = " + floorid + " and postid = " + postid;
+		return jdbcTemplate.query(sql, new FloorMapper());
+	}
+	
+	/**
+	 * 查询所有楼层
+	 * 
+	 */
+	public List<Floor> queryAllFloor(Integer postid) {
+		String sql = "select * from floor where postid = "+ postid ;
+		// 将查询结果映射到User类中，添加到list中，并返回
 		return jdbcTemplate.query(sql, new FloorMapper());
 	}
 
 	/**
-	 * 通过floorid查询具体楼层
+	 * 
 	 * 
 	 */
 	public boolean updateHandle(Report report) {
@@ -354,6 +364,75 @@ public class UserDao {
 	public List<Post> findBooksAjax(String name) {
 		String sql = "select distinct title from post where title like \"%" + name + "%\"";
 		return jdbcTemplate.query(sql, new PostTitleMapper());
+	}
+
+	/**
+	 * 在一个板块里通过帖子title查询帖子
+	 * 
+	 */
+	public List<Post> queryForPostByPostTitleInABoard(String title, int boardid) {
+		String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost from post where title = '"
+				+ title + "' and boardid = '" + boardid + "'";
+		return jdbcTemplate.query(sql, new PostMapper());
+	}
+
+	/**
+	 * 帖子封禁
+	 * 
+	 */
+	public boolean setBanned(Post post) {
+		String sql = "UPDATE `post` SET `isBanned` = '1' WHERE  (`id` = '" + post.getPostid() + "')";
+		return jdbcTemplate.update(sql) == 1;
+	}
+
+	/**
+	 * 
+	 * 帖子解封
+	 * 
+	 */
+	public boolean delBanned(Post post) {
+		String sql = "UPDATE `post` SET `isBanned` = '0' WHERE  (`id` = '" + post.getPostid() + "')";
+		return jdbcTemplate.update(sql) == 1;
+	}
+
+	/**
+	 * 帖子删除
+	 * 
+	 */
+	public boolean setDeleted(Post post) {
+		String sql = "UPDATE `post` SET `isExist` = '0' WHERE  (`id` = '" + post.getPostid() + "')";
+		return jdbcTemplate.update(sql) == 1;
+	}
+
+	/**
+	 * 
+	 * 帖子恢复
+	 * 
+	 */
+	public boolean delDeleted(Post post) {
+		String sql = "UPDATE `post` SET `isExist` = '1' WHERE  (`id` = '" + post.getPostid() + "')";
+		return jdbcTemplate.update(sql) == 1;
+	}
+
+	/**
+	 * 查询所有系统信息
+	 * 
+	 */
+	public List<Message> queryAllMessage() {
+		String sql = "select * from message ";
+		return jdbcTemplate.query(sql, new MessageMapper());
+	}
+
+	/**
+	 * 添加message
+	 * 
+	 */
+	public boolean addMessage(Message message) {
+		String sql = "insert into message (`messageid`, `userid`, `messagetime`, `messagecontent`, `adminid`)  values(?,?,?,?,?)";
+		return jdbcTemplate.update(sql,
+				new Object[] { message.getMessageid(), message.getUserid(), message.getMessagetime(),
+						message.getMessagecontent(), message.getAdminid() },
+				new int[] { Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER }) == 1;
 	}
 
 	/**
@@ -428,26 +507,25 @@ public class UserDao {
 		String sql = "select * from message where userid = " + userid;
 		return jdbcTemplate.query(sql, new MessageMapper());
 	}
-	
-	   /**
-	    * 查询全部板块申请信息
-	    * 
-	    */
-	   public List<Applyingboard> queryAllApplyBoard(){
-		   String sql = "select * from applyingboard ";
-			return jdbcTemplate.query(sql, new ApplyingboardMapper());
-	   }
-	   
 
-	   /**
-	    * 查询全部管理员申请信息
-	    * 
-	    */
-	   public List<Applyingadmin> queryAllApplyAdmin(){
-		   String sql = "select * from applyingadmin ";
-			return jdbcTemplate.query(sql, new ApplyingadminMapper());
-	   }
-	   
+	/**
+	 * 查询全部板块申请信息
+	 * 
+	 */
+	public List<Applyingboard> queryAllApplyBoard() {
+		String sql = "select * from applyingboard ";
+		return jdbcTemplate.query(sql, new ApplyingboardMapper());
+	}
+
+	/**
+	 * 查询全部管理员申请信息
+	 * 
+	 */
+	public List<Applyingadmin> queryAllApplyAdmin() {
+		String sql = "select * from applyingadmin ";
+		return jdbcTemplate.query(sql, new ApplyingadminMapper());
+	}
+
 	/**
 	 * 通过帖子title查询帖子
 	 * 
@@ -456,79 +534,74 @@ public class UserDao {
 		String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost from post where title = '"
 				+ title + "'";
 		return jdbcTemplate.query(sql, new PostMapper());
-	}
-//
-	
-	/**
-	 * 在一个板块里通过帖子title查询帖子
-	 * 
-	 */
-	public List<Post> queryForPostByPostTitleInABoard(String title,int boardid) {
-		String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost from post where title = '"
-				+ title + "' and boardid = '"+boardid+"'";
-		return jdbcTemplate.query(sql, new PostMapper());
-	}
-	
-	/**
-	 * 帖子封禁
-	 * 
-	 */
-	public boolean setBanned(Post post) {
-		String sql = "UPDATE `post` SET `isBanned` = '1' WHERE  (`id` = '" + post.getPostid() + "')";
-		return jdbcTemplate.update(sql) == 1;
+
 	}
 
 	/**
-	 * 
-	 * 帖子解封
+	 * 通过板块申请id查询板块申请
 	 * 
 	 */
-	public boolean delBanned(Post post) {
-		String sql = "UPDATE `post` SET `isBanned` = '0' WHERE  (`id` = '" + post.getPostid() + "')";
-		return jdbcTemplate.update(sql) == 1;
+	public List<Applyingboard> queryApplyboardById(Integer applyid) {
+		String sql = "select * from applyingboard where applyingid =" + applyid;
+		return jdbcTemplate.query(sql, new ApplyingboardMapper());
 	}
 
 	/**
-	 * 帖子删除
-	 * 
+	 * 更新板块申请处理信息
 	 */
-	public boolean setDeleted(Post post) {
-		String sql = "UPDATE `post` SET `isExist` = '0' WHERE  (`id` = '" + post.getPostid() + "')";
-		return jdbcTemplate.update(sql) == 1;
+	public boolean updateApplyBoardHandle(Applyingboard applyboard) {
+		String sql = "update applyingboard set ishandle = ? where applyingid = ?";
+		Object applyboardObj[] = new Object[] { applyboard.getIshandle(), applyboard.getApplyingid() };
+		return jdbcTemplate.update(sql, applyboardObj) == 1;
 	}
 
 	/**
-	 * 
-	 * 帖子恢复
+	 * 获取最后一个板块申请
 	 * 
 	 */
-	public boolean delDeleted(Post post) {
-		String sql = "UPDATE `post` SET `isExist` = '1' WHERE  (`id` = '" + post.getPostid() + "')";
-		return jdbcTemplate.update(sql) == 1;
+	public List<Board> forLastBoard() {
+		String sql = "select * from board order by id desc LIMIT 1";
+		return jdbcTemplate.query(sql, new BoardMapper());
 	}
 
-
 	/**
-	 * 查询所有系统信息
+	 * 添加板块
 	 * 
 	 */
-	public List<Message> queryAllMessage() {
-		String sql = "select * from message ";
-		return jdbcTemplate.query(sql, new MessageMapper());
-	}
-	
-	
-	/**
-	 * 添加message
-	 * 
-	 */
-	public boolean addMessage(Message message) {
-		String sql = "insert into message (`messageid`, `userid`, `messagetime`, `messagecontent`, `adminid`)  values(?,?,?,?,?)";
+	public boolean addBoard(Board board) {
+		String sql = "insert into board(id,name,intro,isExist) values(?,?,?,?)";
 		return jdbcTemplate.update(sql,
-				new Object[] { message.getMessageid(),message.getUserid(),message.getMessagetime(),message.getMessagecontent(),message.getAdminid()},
-				new int[] { Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER }) == 1;
+				new Object[] { board.getBoardid(), board.getBoardname(), board.getBoardintro(), board.getBoardexist() },
+				new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER }) == 1;
 	}
-	
+
+	/**
+	 * 通过管理员申请id查询管理员申请
+	 * 
+	 */
+	public List<Applyingadmin> queryApplyadminById(Integer applyid) {
+		String sql = "select * from applyingadmin where applyingid =" + applyid;
+		return jdbcTemplate.query(sql, new ApplyingadminMapper());
+	}
+
+	/**
+	 * 更新管理员申请处理信息
+	 */
+	public boolean updateApplyAdminHandle(Applyingadmin applyadmin) {
+		String sql = "update applyingadmin set ishandle = ? where applyingid = ?";
+		Object applyadminObj[] = new Object[] { applyadmin.getIshandle(), applyadmin.getApplyingid() };
+		return jdbcTemplate.update(sql, applyadminObj) == 1;
+	}
+
+	/**
+	 * 更新用户管理员信息
+	 */
+	public boolean updateUseradmin(User user) {
+		String sql = "update user set isBoardAdmin = ? where id = ?";
+		Object userObj[] = new Object[] { user.getIsBoardAdmin(), user.getId() };
+		return jdbcTemplate.update(sql, userObj) == 1;
+	}
+
 	/**
 	 * 
 	 * BoardMapper数据库映射
@@ -563,9 +636,9 @@ public class UserDao {
 			User.setUsername(rs.getString(2));
 			User.setPassword(rs.getString(3));
 			User.setEmail(rs.getString(4));
-			User.setisExist(rs.getInt(5));
-			User.setisBoardAdmin(rs.getInt(6));
-			User.setisForumAdmin(rs.getInt(7));
+			User.setIsExist(rs.getInt(5));
+			User.setIsBoardAdmin(rs.getInt(6));
+			User.setIsForumAdmin(rs.getInt(7));
 
 			return User;
 		}

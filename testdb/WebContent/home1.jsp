@@ -15,10 +15,10 @@
 	<div class="nav">
 		<a href="accountCenter">个人中心</a>
 		<c:if test ="${CurrentUser.isBoardAdmin !=0 }">
-			<a href="boardAdmin">板块管理员入口</a>
+			<a href="/testdb/boardAdmin">板块管理员入口</a>
 		</c:if>
 		<c:if test ="${CurrentUser.isForumAdmin !=0 }">
-			<a href="superAdmin.jsp">超级管理员入口</a>
+			<a href="/testdb/superAdmin">超级管理员入口</a>
 		</c:if>
 		<a href="quit">退出登录</a>
 	</div>
