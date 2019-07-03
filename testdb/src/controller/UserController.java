@@ -449,61 +449,6 @@ public class UserController {
 		return "/reportAdmin";
 	}
 
-	
-
-  
-	/**
-	 * 
-	 * 管理员加精
-	 * 
-	 */
-	@RequestMapping(value = "/good")
-	public String addGood(Model model, HttpSession session, HttpServletRequest request) {
-		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		User currentuser = (User) session.getAttribute("CurrentUser");
-		UserDao dao = (UserDao) context.getBean("dao");
-		if (request.getHeader("Referer").toString().contains("good")) {
-			String isNotGoodAnymore = request.getParameter("isNotGoodAnymore");
-			String isGoodNow = request.getParameter("isGoodNow");
-			if (!isNotGoodAnymore.isEmpty()) {
-				int notGoodPost=Integer.parseInt(isNotGoodAnymore);
-				dao.deleteGood(dao.queryForPostByPostId(notGoodPost).get(0));
-			}
-			else if(!isGoodNow.isEmpty()) {
-				int goodPost=Integer.parseInt(isGoodNow);
-				dao.addGood(dao.queryForPostByPostId(goodPost).get(0));
-			}
-		}
-		if (currentuser.getIsForumAdmin() != 0) {
-			List<Post> pl = dao.queryAllGoodPost();
-			model.addAttribute("goodPost", pl);
-			session.setAttribute("goodPost", pl);
-			List<String> boardNameList = new ArrayList();
-			List<String> userNameList = new ArrayList();
-			for (int i = 0; i < pl.size(); i++) {
-				boardNameList.add(dao.queryBoardByBoardId(pl.get(i).getBoardid()).get(0).getBoardname());
-				userNameList.add(dao.queryByID(pl.get(i).getUserid()).get(0).getUsername());
-			}
-			model.addAttribute("boardNameList", boardNameList);
-			session.setAttribute("userNameList", userNameList);
-		} else if (currentuser.getIsBoardAdmin() != 0) {
-			List<Post> pl = dao.queryAllGoodPostInABoard(currentuser.getIsBoardAdmin());
-			model.addAttribute("goodPost", pl);
-			session.setAttribute("goodPost", pl);
-			List<String> boardNameList = new ArrayList();
-			List<String> userNameList = new ArrayList();
-			for (int i = 0; i < pl.size(); i++) {
-				boardNameList.add(dao.queryBoardByBoardId(pl.get(i).getBoardid()).get(0).getBoardname());
-				userNameList.add(dao.queryByID(pl.get(i).getUserid()).get(0).getUsername());
-			}
-			model.addAttribute("boardNameList", boardNameList);
-			session.setAttribute("userNameList", userNameList);
-		} else {
-			return "home1.jsp";
-		}
-		return "good.jsp";
-	}
-
 	public String msg(String msg) {
 		return "<script>alert('" + msg + "')</script>";
 	}
@@ -694,7 +639,61 @@ public class UserController {
     	}
     	
     	boolean resultapply = dao.updateApplyBoardHandle(applyboard);
-		return "superAdmin.jsp";
+    	
+    	List<Applyingboard> newapplyboard = dao.queryAllApplyBoard();
+    	session.setAttribute("applyboards", newapplyboard);
+		List<String> username = new ArrayList();
+		for (int i = 0; i < newapplyboard.size(); i++) {
+			List<User> user = dao.queryByID(newapplyboard.get(i).getUserid());
+			username.add(user.get(0).getUsername());
+		}
+		session.setAttribute("username", username);
+		
+		return "boardApplyAdmin.jsp";
+	}
+	
+    /**
+     * 超级管理员管理管理员申请
+     * 
+     */
+	@RequestMapping(value = "/manageApplyAdmin")
+    public String ManageApplyAdmin(@RequestParam("applyid") String applyId, @RequestParam("newAdmin") String newadmin, HttpSession session) { 
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	Integer applyid = Integer.parseInt(applyId);
+    	List<Applyingadmin> applyadmined = dao.queryApplyadminById(applyid);
+    	Applyingadmin applyadmin = applyadmined.get(0);
+    	if(newadmin.equals("allow")) {
+    		applyadmin.setIshandle(1);
+    		List<User> user = dao.queryByID(applyadmin.getUserid());
+    		User updateuser = user.get(0);
+    		updateuser.setIsBoardAdmin(applyadmin.getBoardid());
+    		boolean userresult = dao.updateUseradmin(updateuser);
+    	}
+    	if(newadmin.equals("refuse")) {
+    		applyadmin.setIshandle(2);
+    	}
+    	
+    	boolean resultapply = dao.updateApplyAdminHandle(applyadmin);
+    	
+    	List<Applyingadmin> newapplyadmin = dao.queryAllApplyAdmin();
+    	session.setAttribute("applyadmins", newapplyadmin);
+		List<String> boardname = new ArrayList();
+		for (int i = 0; i < newapplyadmin.size(); i++) {
+			List<Board> board = dao.queryBoardByBoardId(newapplyadmin.get(i).getBoardid());
+			boardname.add(board.get(0).getBoardname());
+		}
+		session.setAttribute("boardname", boardname);
+		List<String> username2 = new ArrayList();
+		for (int i = 0; i < newapplyadmin.size(); i++) {
+			List<User> user2 = dao.queryByID(newapplyadmin.get(i).getUserid());
+			username2.add(user2.get(0).getUsername());
+		}
+		session.setAttribute("username2", username2);
+		
+		return "boardApplyAdmin.jsp";
 	}
     
     /**
@@ -733,7 +732,112 @@ public class UserController {
             throws ServletException, IOException{
         doGet(request, response);
     }
+ 
+	/**
+	 * 
+	 * 管理员加精
+	 * 
+	 */
+	@RequestMapping(value = "/good")
+	public String addGood(Model model, HttpSession session, HttpServletRequest request) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		User currentuser = (User) session.getAttribute("CurrentUser");
+		UserDao dao = (UserDao) context.getBean("dao");
+		if (request.getHeader("Referer").toString().contains("good")) {
+			String isNotGoodAnymore = request.getParameter("isNotGoodAnymore");
+			String isGoodNow = request.getParameter("isGoodNow");
+			String searchPostByKeyWord = request.getParameter("searchPostByKeyWord");
+			if (isNotGoodAnymore!=null) {
+				int notGoodPost = Integer.parseInt(isNotGoodAnymore);
+				dao.deleteGood(dao.queryForPostByPostId(notGoodPost).get(0));
+			}
+			if (isGoodNow!=null) {
+				int goodPost = Integer.parseInt(isGoodNow);
+				dao.addGood(dao.queryForPostByPostId(goodPost).get(0));
+			}
+			if (searchPostByKeyWord!=null) {
+				List<Post> pl = dao.queryForPostByPostTitle(searchPostByKeyWord);
+				model.addAttribute("searchedPost", pl);
+				session.setAttribute("searchedPost", pl);
+				List<String> sboardNameList = new ArrayList();
+				List<String> suserNameList = new ArrayList();
+				for (int i = 0; i < pl.size(); i++) {
+					sboardNameList.add(dao.queryBoardByBoardId(pl.get(i).getBoardid()).get(0).getBoardname());
+					suserNameList.add(dao.queryByID(pl.get(i).getUserid()).get(0).getUsername());
+				}
+				model.addAttribute("sboardNameList", sboardNameList);
+				session.setAttribute("sboardNameList", sboardNameList);
+				model.addAttribute("suserNameList", suserNameList);
+				session.setAttribute("suserNameList", suserNameList);
 
-    
-  
+			} 
+
+		}
+		if (currentuser.getIsForumAdmin() != 0) {
+			List<Post> pl = dao.queryAllGoodPost();
+			model.addAttribute("goodPost", pl);
+			session.setAttribute("goodPost", pl);
+			List<String> boardNameList = new ArrayList();
+			List<String> userNameList = new ArrayList();
+			for (int i = 0; i < pl.size(); i++) {
+				boardNameList.add(dao.queryBoardByBoardId(pl.get(i).getBoardid()).get(0).getBoardname());
+				userNameList.add(dao.queryByID(pl.get(i).getUserid()).get(0).getUsername());
+			}
+			model.addAttribute("boardNameList", boardNameList);
+			session.setAttribute("userNameList", userNameList);
+		} else if (currentuser.getIsBoardAdmin() != 0) {
+			List<Post> pl = dao.queryAllGoodPostInABoard(currentuser.getIsBoardAdmin());
+			model.addAttribute("goodPost", pl);
+			session.setAttribute("goodPost", pl);
+			List<String> boardNameList = new ArrayList();
+			List<String> userNameList = new ArrayList();
+			for (int i = 0; i < pl.size(); i++) {
+				boardNameList.add(dao.queryBoardByBoardId(pl.get(i).getBoardid()).get(0).getBoardname());
+				userNameList.add(dao.queryByID(pl.get(i).getUserid()).get(0).getUsername());
+			}
+			model.addAttribute("boardNameList", boardNameList);
+			session.setAttribute("userNameList", userNameList);
+		} else {
+			return "home1.jsp";
+		}
+		return "good.jsp";
+	}
+	
+    /**
+     * 
+     * 回复
+     * 
+     */
+	@RequestMapping(value = "/post/postReply")
+    public String addPostReply(HttpSession session, @RequestParam("postId") String postId, @RequestParam("replyContent") String replycontent) {
+    	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	Integer postid = Integer.parseInt(postId);
+    	//Integer floorid = Integer.parseInt(floorId);
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	
+    	List<Post> posted = dao.queryForPostByPostId(postid);
+    	Post post = posted.get(0);
+    	List<Floor> floored = dao.forLastFloor(postid);
+    	Floor lastfloor = floored.get(0);
+    	
+    	Floor newfloor = new Floor();
+    	newfloor.setBoardid(post.getBoardid());
+    	newfloor.setPostid(postid);
+    	newfloor.setFloorid(lastfloor.getFloorid()+1);
+    	newfloor.setAnsfloorid(0);
+    	newfloor.setUserid(currentuser.getId());
+    	newfloor.setFloorcontent(replycontent);
+    	Date date = new Date();
+    	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
+    	newfloor.setFloortime(dateFormat.format(date));
+    	newfloor.setIsbanned(0);
+    	newfloor.setIsgood(0);
+    	newfloor.setIsexist(1);
+    	
+		boolean result = dao.addFloor(newfloor);
+		return "/content001.jsp";
+    }
+	
 }

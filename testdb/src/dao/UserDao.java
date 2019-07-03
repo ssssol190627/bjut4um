@@ -72,7 +72,7 @@ public class UserDao {
      * 
      */
     public List<User> queryByName(String name) {
-    	String sql = "select id,username,password,email,isExist,isBroadAdmin,isForumAdmin from user where username = '"+name +"'" ;
+    	String sql = "select id,username,password,email,isExist,isBoardAdmin,isForumAdmin from user where username = '"+name +"'" ;
     	return jdbcTemplate.query(sql, new UserMapper());
     }
     
@@ -81,7 +81,7 @@ public class UserDao {
      * 
      */
     public List<User> queryByEmail(String email) {
-    	String sql = "select id,username,password,email,isExist,isBroadAdmin,isForumAdmin from user where email = '"+email +"'" ;
+    	String sql = "select id,username,password,email,isExist,isBoardAdmin,isForumAdmin from user where email = '"+email +"'" ;
     	return jdbcTemplate.query(sql, new UserMapper());
     }
     
@@ -181,7 +181,7 @@ public class UserDao {
      * 
      */
     public boolean addUser(User user) {
-	String sql = "insert into user(id,username,password,email,isExist,isBroadAdmin,isForumAdmin) values(?,?,?,?,?,?,?)";
+	String sql = "insert into user(id,username,password,email,isExist,isBoardAdmin,isForumAdmin) values(?,?,?,?,?,?,?)";
 	return jdbcTemplate.update(sql,
 		new Object[] { user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getIsExist(), user.getIsBoardAdmin(), user.getIsForumAdmin()},
 		new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER }) == 1;
@@ -436,6 +436,15 @@ public class UserDao {
 	   String sql = "select * from applyingadmin ";
 		return jdbcTemplate.query(sql, new ApplyingadminMapper());
    }
+/**
+    * 通过帖子title查询帖子
+    * 
+    */
+   public List<Post> queryForPostByPostTitle(String title) {
+   	String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,isGood,isBanned,isExist,numpost from post where title = '" + title + "'";
+   	return jdbcTemplate.query(sql, new PostMapper());
+
+   }
    
    /**
     * 通过板块申请id查询板块申请
@@ -473,6 +482,33 @@ public class UserDao {
 		return jdbcTemplate.update(sql,
 			new Object[] { board.getBoardid(), board.getBoardname(), board.getBoardintro(), board.getBoardexist()},
 			new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER }) == 1;
+	}
+	
+	   /**
+	    * 通过管理员申请id查询管理员申请
+	    * 
+	    */
+	public List<Applyingadmin> queryApplyadminById(Integer applyid){
+	   String sql = "select * from applyingadmin where applyingid =" + applyid;
+		return jdbcTemplate.query(sql, new ApplyingadminMapper());
+	}
+	
+	/**
+	 * 更新管理员申请处理信息
+	 */
+	public boolean updateApplyAdminHandle(Applyingadmin applyadmin) {
+		String sql = "update applyingadmin set ishandle = ? where applyingid = ?";
+		Object applyadminObj[] = new Object[] { applyadmin.getIshandle(), applyadmin.getApplyingid() };
+		return jdbcTemplate.update(sql, applyadminObj) == 1;
+	}
+	
+	/**
+	 * 更新用户管理员信息
+	 */
+	public boolean updateUseradmin(User user) {
+		String sql = "update user set isBoardAdmin = ? where id = ?";
+		Object userObj[] = new Object[] { user.getIsBoardAdmin(), user.getId() };
+		return jdbcTemplate.update(sql, userObj) == 1;
 	}
     
 	/**

@@ -48,4 +48,3 @@ public class Applyingadmin {
 		this.ishandle=ishandle;
 	}
 }
-
