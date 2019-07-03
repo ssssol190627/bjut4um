@@ -11,7 +11,7 @@
 	<div class="nav">
 		<a href="reportAdmin">管理举报信息</a>
 		<a href="/testdb/good">加精</a>
-		<a href="banAndDelete.jsp">封禁和删除</a>
+		<a href="/testdb/banAndDelete">封禁和删除</a>
 		<a href="home1">回主页</a>
 	</div>
 </body>

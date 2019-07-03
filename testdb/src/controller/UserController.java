@@ -461,16 +461,26 @@ public class UserController {
 		if (request.getHeader("Referer").toString().contains("good")) {
 			String isNotGoodAnymore = request.getParameter("isNotGoodAnymore");
 			String isGoodNow = request.getParameter("isGoodNow");
-			String searchPostByKeyWord = request.getParameter("searchPostByKeyWord");
-			if (isNotGoodAnymore!=null) {
+			
+			if (isNotGoodAnymore != null) {
 				int notGoodPost = Integer.parseInt(isNotGoodAnymore);
 				dao.deleteGood(dao.queryForPostByPostId(notGoodPost).get(0));
 			}
-			if (isGoodNow!=null) {
-				int goodPost = Integer.parseInt(isGoodNow);
-				dao.addGood(dao.queryForPostByPostId(goodPost).get(0));
+			if (isGoodNow != null) {
+				int goodPostId = Integer.parseInt(isGoodNow);
+				Post goodPost=dao.queryForPostByPostId(goodPostId).get(0);
+				dao.addGood(goodPost);
+				int messageid=dao.queryAllMessage().size()+1;
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
+				String nowtime = df.format(new Date());
+				String goodReason="";
+				Message message=new Message(messageid,goodPost.getUserid(),nowtime,goodReason,currentuser.getId());
+				dao.addMessage(message);
 			}
-			if (searchPostByKeyWord!=null) {
+		}
+		if (currentuser.getisForumAdmin() != 0) {
+			String searchPostByKeyWord = request.getParameter("searchPostByKeyWord");
+			if (searchPostByKeyWord != null) {
 				List<Post> pl = dao.queryForPostByPostTitle(searchPostByKeyWord);
 				model.addAttribute("searchedPost", pl);
 				session.setAttribute("searchedPost", pl);
@@ -484,11 +494,8 @@ public class UserController {
 				session.setAttribute("sboardNameList", sboardNameList);
 				model.addAttribute("suserNameList", suserNameList);
 				session.setAttribute("suserNameList", suserNameList);
-
-			} 
-
-		}
-		if (currentuser.getisForumAdmin() != 0) {
+				
+			}
 			List<Post> pl = dao.queryAllGoodPost();
 			model.addAttribute("goodPost", pl);
 			session.setAttribute("goodPost", pl);
@@ -501,6 +508,24 @@ public class UserController {
 			model.addAttribute("boardNameList", boardNameList);
 			session.setAttribute("userNameList", userNameList);
 		} else if (currentuser.getisBoardAdmin() != 0) {
+			String searchPostByKeyWord = request.getParameter("searchPostByKeyWord");
+			if (searchPostByKeyWord != null) {
+				List<Post> pl = dao.queryForPostByPostTitleInABoard(searchPostByKeyWord,currentuser.getisBoardAdmin() );
+				model.addAttribute("searchedPost", pl);
+				session.setAttribute("searchedPost", pl);
+				List<String> sboardNameList = new ArrayList();
+				List<String> suserNameList = new ArrayList();
+				for (int i = 0; i < pl.size(); i++) {
+					sboardNameList.add(dao.queryBoardByBoardId(pl.get(i).getBoardid()).get(0).getBoardname());
+					suserNameList.add(dao.queryByID(pl.get(i).getUserid()).get(0).getUsername());
+				}
+				model.addAttribute("sboardNameList", sboardNameList);
+				session.setAttribute("sboardNameList", sboardNameList);
+				model.addAttribute("suserNameList", suserNameList);
+				session.setAttribute("suserNameList", suserNameList);
+
+			}
+			
 			List<Post> pl = dao.queryAllGoodPostInABoard(currentuser.getisBoardAdmin());
 			model.addAttribute("goodPost", pl);
 			session.setAttribute("goodPost", pl);
@@ -666,5 +691,89 @@ public class UserController {
 	@ResponseBody
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
+	}
+
+	/**
+	 * 
+	 * 管理员封禁和删除 TODO
+	 * 
+	 */
+	@RequestMapping(value = "/banAndDelete")
+	public String setBanAndDelete(Model model, HttpSession session, HttpServletRequest request) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		User currentuser = (User) session.getAttribute("CurrentUser");
+		UserDao dao = (UserDao) context.getBean("dao");
+		if (request.getHeader("Referer").toString().contains("banAndDelete")) {
+			String isBanned = request.getParameter("isBanned");
+			String isDeleted = request.getParameter("isDeleted");
+			String searchPostByKeyWord = request.getParameter("searchPostByKeyWord");
+			String bdReason = request.getParameter("bdReason");
+			if (isBanned!=null) {
+				int bannedPostId = Integer.parseInt(isBanned);
+				Post bannedPost=dao.queryForPostByPostId(bannedPostId).get(0);
+				dao.setBanned(bannedPost);
+				int messageid=dao.queryAllMessage().size()+1;
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
+				String nowtime = df.format(new Date());
+				Message message=new Message(messageid,bannedPost.getUserid(),nowtime,bdReason,currentuser.getId());
+				dao.addMessage(message);
+			}
+			if (isDeleted!=null) {
+				int deletedPostId = Integer.parseInt(isDeleted);
+				Post deletedPost=dao.queryForPostByPostId(deletedPostId).get(0);
+				dao.setDeleted(deletedPost);
+				int messageid=dao.queryAllMessage().size()+1;
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
+				String nowtime = df.format(new Date());
+				Message message=new Message(messageid,deletedPost.getUserid(),nowtime,bdReason,currentuser.getId());
+				dao.addMessage(message);
+			}
+		//如果是超级管理员
+		if (currentuser.getisForumAdmin() != 0) {
+			if (request.getHeader("Referer").toString().contains("banAndDelete")) {
+				
+				if (searchPostByKeyWord!=null) {
+					List<Post> pl = dao.queryForPostByPostTitle(searchPostByKeyWord);
+					model.addAttribute("searchedPost", pl);
+					session.setAttribute("searchedPost", pl);
+					List<String> sboardNameList = new ArrayList();
+					List<String> suserNameList = new ArrayList();
+					for (int i = 0; i < pl.size(); i++) {
+						sboardNameList.add(dao.queryBoardByBoardId(pl.get(i).getBoardid()).get(0).getBoardname());
+						suserNameList.add(dao.queryByID(pl.get(i).getUserid()).get(0).getUsername());
+					}
+					model.addAttribute("sboardNameList", sboardNameList);
+					session.setAttribute("sboardNameList", sboardNameList);
+					model.addAttribute("suserNameList", suserNameList);
+					session.setAttribute("suserNameList", suserNameList);
+				} 
+			}
+			
+		}
+		//是板块管理员
+		else if (currentuser.getisBoardAdmin() != 0) {
+			
+				if (searchPostByKeyWord!=null) {
+					int boardid=currentuser.getisBoardAdmin();
+					List<Post> pl = dao.queryForPostByPostTitleInABoard(searchPostByKeyWord,boardid);
+					model.addAttribute("searchedPost", pl);
+					session.setAttribute("searchedPost", pl);
+					List<String> sboardNameList = new ArrayList();
+					List<String> suserNameList = new ArrayList();
+					for (int i = 0; i < pl.size(); i++) {
+						sboardNameList.add(dao.queryBoardByBoardId(pl.get(i).getBoardid()).get(0).getBoardname());
+						suserNameList.add(dao.queryByID(pl.get(i).getUserid()).get(0).getUsername());
+					}
+					model.addAttribute("sboardNameList", sboardNameList);
+					session.setAttribute("sboardNameList", sboardNameList);
+					model.addAttribute("suserNameList", suserNameList);
+					session.setAttribute("suserNameList", suserNameList);
+				} 
+			}
+		} 
+		else {
+			return "index.jsp";
+		}
+		return "banAndDelete.jsp";
 	}
 }
