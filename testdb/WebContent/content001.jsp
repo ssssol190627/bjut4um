@@ -220,12 +220,11 @@
 	</div>      
  
 	<div class="my-3 p-3 bg-white rounded shadow-sm">
-		<form action="content001.jsp" name="postAReply">
+		<form action="postReply" name="postAReply">
  			<p id="showReplyContent"></p>
  			<textarea name="replyContent" style="width:200px;height:50px;" placeholder="这里写内容"></textarea>
  			<input type="submit" name="回复"/>
  			<input type="hidden" name="postId" value="${post.postid }" /> 
- 			<input type="hidden" name="postId" value="<% %>>"/> 
  		</form>
 	</div> 	
  </main>

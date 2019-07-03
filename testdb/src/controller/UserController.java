@@ -713,5 +713,38 @@ public class UserController {
             throws ServletException, IOException{
         doGet(request, response);
     }
+    
+    /**
+    *
+    * 回复
+    *
+    */
+    @RequestMapping(value = "/post/postReply")
+    public String addPostReply(HttpSession session, @RequestParam("postId") String postId, @RequestParam("replyContent") String replycontent) {
+    ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    UserDao dao = (UserDao) context.getBean("dao");
+    Integer postid = Integer.parseInt(postId);
+    //Integer floorid = Integer.parseInt(floorId);
+    User currentuser = (User)session.getAttribute("CurrentUser");
+    List<Post> posted = dao.queryForPostByPostId(postid);
+    Post post = posted.get(0);
+    List<Floor> floored = dao.forLastFloor(postid);
+    Floor lastfloor = floored.get(0);
+    Floor newfloor = new Floor();
+    newfloor.setBoardid(post.getBoardid());
+    newfloor.setPostid(postid);
+    newfloor.setFloorid(lastfloor.getFloorid()+1);
+    newfloor.setAnsfloorid(0);
+    newfloor.setUserid(currentuser.getId());
+    newfloor.setFloorcontent(replycontent);
+    Date date = new Date();
+    SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
+    newfloor.setFloortime(dateFormat.format(date));
+    newfloor.setIsbanned(0);
+    newfloor.setIsgood(0);
+    newfloor.setIsexist(1);
+    boolean result = dao.addFloor(newfloor);
+    return "/content001.jsp";
+    }
 
 }
