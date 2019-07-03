@@ -803,30 +803,27 @@ public class UserController {
 		return "good.jsp";
 	}
 	
-    /**
-     * 
-     * 回复
-     * 
-     */
-	@RequestMapping(value = "/post/postReply")
-    public String addPostReply(HttpSession session, @RequestParam("postId") String postId, @RequestParam("replyContent") String replycontent) {
+	/**
+    *
+    * 回复
+    *
+    */
+    @RequestMapping(value = "/post/{postid}/postReply")
+    public String addPostReply(HttpSession session, @RequestParam("ansfloorId") String ansfloorId, @RequestParam("postId") String postId, @RequestParam("replyContent") String replycontent,Model model, HttpServletRequest request) {
     	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
     	UserDao dao = (UserDao) context.getBean("dao");
-    	
     	Integer postid = Integer.parseInt(postId);
-    	//Integer floorid = Integer.parseInt(floorId);
+    	Integer ansfloorid = Integer.parseInt(ansfloorId);
     	User currentuser = (User)session.getAttribute("CurrentUser");
-    	
     	List<Post> posted = dao.queryForPostByPostId(postid);
     	Post post = posted.get(0);
     	List<Floor> floored = dao.forLastFloor(postid);
     	Floor lastfloor = floored.get(0);
-    	
     	Floor newfloor = new Floor();
     	newfloor.setBoardid(post.getBoardid());
     	newfloor.setPostid(postid);
     	newfloor.setFloorid(lastfloor.getFloorid()+1);
-    	newfloor.setAnsfloorid(0);
+    	newfloor.setAnsfloorid(ansfloorid);
     	newfloor.setUserid(currentuser.getId());
     	newfloor.setFloorcontent(replycontent);
     	Date date = new Date();
@@ -835,9 +832,41 @@ public class UserController {
     	newfloor.setIsbanned(0);
     	newfloor.setIsgood(0);
     	newfloor.setIsexist(1);
+    	boolean result = dao.addFloor(newfloor);
     	
-		boolean result = dao.addFloor(newfloor);
-		return "/content001.jsp";
+    	int pageNum = 1;
+    	
+    	String pageNumString=request.getParameter("nowPage");
+    
+    	if (pageNumString != null) {
+    		pageNum = Integer.parseInt(pageNumString);
+    	}
+    	int pageSize = 2;
+    	Page p = dao.findAllFloorWithPage(pageNum, pageSize, postid);
+    	model.addAttribute("page", p);
+    	session.setAttribute("page", p);
+    	List<Floor> fl = p.getList();
+    	
+    	List<Post> posted2 = dao.queryForPostByPostId(postid);
+    	Post currentpost = posted2.get(0);
+    	List<User> postuser = dao.queryByID(currentpost.getUserid());
+    	List<String> ul = new ArrayList();
+    	for (int i = 0; i < fl.size(); i++) {
+    		String thisuser = dao.queryByID(fl.get(i).getUserid()).get(0).getUsername();
+    		ul.add(thisuser);
+    	}
+    	
+    	// List<Floor> floored = dao.queryForReplyedByPost(currentpost.getPostid());
+    	model.addAttribute("floor", fl);
+    	session.setAttribute("floor", fl);
+    	model.addAttribute("postuser", postuser.get(0));
+    	session.setAttribute("postuser", postuser.get(0));
+    	model.addAttribute("flooruser", ul);
+    	session.setAttribute("flooruser", ul);
+    	model.addAttribute("post", currentpost);
+    	session.setAttribute("post", currentpost);
+    	
+    	return "/content001.jsp";
     }
 	
 }
