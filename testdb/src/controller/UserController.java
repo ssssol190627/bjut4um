@@ -465,16 +465,34 @@ public class UserController {
 		if (request.getHeader("Referer").toString().contains("good")) {
 			String isNotGoodAnymore = request.getParameter("isNotGoodAnymore");
 			String isGoodNow = request.getParameter("isGoodNow");
-			if (!isNotGoodAnymore.isEmpty()) {
-				int notGoodPost=Integer.parseInt(isNotGoodAnymore);
+			String searchPostByKeyWord = request.getParameter("searchPostByKeyWord");
+			if (isNotGoodAnymore!=null) {
+				int notGoodPost = Integer.parseInt(isNotGoodAnymore);
 				dao.deleteGood(dao.queryForPostByPostId(notGoodPost).get(0));
 			}
-			else if(!isGoodNow.isEmpty()) {
-				int goodPost=Integer.parseInt(isGoodNow);
+			if (isGoodNow!=null) {
+				int goodPost = Integer.parseInt(isGoodNow);
 				dao.addGood(dao.queryForPostByPostId(goodPost).get(0));
 			}
+			if (searchPostByKeyWord!=null) {
+				List<Post> pl = dao.queryForPostByPostTitle(searchPostByKeyWord);
+				model.addAttribute("searchedPost", pl);
+				session.setAttribute("searchedPost", pl);
+				List<String> sboardNameList = new ArrayList();
+				List<String> suserNameList = new ArrayList();
+				for (int i = 0; i < pl.size(); i++) {
+					sboardNameList.add(dao.queryBoardByBoardId(pl.get(i).getBoardid()).get(0).getBoardname());
+					suserNameList.add(dao.queryByID(pl.get(i).getUserid()).get(0).getUsername());
+				}
+				model.addAttribute("sboardNameList", sboardNameList);
+				session.setAttribute("sboardNameList", sboardNameList);
+				model.addAttribute("suserNameList", suserNameList);
+				session.setAttribute("suserNameList", suserNameList);
+
+			} 
+
 		}
-		if (currentuser.getIsForumAdmin() != 0) {
+		if (currentuser.getisForumAdmin() != 0) {
 			List<Post> pl = dao.queryAllGoodPost();
 			model.addAttribute("goodPost", pl);
 			session.setAttribute("goodPost", pl);
@@ -486,8 +504,8 @@ public class UserController {
 			}
 			model.addAttribute("boardNameList", boardNameList);
 			session.setAttribute("userNameList", userNameList);
-		} else if (currentuser.getIsBoardAdmin() != 0) {
-			List<Post> pl = dao.queryAllGoodPostInABoard(currentuser.getIsBoardAdmin());
+		} else if (currentuser.getisBoardAdmin() != 0) {
+			List<Post> pl = dao.queryAllGoodPostInABoard(currentuser.getisBoardAdmin());
 			model.addAttribute("goodPost", pl);
 			session.setAttribute("goodPost", pl);
 			List<String> boardNameList = new ArrayList();
@@ -502,6 +520,10 @@ public class UserController {
 			return "home1.jsp";
 		}
 		return "good.jsp";
+	}
+
+	public String msg(String msg) {
+		return "<script>alert('" + msg + "')</script>";
 	}
 
 	public String msg(String msg) {
@@ -695,4 +717,5 @@ public class UserController {
             throws ServletException, IOException{
         doGet(request, response);
     }
+
 }
