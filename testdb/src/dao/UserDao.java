@@ -435,6 +435,7 @@ public class UserDao {
    public List<Applyingadmin> queryAllApplyAdmin(){
 	   String sql = "select * from applyingadmin ";
 		return jdbcTemplate.query(sql, new ApplyingadminMapper());
+   }
 /**
     * 通过帖子title查询帖子
     * 

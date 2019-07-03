@@ -217,9 +217,11 @@ public class UserController {
     	UserDao dao = (UserDao) context.getBean("dao");
     	
     	int pageNum = 1;
-		if (request.getQueryString() != null) {
-			pageNum = Integer.parseInt(request.getParameter("page").toString());
-		}
+        String pageNumString=request.getParameter("page");
+        
+    	if (pageNumString != null) {
+    		pageNum = Integer.parseInt(pageNumString);
+    	}
 		int pageSize = 2;
 		Page p = dao.findAllFloorWithPage(pageNum, pageSize, postid);
 		model.addAttribute("page", p);
@@ -492,7 +494,7 @@ public class UserController {
 			} 
 
 		}
-		if (currentuser.getisForumAdmin() != 0) {
+		if (currentuser.getIsBoardAdmin() != 0) {
 			List<Post> pl = dao.queryAllGoodPost();
 			model.addAttribute("goodPost", pl);
 			session.setAttribute("goodPost", pl);
@@ -504,8 +506,8 @@ public class UserController {
 			}
 			model.addAttribute("boardNameList", boardNameList);
 			session.setAttribute("userNameList", userNameList);
-		} else if (currentuser.getisBoardAdmin() != 0) {
-			List<Post> pl = dao.queryAllGoodPostInABoard(currentuser.getisBoardAdmin());
+		} else if (currentuser.getIsBoardAdmin() != 0) {
+			List<Post> pl = dao.queryAllGoodPostInABoard(currentuser.getIsBoardAdmin());
 			model.addAttribute("goodPost", pl);
 			session.setAttribute("goodPost", pl);
 			List<String> boardNameList = new ArrayList();
@@ -520,10 +522,6 @@ public class UserController {
 			return "home1.jsp";
 		}
 		return "good.jsp";
-	}
-
-	public String msg(String msg) {
-		return "<script>alert('" + msg + "')</script>";
 	}
 
 	public String msg(String msg) {
@@ -716,6 +714,73 @@ public class UserController {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
         doGet(request, response);
+    }
+    
+    /**
+    *
+    * 回复
+    *
+    */
+    @RequestMapping(value = "/post/{postid}/postReply")
+    public String addPostReply(HttpSession session, @RequestParam("postId") String postId, @RequestParam("replyContent") String replycontent,Model model, HttpServletRequest request) {
+    ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    UserDao dao = (UserDao) context.getBean("dao");
+    Integer postid = Integer.parseInt(postId);
+    //Integer floorid = Integer.parseInt(floorId);
+    User currentuser = (User)session.getAttribute("CurrentUser");
+    List<Post> posted = dao.queryForPostByPostId(postid);
+    Post post = posted.get(0);
+    List<Floor> floored = dao.forLastFloor(postid);
+    Floor lastfloor = floored.get(0);
+    Floor newfloor = new Floor();
+    newfloor.setBoardid(post.getBoardid());
+    newfloor.setPostid(postid);
+    newfloor.setFloorid(lastfloor.getFloorid()+1);
+    newfloor.setAnsfloorid(0);
+    newfloor.setUserid(currentuser.getId());
+    newfloor.setFloorcontent(replycontent);
+    Date date = new Date();
+    SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
+    newfloor.setFloortime(dateFormat.format(date));
+    newfloor.setIsbanned(0);
+    newfloor.setIsgood(0);
+    newfloor.setIsexist(1);
+    boolean result = dao.addFloor(newfloor);
+    
+    int pageNum = 1;
+   
+    
+    String pageNumString=request.getParameter("nowPage");
+    
+	if (pageNumString != null) {
+		pageNum = Integer.parseInt(pageNumString);
+	}
+	int pageSize = 2;
+	Page p = dao.findAllFloorWithPage(pageNum, pageSize, postid);
+	model.addAttribute("page", p);
+	session.setAttribute("page", p);
+	List<Floor> fl = p.getList();
+
+	List<Post> posted2 = dao.queryForPostByPostId(postid);
+	Post currentpost = posted2.get(0);
+	List<User> postuser = dao.queryByID(currentpost.getUserid());
+	List<String> ul = new ArrayList();
+	for (int i = 0; i < fl.size(); i++) {
+		String thisuser = dao.queryByID(fl.get(i).getUserid()).get(0).getUsername();
+		ul.add(thisuser);
+	}
+
+	// List<Floor> floored = dao.queryForReplyedByPost(currentpost.getPostid());
+	model.addAttribute("floor", fl);
+	session.setAttribute("floor", fl);
+	model.addAttribute("postuser", postuser.get(0));
+	session.setAttribute("postuser", postuser.get(0));
+	model.addAttribute("flooruser", ul);
+	session.setAttribute("flooruser", ul);
+	model.addAttribute("post", currentpost);
+	session.setAttribute("post", currentpost);
+	
+    return "/content001.jsp";
     }
 
 }
