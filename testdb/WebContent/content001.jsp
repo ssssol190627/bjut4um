@@ -56,7 +56,7 @@
 				document.getElementById("replyContent").readOnly=false;
 			}
 		}
-		function replyFloor(loopCount,replyFloor,floorUser,floorContent){
+		function replyFloor(loopCount,ansFloor,floorUser,floorContent){
 			var s="<%=session.getAttribute("CurrentUser")%>";
 			if(s=="null"){
 				alert("请先登录");
@@ -64,7 +64,7 @@
 			}
 			else{
 				document.getElementById("showReplyContent").textContent ="回复："+floorUser+":"+floorContent;
-				document.getElementById("replyContent").readOnly=false;
+				document.getElementById("ansfloorId").value = ansFloor;
 			}
 		}
 	</script>
@@ -137,7 +137,12 @@
             		<div class="d-flex justify-content-between align-items-center w-100">
               			<strong class="text-gray-dark" id="us">${flooruser.get(loop.count-1)}</strong>
             		</div>
-            		<span class="d-block" id="content">${floor.floorcontent }</span><br>
+            		<span class="d-block" id="content">
+            		<c:if test = "${floor.ansfloorid !=0 }">
+            		回复 [${ansname.get(loop.count-1) }] : 
+            		</c:if>
+            		${floor.floorcontent }
+            		</span><br>
             		${floor.floortime }
           		</div>
 	        	<small class="d-block text-right mt-3">
@@ -154,7 +159,7 @@
 					<input type="radio" name="reportType" value="不实信息" /> 不实信息<br />
 					<input type="radio" name="reportType" value="内容抄袭" /> 内容抄袭
 					<input type="hidden" name="postId" value="${post.postid}" /> 
-					<input type="hidden" name="floorId" id="floorId+${loop.count}"/> 
+					<input type="hidden" name="floorId" id="floorId${loop.count+1}"/> 
 					<br>举报原因：<br>
 					<input type="text" name="reportReason" value="">
 					<input type="submit" name="submit" value="确定" onclick ="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">
@@ -238,9 +243,11 @@
 	    </div>
 	    <div class="panel-body">
 	      <form action="/testdb/post/${post.postid }/postReply" name="postAReply">
-	      	<textarea class="form-control" name="replyContent" id="log" placeholder="这里写内容" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;"></textarea>
-	      	<input type="submit" id="course" name="回复" class="btn btn-inverse btn-default"/>
+
+	      	<textarea class="form-control" name="replyContent" id="log" placeholder="这里写内容" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:10px;"></textarea>
+	      	<input type="submit" id="course" name="回复" class="btn btn-inverse" role="button"/>
  			<input type="hidden" name="postId" value="${post.postid }" /> 
+ 			<input type="hidden" name="ansfloorId" id="ansfloorId"/> 
  			<input type="hidden" name="nowPage" value="${page.pageNum }" /> 
 	      </form>
 	    </div>
