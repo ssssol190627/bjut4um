@@ -518,6 +518,7 @@ public class UserDao {
     		return Report;
     	}
     }
+
     
     /**
      * 
@@ -534,8 +535,55 @@ public class UserDao {
     		Applyingboard.setBoardname(rs.getString(2));
     		Applyingboard.setApplyingreason(rs.getString(3));
     		Applyingboard.setUserid(rs.getInt(4));
+    		Applyingboard.setApplytime(rs.getString(5));
+    		Applyingboard.setIshandle(rs.getInt(6));
 
     		return Applyingboard;
+    	}
+
+    }
+    
+    /**
+     * 
+     * ApplyingadminMapper数据库映射
+     * 
+     */
+
+    class ApplyingadminMapper implements RowMapper<Applyingadmin> {
+
+    	public Applyingadmin mapRow(ResultSet rs, int rowNum) throws SQLException {
+    		// TODO Auto-generated method stub
+    		Applyingadmin Applyingadmin = new Applyingadmin();
+    		Applyingadmin.setApplyingid(rs.getInt(1));
+    		Applyingadmin.setBoardid(rs.getInt(2));
+    		Applyingadmin.setApplyingreason(rs.getString(3));
+    		Applyingadmin.setUserid(rs.getInt(4));
+    		Applyingadmin.setApplytime(rs.getString(5));
+    		Applyingadmin.setIshandle(rs.getInt(6));
+
+    		return Applyingadmin;
+    	}
+
+    }
+    
+    /**
+     * 
+     * MessageMapper数据库映射
+     * 
+     */
+
+    class MessageMapper implements RowMapper<Message> {
+
+    	public Message mapRow(ResultSet rs, int rowNum) throws SQLException {
+    		// TODO Auto-generated method stub
+    		Message Message = new Message();
+    		Message.setMessageid(rs.getInt(1));
+    		Message.setUserid(rs.getInt(2));
+    		Message.setMessagetime(rs.getString(3));
+    		Message.setMessagecontent(rs.getString(4));
+    		Message.setAdminid(rs.getInt(5));
+
+    		return Message;
     	}
 
     }

@@ -23,10 +23,10 @@
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   		<ul class="navbar-nav">
     		<li class="nav-item active">
-      		<a class="nav-link" href="applyBoard.jsp">申请板块/成为板块管理员</a>
+      		<a class="nav-link" href="applyBoard">申请板块/成为板块管理员</a>
     		</li>
     		<li class="nav-item">
-     		 <a class="nav-link" href="adminMessage.jsp">站内信息</a>
+     		 <a class="nav-link" href="adminMessage">站内信息</a>
     		</li>
     		<li class="nav-item">
       		<a class="nav-link" href="userPreferences">改密码</a>
@@ -65,7 +65,7 @@
 			</thead>
 			<tbody>
 				<c:forEach items="${floored}" var="floor" varStatus="postStatus" >
-					<td><a href="detailedfloor">${floor.floorcontent }</a></td>
+					<td><a href="/testdb/post/${floor.postid }">${floor.floorcontent }</a></td>
 			       	<td>${floor.floortime }</td>
         		</c:forEach>	
 			</tbody>
