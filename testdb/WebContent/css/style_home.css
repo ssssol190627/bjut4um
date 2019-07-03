@@ -1,0 +1,44 @@
+@charset "UTF-8";
+.nav{
+    background-color:black;
+    color:white;
+    text-align:right;
+    float:center;
+    padding:5px;
+    margin-top:0px;
+}
+.header {
+    background-color:black;
+    color:white;
+    text-align:center;
+    padding:5px;
+    margin-bottom:0px;
+}
+.board {
+    line-height:30px;
+    background-color:#eeeeee;
+    height:300px;
+    width:100px;
+    float:left;
+    padding:5px;	      
+}
+.latest_content {
+    width:350px;
+    float:left;
+    padding:10px;	 	 
+}
+.footer {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+   padding:5px;	 	 
+}
+.login-body{
+    background: url(http://mymaplist.com/img/parallax/back.png);
+	background-color: #444;
+    background: url(http://mymaplist.com/img/parallax/pinlayer2.png),url(http://mymaplist.com/img/parallax/pinlayer1.png),url(http://mymaplist.com/img/parallax/back.png);    
+}
+.vertical-offset-100{
+    padding-top:150px;
+}
