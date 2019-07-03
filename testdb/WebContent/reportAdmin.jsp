@@ -4,8 +4,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>管理举报信息</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入 Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<title>管理举报信息</title>
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath }/css/style_home.css" type="text/css" />
+	<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+  	<script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+  	<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script> 
+  	<style> 
+		.accountCentercontainer{ font-size:14px} 
+	</style>
+
 	<script type="text/javascript">
 		function alertAdminMessage(loopCount){
 			var adminResult = document.getElementById ("mR"+loopCount).manage.value;
@@ -16,24 +28,32 @@
 	</script>
 </head>
 <body>
-	<div class="nav">
-		<c:if test = "${CurrentUser.isForumAdmin == 1}">
-			<a href="superAdmin">返回</a>
-		</c:if>
-		<c:if test = "${CurrentUser.isForumAdmin != 1}">
-			<a href="boardAdmin">返回</a>
-		</c:if>
-	</div>
-	<table border="1">
-	<tr>
-		<th>举报类型</th>
-		<th>所属帖子</th>
-		<th>所属楼层</th>
-		<th>举报原因</th>
-		<th>举报人</th>
-		<th>处理结果</th>
-	</tr>
-	<c:forEach items="${reported }" var="report" varStatus="loop">
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  		<ul class="navbar-nav">
+    		<li class="nav-item active">
+    			<c:if test = "${CurrentUser.isForumAdmin == 1}">
+					<a class="nav-link" href="superAdmin">返回</a>
+				</c:if>
+				<c:if test = "${CurrentUser.isForumAdmin != 1}">
+					<a class="nav-link" href="boardAdmin">返回</a>
+				</c:if>
+    		</li>
+  		</ul>
+	</nav>
+	<h3 class="footer">举报信息</h3>
+	<table class="table table-hover">
+		<thead>
+   			<tr>
+		       	<td>举报类型</td>
+				<td>所属帖子</td>
+				<td>所属楼层</td>
+				<td>举报原因</td>
+				<td>举报人</td>
+				<td>处理结果</td>
+   			</tr>
+		</thead>
+		<tbody>
+				<c:forEach items="${reported }" var="report" varStatus="loop">
 		<tr>
 			<c:if test ="${report.ishandle == 0 }">
 			<td id="reportbrief${report.reportbrief }">${report.reportbrief }</td>
@@ -52,10 +72,11 @@
 					<input type="hidden" name="reportid" value="${report.reportid }" />  					
 					<input type="submit" name="submit" value="确定" onclick="javascript:alertAdminMessage(${loop.count-1 })"><br>
 				</form>
-			</c:if>
 			</td>
+			</c:if>
 		</tr>
 	</c:forEach>
+		</tbody> 
 	</table>
 </body>
 </html>
