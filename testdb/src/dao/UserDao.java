@@ -437,6 +437,43 @@ public class UserDao {
 		return jdbcTemplate.query(sql, new ApplyingadminMapper());
    }
    
+   /**
+    * 通过板块申请id查询板块申请
+    * 
+    */
+   public List<Applyingboard> queryApplyboardById(Integer applyid){
+	   String sql = "select * from applyingboard where applyingid =" + applyid;
+		return jdbcTemplate.query(sql, new ApplyingboardMapper());
+   }
+   
+	/**
+	 * 更新板块申请处理信息
+	 */
+	public boolean updateApplyBoardHandle(Applyingboard applyboard) {
+		String sql = "update applyingboard set ishandle = ? where applyingid = ?";
+		Object applyboardObj[] = new Object[] { applyboard.getIshandle(), applyboard.getApplyingid() };
+		return jdbcTemplate.update(sql, applyboardObj) == 1;
+	}
+   
+	   /** 
+	    * 获取最后一个板块申请
+	   * 
+	   */
+	public List<Board> forLastBoard() {
+		String sql = "select * from board order by id desc LIMIT 1" ;
+	  	return jdbcTemplate.query(sql, new BoardMapper());
+	}
+	  
+	    /**
+	     * 添加板块
+	     * 
+	     */
+	public boolean addBoard(Board board) {
+		String sql = "insert into board(id,name,intro,isExist) values(?,?,?,?)";
+		return jdbcTemplate.update(sql,
+			new Object[] { board.getBoardid(), board.getBoardname(), board.getBoardintro(), board.getBoardexist()},
+			new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER }) == 1;
+	}
     
 	/**
 	 * 

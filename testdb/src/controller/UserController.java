@@ -658,6 +658,44 @@ public class UserController {
 		session.setAttribute("username2", username2);
 		return "boardApplyAdmin.jsp";
 	}
+	
+    /**
+     * 超级管理员管理板块申请
+     * 
+     */
+	@RequestMapping(value = "/manageApplyboard")
+    public String ManageApplyBoard(@RequestParam("applyid") String applyId, @RequestParam("newBoard") String newboard, HttpSession session) { 
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    	UserDao dao = (UserDao) context.getBean("dao");
+    	
+    	User currentuser = (User)session.getAttribute("CurrentUser");
+    	Integer applyid = Integer.parseInt(applyId);
+    	List<Applyingboard> applyboarded = dao.queryApplyboardById(applyid);
+    	Applyingboard applyboard = applyboarded.get(0);
+    	if(newboard.equals("allow")) {
+    		applyboard.setIshandle(1);
+    		Board board = new Board();
+    		List<Board> boarded = dao.forLastBoard();
+    		Integer boardid;
+    		if(boarded.size()==0) {
+    			boardid = 0;
+    		}else {
+    			Board lastboard = boarded.get(0);
+    			boardid = lastboard.getBoardid()+1;
+    		}    		
+    		board.setBoardid(boardid);
+    		board.setBoardintro(applyboard.getApplyingreason());
+    		board.setBoardname(applyboard.getBoardname());
+    		board.setBoardexist(1);
+    		boolean addresult = dao.addBoard(board);
+    	}
+    	if(newboard.equals("refuse")) {
+    		applyboard.setIshandle(2);
+    	}
+    	
+    	boolean resultapply = dao.updateApplyBoardHandle(applyboard);
+		return "superAdmin.jsp";
+	}
     
     /**
      * ajax查数据库

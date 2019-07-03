@@ -29,7 +29,9 @@
 		    <c:if test = "${applyboard.ishandle == 0 }">
 		    	<td>
 					<form action="manageApplyboard">
-						<input type="radio" name="newBoard" value="newBoard">通过<br>
+						<input type="radio" name="newBoard" value="allow">通过<br>
+						<input type="radio" name="newBoard" value="refuse">驳回<br>
+						<input type="hidden" name="applyid" value="${applyboard.applyingid }" />   
 						<input type="submit" name="submit" value="确定">
 					<br>
 					</form>
@@ -59,8 +61,8 @@
 		    <c:if test = "${applyadmin.ishandle == 0 }">
 		    	<td>
 					<form action="boardAdmin.jsp">
-						<input type="radio" name="newBoardAdministrator" value="newBoardAdministrator">
-							通过<br>
+						<input type="radio" name="newBoardAdministrator" value="allow">通过<br>
+						<input type="radio" name="newBoardAdministrator" value="refuse">驳回<br>
 						<input type="submit" name="submit" value="确定">
 						<br>
 					</form>
