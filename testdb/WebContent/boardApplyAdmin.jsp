@@ -49,7 +49,9 @@
 		    <c:if test = "${applyboard.ishandle == 0 }">
 		    	<td>
 					<form action="manageApplyboard">
-						<input type="radio" name="newBoard" value="newBoard">通过<br>
+						<input type="radio" name="newBoard" value="allow">通过<br>
+						<input type="radio" name="newBoard" value="refuse">驳回<br>
+						<input type="hidden" name="applyid" value="${applyboard.applyingid }" />   
 						<input type="submit" name="submit" value="确定">
 					<br>
 					</form>
@@ -58,9 +60,11 @@
 			<c:if test = "${applyboard.ishandle == 1 }">
 				<td>已通过</td>
 			</c:if>
+			<c:if test = "${applyboard.ishandle == 2 }">
+				<td>已驳回</td>
+			</c:if>
    		</tr>
     </c:forEach>
-		</tbody> 
 	</table>
 
 
@@ -73,9 +77,7 @@
 		<th>申请理由</th>
 		<th>申请时间</th>
 		<th>是否通过</th>
-   			</tr>
-		</thead>
-		<tbody>
+	</tr>
 	<c:forEach items="${applyadmins}" var="applyadmin" varStatus="loop">
 		<tr>
 		    <td>${boardname.get(loop.count-1) }</td>
@@ -84,9 +86,10 @@
 		    <td>${applyadmin.applytime }</td>
 		    <c:if test = "${applyadmin.ishandle == 0 }">
 		    	<td>
-					<form action="boardAdmin.jsp">
-						<input type="radio" name="newBoardAdministrator" value="newBoardAdministrator">
-							通过<br>
+					<form action="manageApplyAdmin">
+						<input type="radio" name="newAdmin" value="allow">通过<br>
+						<input type="radio" name="newAdmin" value="refuse">驳回<br>
+						<input type="hidden" name="applyid" value="${applyadmin.applyingid }" />   
 						<input type="submit" name="submit" value="确定">
 						<br>
 					</form>
@@ -97,7 +100,6 @@
 			</c:if>
    		</tr>
     </c:forEach>
-		</tbody> 
 	</table>
 
 </body>

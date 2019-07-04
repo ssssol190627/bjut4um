@@ -1,23 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-    
+  
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 引入 Bootstrap -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-	<title>管理举报信息</title>
-	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="${pageContext.request.contextPath }/css/style_home.css" type="text/css" />
-	<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
-  	<script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
-  	<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script> 
-  	<style> 
-		.accountCentercontainer{ font-size:14px} 
-	</style>
+	<title>封禁和删除</title>
+	<script src="${pageContext.request.contextPath }/js/jquery-3.4.1.min.js"></script>
 </head>
 <body>
 	<script type="text/javascript">
@@ -81,7 +74,6 @@
     		</li>
   		</ul>
 	</nav>
-
 	<form action="/testdb/banAndDelete">
 		<br>帖子关键词：<br>
 		<input type="text" name="searchPostByKeyWord" placeholder="searchPostByKeyWord" class="inputtable" >
@@ -124,5 +116,8 @@
 		</c:forEach>
 		</tbody> 
 	</table>
+	<br>
+
+	
 </body>
 </html>
