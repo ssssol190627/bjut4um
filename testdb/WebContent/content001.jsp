@@ -65,8 +65,7 @@
                         }
                 }
                 function replyFloor(loopCount,ansFloor,floorUser,floorContent){
-                        var s="<%=session.getAttribute("CurrentUser")%>
-        ";
+                        var s="<%=session.getAttribute("CurrentUser")%>";
                 if (s == "null") {
                         alert("请先登录");
                         document.getElementById("replyContent").readOnly = true;
