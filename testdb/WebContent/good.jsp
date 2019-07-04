@@ -72,11 +72,16 @@
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   		<ul class="navbar-nav">
     		<li class="nav-item active">
-				<a class="nav-link" href="boardAdmin.jsp">返回</a>
+				<c:if test = "${CurrentUser.isForumAdmin == 1}">
+					<a class="nav-link" href="superAdmin">返回</a>
+				</c:if>
+				<c:if test = "${CurrentUser.isForumAdmin != 1}">
+					<a class="nav-link" href="boardAdmin">返回</a>
+				</c:if>
     		</li>
+    		
   		</ul>
 	</nav>
-	
 	<form action="/testdb/good">
 		<br>帖子关键词：<br>
 		<input type="text" name="searchPostByKeyWord" placeholder="searchPostByKeyWord" class="inputtable" >

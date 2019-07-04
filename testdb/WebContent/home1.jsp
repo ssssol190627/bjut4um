@@ -57,6 +57,7 @@
 		</c:forEach>
 	</div>
 
+
 	<h3 class="footer">Copyright bjut4um.cn</h3>
 </body>
 

@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+    
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,80 +20,109 @@
 	</style>
 </head>
 <body>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$(".inputtable").keydown(function(){
+			    $(".inputtable").css("background-color","#FFFFCC");
+			  });
+			$(".inputtable").keyup(function(){
+				$(".inputtable").css("background-color","#D6D6FF");
+				var content=$(this).val();
+			  	//如果当前搜索内容为空，无须进行查询
+			  	if(content==""){
+			      	$("#context1").css("display","none");
+			      	return ;
+			  	}
+			  	//由于浏览器的缓存机制 所以我们每次传入一个时间
+			  	var time=new Date().getTime();
+			  	$.ajax({
+			      	type:"get",
+			      	//新建一个名为findBooksAjaxServlet的servlet
+			      	url:"/testdb/findPostsAjaxServlet",
+			      	data:{name:content,time:time},
+			      	success:function(data){
+				        //拼接html
+				        var res=data.split(",");
+				        var html="";
+				        for(var i=0;i<res.length;i++){
+				        	 //每一个div还有鼠标移出、移入点击事件
+				         	  html+="<div onclick='setSearch_onclick(this)' onmouseout='changeBackColor_out(this)' onmouseover='changeBackColor_over(this)'>"+res[i]+"</div>";
+				      	}
+				       	$("#context1").html(html);
+				        //显示为块级元素
+				       	$("#context1").css("display","block");
+			      	}
+			  });
+			});
+		});
+		//鼠标移动到内容上
+	 	function changeBackColor_over(div){
+	     	$(div).css("background-color","#CCCCCC");
+	 	}
+	 	//鼠标离开内容
+	 	function changeBackColor_out(div){
+	     	$(div).css("background-color","");
+		 }
+	 	//将点击的内容放到搜索框
+	 	function setSearch_onclick(div){
+	     	$(".inputtable").val(div.innerText);
+	    	 $("#context1").css("display","none");
+	 	}
+	</script>
 		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   		<ul class="navbar-nav">
     		<li class="nav-item active">
-				<a class="nav-link" href="boardAdmin.jsp">返回</a>
+    			<c:if test = "${CurrentUser.isForumAdmin == 1}">
+					<a class="nav-link" href="superAdmin">返回</a>
+				</c:if>
+				<c:if test = "${CurrentUser.isForumAdmin != 1}">
+					<a class="nav-link" href="boardAdmin">返回</a>
+				</c:if>
     		</li>
   		</ul>
 	</nav>
 
-	<form action="boardAdmin.jsp">
+	<form action="/testdb/banAndDelete">
 		<br>帖子关键词：<br>
-		<input type="text" name="searchToBanByKeyWord" value="searchToBanByKeyWord">
+		<input type="text" name="searchPostByKeyWord" placeholder="searchPostByKeyWord" class="inputtable" >
 		<input type="submit" name="submit" value="搜索">
 		<br>
 	</form>
-	
-	
-	<table border="1">
-	<tr>
-		<th>举报类型</th>
-		<th>所属帖子</th>
-		<th>所属楼层</th>
-		<th>举报原因</th>
-		<th>举报人</th>
-		<th>处理结果</th>
-	</tr>
-	<tr>
-		<td>不实信息</td>
-		<td>我从北区食堂吃出苍蝇了</td>
-		<td>我也迟到了！</td>
-		<th>说谎！北区食堂苍蝇都让我打死了！</th>
-		<th>王xx</th>
-		<th>
-		<form action="boardAdmin.jsp">
-			<input type="radio" name="ban" value="ban">
+	<div id="context1" style="background-color:white; border: 1px solid red;width:128px;display:none" ></div>
+
+	<h3 class="footer">搜索结果</h3>
+	<table class="table table-hover">
+		<thead>
+   			<tr>
+		       	<th>所属板块</th>
+			<th>帖子标题</th>
+			<th>帖子内容</th>
+			<th>发帖人</th>
+			<th>是否封禁或删除</th>
+   			</tr>
+		</thead>
+		<tbody>
+						<c:forEach items="${searchedPost}" var="searchedPost" varStatus="loop">
+			<tr>
+				<td id="board${sboardNameList.get(loop.count-1) }">${sboardNameList.get(loop.count-1) }</td>
+				<td id="title${searchedPost.title }"><a href="  /testdb/post/${searchedPost.postid}">${searchedPost.title }</a></td>
+				<td id="content${searchedPost.postcontent }">${searchedPost.postcontent }</td>
+				<td id="user${suserNameList.get(loop.count-1) }">${suserNameList.get(loop.count-1) }</td>
+				<td>
+					<form action="/testdb/banAndDelete" method="post">
+			<input type="radio" name="isBanned" value="${searchedPost.postid}">
 			封禁<br>
-			<input type="radio" name="delete" value="delete">
+			<input type="radio" name="isDeleted" value="${searchedPost.postid}">
 			删除<br>
 		    <input type="text" name="bdReason" value="bdReason">
 			<br>
 			<input type="submit" name="submit" value="确定">
 			<br>
 			</form>
-		</th>
-	</tr>
-	</table>
-	<table border="1">
-	<caption align="top">申请解封列表</caption>
-	<tr>
-	    <th>所属板块</th>
-		<th>所属帖子</th>
-		<th>所属楼层</th>
-		<th>封禁原因</th>
-		<th>封禁时间</th>
-		<th>申请解封理由</th>
-		<th>是否恢复，不通过理由</th>
-	</tr>
-	<tr>
-		<td>工大生活</td>
-		<td>食堂美食汇总</td>
-		<td>rt！</td>
-		<th>不实信息</th>
-		<th>2019/06/20 23:05:07</th>
-		<th>经查实，并非不实信息</th>
-		<th>
-		<form action="boardAdmin.jsp">
-			<input type="radio" name="notBanAnymore" value="notBanAnymore">
-			恢复<br>
-			<input type="text" name="stillBanReason" value="stillBanReason">
-			<br>不通过原因<br>
-			<input type="submit" name="submit" value="确定">
-			<br>
-		</form>
-		</th>
-	</tr>
+
+				</td>
+		</c:forEach>
+		</tbody> 
 	</table>
 </body>
 </html>
