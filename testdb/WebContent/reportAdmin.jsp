@@ -28,6 +28,31 @@
 	</script>
 </head>
 <body>
+	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+		<a class="navbar-brand mr-auto mr-lg-0" href="index.jsp">Bjut4um</a>		
+      		<div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+        		<ul class="navbar-nav">
+        			<li class="nav-item">
+	            		<a class="nav-link" href="#">💗</a>
+	          		</li>  
+					<li class="nav-item">
+	            		<a class="nav-link" href="accountCenter">个人中心</a>
+	          		</li> 
+	          		<li class="nav-item active">
+		    			<c:if test = "${CurrentUser.isForumAdmin == 1}">
+							<a class="nav-link" href="superAdmin">返回</a>
+						</c:if>
+						<c:if test = "${CurrentUser.isForumAdmin != 1}">
+							<a class="nav-link" href="boardAdmin">返回</a>
+						</c:if>
+		    		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="quit" style="position:fixed;right:50px;">退出登录</a>
+	          		</li>
+        		</ul>
+      		</div>
+	</nav>
+<h1 class="footer">管理员管理页面-举报信息</h1>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   		<ul class="navbar-nav">
     		<li class="nav-item active">
@@ -40,7 +65,6 @@
     		</li>
   		</ul>
 	</nav>
-	<h3 class="footer">举报信息</h3>
 	<table class="table table-hover">
 		<thead>
    			<tr>

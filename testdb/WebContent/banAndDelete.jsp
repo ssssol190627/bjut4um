@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+    pageEncoding="utf-8"%>
+  
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -61,9 +62,18 @@
 	    	 $("#context1").css("display","none");
 	 	}
 	</script>
-	<div class="nav">
-		<a href="boardAdmin.jsp">返回</a>
-	</div>
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  		<ul class="navbar-nav">
+    		<li class="nav-item active">
+    			<c:if test = "${CurrentUser.isForumAdmin == 1}">
+					<a class="nav-link" href="superAdmin">返回</a>
+				</c:if>
+				<c:if test = "${CurrentUser.isForumAdmin != 1}">
+					<a class="nav-link" href="boardAdmin">返回</a>
+				</c:if>
+    		</li>
+  		</ul>
+	</nav>
 	<form action="/testdb/banAndDelete">
 		<br>帖子关键词：<br>
 		<input type="text" name="searchPostByKeyWord" placeholder="searchPostByKeyWord" class="inputtable" >
@@ -72,16 +82,19 @@
 	</form>
 	<div id="context1" style="background-color:white; border: 1px solid red;width:128px;display:none" ></div>
 
-
-	<table border="1">
-		<tr>
-			<th>所属板块</th>
+	<h3 class="footer">搜索结果</h3>
+	<table class="table table-hover">
+		<thead>
+   			<tr>
+		       	<th>所属板块</th>
 			<th>帖子标题</th>
 			<th>帖子内容</th>
 			<th>发帖人</th>
 			<th>是否封禁或删除</th>
-		</tr>
-		<c:forEach items="${searchedPost}" var="searchedPost" varStatus="loop">
+   			</tr>
+		</thead>
+		<tbody>
+						<c:forEach items="${searchedPost}" var="searchedPost" varStatus="loop">
 			<tr>
 				<td id="board${sboardNameList.get(loop.count-1) }">${sboardNameList.get(loop.count-1) }</td>
 				<td id="title${searchedPost.title }"><a href="  /testdb/post/${searchedPost.postid}">${searchedPost.title }</a></td>
@@ -101,6 +114,7 @@
 
 				</td>
 		</c:forEach>
+		</tbody> 
 	</table>
 	<br>
 

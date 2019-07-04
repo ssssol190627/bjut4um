@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>login</title>
+	<title>登录</title>
 	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 	 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -19,7 +19,7 @@
     	        	.5, 
     	        		{ css: 
     	            		{
-    	                		backgroundPosition: ""+ parseInt(event.pageX/8) + "px "+parseInt(event.pageY/'12')+"px, "+parseInt(event.pageX/'15')+"px "+parseInt(event.pageY/'15')+"px, "+parseInt(event.pageX/'30')+"px "+parseInt(event.pageY/'30')+"px"
+    	                		backgroundPosition: ""+ parseInt(event.pageX/'8') + "px "+parseInt(event.pageY/'12')+"px, "+parseInt(event.pageX/'15')+"px "+parseInt(event.pageY/'15')+"px, "+parseInt(event.pageX/'30')+"px "+parseInt(event.pageY/'30')+"px";
     	            		}
     	        		});
     	  	});
@@ -40,7 +40,7 @@
 			    			<h3 class="panel-title">欢迎来到登录页面</h3>
 			 			</div>
 			  		<div class="panel-body">
-			    	<form accept-charset="UTF-8" action="login">
+			    	<form accept-charset="UTF-8" action="login" method="post">
                     <fieldset>
 			    	  	<div class="form-group">
 			    		    <input class="form-control" placeholder="用户名" name="username" type="text">

@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -230,7 +232,7 @@ public class UserController {
 		if (request.getQueryString() != null) {
 			pageNum = Integer.parseInt(request.getParameter("page").toString());
 		}
-		int pageSize = 2;
+		int pageSize = 10;
 		Page p = dao.findAllFloorWithPage(pageNum, pageSize, postid);
 		model.addAttribute("page", p);
 		session.setAttribute("page", p);
@@ -246,13 +248,14 @@ public class UserController {
 			ul.add(thisuser);
 		}
 		
-		List<Floor> allfloor = dao.queryAllFloor(postid);
+		List<Floor> allfloor =fl;
     	List<String> ansusername = new ArrayList();
 		for (int i = 0; i < allfloor.size(); i++) {
 			if(allfloor.get(i).getAnsfloorid()==0) {
 				List<User> ansusered = dao.queryByID(currentpost.getUserid());
 				ansusername.add(ansusered.get(0).getUsername());
 			}else {
+
 				List<Floor> ansfloored = dao.queryFloorByFloorIdandPostId(allfloor.get(i).getAnsfloorid(), postid);
 				Floor ansfloor = ansfloored.get(0);
 				List<User> ansusered = dao.queryByID(ansfloor.getUserid());
@@ -333,11 +336,12 @@ public class UserController {
 	 * 
 	 */
 	@RequestMapping(value = "/board/{boardid}")
-	public String enterBoard(@PathVariable int boardid, Model model, HttpSession session, HttpServletRequest request) {
+	public String enterBoard(@PathVariable int boardid, Model model, HttpSession session, HttpServletRequest request) throws UnsupportedEncodingException {
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		UserDao dao = (UserDao) context.getBean("dao");
 		if (request.getHeader("Referer").toString().contains("addPost")) {
-			String newPostTitle = request.getParameter("title");
+			request.setCharacterEncoding("utf-8");
+			String newPostTitle = request.getParameter("title");	
 			String newPostContent = request.getParameter("content");
 			if ((!newPostTitle.isEmpty()) && (!newPostContent.isEmpty())) {
 				Post post = new Post();
@@ -355,7 +359,9 @@ public class UserController {
 				post.setIsGood(0);
 				post.setIsExist(1);
 				post.setNumpost(0);
-				post.setPostid(dao.queryForAllPost().size() + 1);
+				List<Post> pp=dao.queryForAllPost();
+				int a=pp.size();
+				post.setPostid(a + 1);
 				dao.addPost(post);
 			}
 
@@ -364,7 +370,7 @@ public class UserController {
 		if (request.getQueryString() != null) {
 			pageNum = Integer.parseInt(request.getParameter("page").toString());
 		}
-		int pageSize = 2;
+		int pageSize = 10;
 		Page p = dao.findAllPostWithPage(pageNum, pageSize, boardid);
 		model.addAttribute("page", p);
 		session.setAttribute("page", p);
@@ -452,21 +458,25 @@ public class UserController {
 				List<Post> banpost = dao.queryForPostByPostId(report.getPostid());
 				banpost.get(0).setIsBanned(1);
 				report.setIshandle(1);
+				dao.updatePost(banpost.get(0));
 
 			} else {
 				List<Floor> banfloor = dao.queryFloorByFloorIdandPostId(report.getFloorid(), report.getPostid());
-				banfloor.get(0).setIsbanned(1);
+				banfloor.get(0).setIsBanned(1);
 				report.setIshandle(1);
+				dao.updateFloor(banfloor.get(0));
 			}
 		} else if (manage.equals("delete")) {
 			if (report.getFloorid() == 0) {
 				List<Post> banpost = dao.queryForPostByPostId(report.getPostid());
 				banpost.get(0).setIsExist(0);
 				report.setIshandle(2);
+				dao.updatePost(banpost.get(0));
 			} else {
 				List<Floor> banfloor = dao.queryFloorByFloorIdandPostId(report.getFloorid(), report.getPostid());
-				banfloor.get(0).setIsexist(0);
+				banfloor.get(0).setIsExist(0);
 				report.setIshandle(2);
+				dao.updateFloor(banfloor.get(0));
 			}
 		} else {
 			report.setIshandle(3);
@@ -635,6 +645,15 @@ public class UserController {
     	
     	List<Applyingboard> boarded = dao.queryBoardByUserid(currentuser.getId());
     	session.setAttribute("boarded", boarded);
+    	
+    	List<Applyingadmin> admined = dao.queryAdminByUserid(currentuser.getId());
+    	session.setAttribute("admined", admined);
+    	List<String> boardName = new ArrayList();
+    	for(int i=0;i<admined.size();i++) {
+    		List<Board> b = dao.queryBoardByBoardId(admined.get(i).getBoardid());
+    		boardName.add(b.get(0).getBoardname());
+    	}
+		session.setAttribute("boardnames", boardName);
     	 return "/applyBoard.jsp";
     }
 	
@@ -672,6 +691,18 @@ public class UserController {
     	List<Applyingadmin> admined = dao.queryAdminByUserid(currentuser.getId());
     	session.setAttribute("admined", admined);
     	
+    	//User currentuser = (User)session.getAttribute("CurrentUser");
+    //	List<Applyingadmin> admined = dao.queryAdminByUserid(currentuser.getId());
+    	List<Applyingboard> boarded = dao.queryBoardByUserid(currentuser.getId());
+    	session.setAttribute("admined", admined);
+    	session.setAttribute("boarded", boarded);
+    	
+    	List<String> boardName = new ArrayList();
+    	for(int i=0;i<admined.size();i++) {
+    		List<Board> b = dao.queryBoardByBoardId(admined.get(i).getBoardid());
+    		boardName.add(b.get(0).getBoardname());
+    	}
+		session.setAttribute("boardnames", boardName);
     	 return "/applyBoard.jsp";
     }
 	
@@ -903,11 +934,16 @@ public class UserController {
     	Date date = new Date();
     	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
     	newfloor.setFloortime(dateFormat.format(date));
-    	newfloor.setIsbanned(0);
-    	newfloor.setIsgood(0);
-    	newfloor.setIsexist(1);
+    	newfloor.setIsBanned(0);
+    	newfloor.setIsGood(0);
+    	newfloor.setIsExist(1);
     	boolean result = dao.addFloor(newfloor);
     	
+    	
+		int numPost=post.getNumpost()+1;
+		post.setNumpost(numPost);
+		post.setNewtime(newfloor.getFloortime());
+		dao.updateReply(post);
     	int pageNum = 1;
     	
     	String pageNumString=request.getParameter("nowPage");
@@ -915,7 +951,7 @@ public class UserController {
     	if (pageNumString != null) {
     		pageNum = Integer.parseInt(pageNumString);
     	}
-    	int pageSize = 2;
+    	int pageSize = 10;
     	Page p = dao.findAllFloorWithPage(pageNum, pageSize, postid);
     	model.addAttribute("page", p);
     	session.setAttribute("page", p);
@@ -963,17 +999,19 @@ public class UserController {
     /**
 	 * 
 	 * 管理员封禁和删除 TODO
+     * @throws UnsupportedEncodingException 
 	 * 
 	 */
 	@RequestMapping(value = "/banAndDelete")
-	public String setBanAndDelete(Model model, HttpSession session, HttpServletRequest request) {
+	public String setBanAndDelete(Model model, HttpSession session, HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		User currentuser = (User) session.getAttribute("CurrentUser");
 		UserDao dao = (UserDao) context.getBean("dao");
 		if (request.getHeader("Referer").toString().contains("banAndDelete")) {
+			response.setContentType("text/html;charset=utf-8");
+	        request.setCharacterEncoding("utf-8");
 			String isBanned = request.getParameter("isBanned");
 			String isDeleted = request.getParameter("isDeleted");
-			String searchPostByKeyWord = request.getParameter("searchPostByKeyWord");
 			String bdReason = request.getParameter("bdReason");
 			if (isBanned!=null) {
 				int bannedPostId = Integer.parseInt(isBanned);
@@ -983,7 +1021,7 @@ public class UserController {
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
 				String nowtime = df.format(new Date());
 				String messageContent="您的帖子"+bannedPost.getTitle()+"由于"+bdReason+"，被封禁了。";
-				Message message=new Message(messageid,bannedPost.getUserid(),nowtime,bdReason,currentuser.getId());
+				Message message=new Message(messageid,bannedPost.getUserid(),nowtime,messageContent,currentuser.getId());
 				dao.addMessage(message);
 			}
 			if (isDeleted!=null) {
@@ -994,12 +1032,14 @@ public class UserController {
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
 				String nowtime = df.format(new Date());
 				String messageContent="您的帖子"+deletedPost.getTitle()+"由于"+bdReason+"，被删除了。";
-				Message message=new Message(messageid,deletedPost.getUserid(),nowtime,bdReason,currentuser.getId());
+				Message message=new Message(messageid,deletedPost.getUserid(),nowtime,messageContent,currentuser.getId());
 				dao.addMessage(message);
 			}
+		}
 		//如果是超级管理员
 		if (currentuser.getIsForumAdmin() != 0) {
 			if (request.getHeader("Referer").toString().contains("banAndDelete")) {
+				String searchPostByKeyWord = request.getParameter("searchPostByKeyWord");
 				
 				if (searchPostByKeyWord!=null) {
 					List<Post> pl = dao.queryForPostByPostTitle(searchPostByKeyWord);
@@ -1021,7 +1061,9 @@ public class UserController {
 		}
 		//是板块管理员
 		else if (currentuser.getIsBoardAdmin() != 0) {
-			
+			if (request.getHeader("Referer").toString().contains("banAndDelete")) {
+			String searchPostByKeyWord = request.getParameter("searchPostByKeyWord");
+			String bdReason = request.getParameter("bdReason");
 				if (searchPostByKeyWord!=null) {
 					int boardid=currentuser.getIsBoardAdmin();
 					List<Post> pl = dao.queryForPostByPostTitleInABoard(searchPostByKeyWord,boardid);
@@ -1039,7 +1081,7 @@ public class UserController {
 					session.setAttribute("suserNameList", suserNameList);
 				} 
 			}
-		} 
+		}
 		else {
 			return "index.jsp";
 		}
