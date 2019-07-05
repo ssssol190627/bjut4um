@@ -11,6 +11,17 @@
 	" rel="stylesheet" id="bootstrap-css">
 	 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script>
+    	$(document).ready(function(){
+    		var s=document.getElementById("judgeRegister").value;
+			if(s!=""){
+				if(s==0)	alert("this email address is not for bjut");
+				else if(s==1)	alert("this email address has already been registered");
+				else if(s==2)	alert("this name has been used");
+				else if(s==3)	alert("注册成功！")
+			}
+    	});
+    </script>
 	<link rel="stylesheet" href="${pageContext.request.contextPath }/css/style_home.css" type="text/css" />
 </head>
 <body>	
@@ -37,7 +48,8 @@
 			    			<input class="form-control" placeholder="密码" name="password" type="password">
 			    		</div>
 			    		<input class="btn btn-lg btn-success btn-block" type="submit" value="注册">
-			    		<input class="btn btn-lg btn-success btn-block" type="button" value="随便逛逛" onClick="javascript :history.back(-1);">
+			    		<input class="btn btn-lg btn-success btn-block" type="button" value="随便逛逛" onClick="javascript:window.location.href='index.jsp';">
+			    		<input id="judgeRegister" type="hidden" value="${checkregister }">
 			    	</fieldset>
 			   	 	</form>
 			    	</div>
