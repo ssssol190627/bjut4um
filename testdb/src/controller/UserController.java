@@ -98,10 +98,9 @@ public class UserController {
     	return "userPreferences.jsp";
     }
     
-    
     /**
      * 
-     * �����޸��������
+     * 添加回帖
      * 
      */
     @RequestMapping(value = "/addPost")
@@ -258,7 +257,6 @@ public class UserController {
 			}else {
 
 				List<Floor> ansfloored = dao.queryFloorByFloorIdandPostId(allfloor.get(i).getAnsfloorid(), postid);
-				
 				Floor ansfloor = ansfloored.get(0);
 				List<User> ansusered = dao.queryByID(ansfloor.getUserid());
 				User ansuser = ansusered.get(0);
@@ -705,7 +703,6 @@ public class UserController {
     		boardName.add(b.get(0).getBoardname());
     	}
 		session.setAttribute("boardnames", boardName);
-		
     	 return "/applyBoard.jsp";
     }
 	
