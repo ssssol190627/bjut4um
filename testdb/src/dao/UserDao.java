@@ -203,7 +203,7 @@ public class UserDao {
      * 
      */
     public boolean addReport(Report report) {
-	String sql = "insert into Report(reportid,boardid,postid,floorid,userid,reporttime,reportbrief,reportcontent,isHandle) values(?,?,?,?,?,?,?,?,?)";
+	String sql = "insert into report(reportid,boardid,postid,floorid,userid,reporttime,reportbrief,reportcontent,isHandle) values(?,?,?,?,?,?,?,?,?)";
 	return jdbcTemplate.update(sql,
 		new Object[] { report.getReportid(), report.getBoardid(), report.getPostid(), report.getFloorid(), report.getUserid(), report.getReporttime(), report.getReportbrief(), report.getReportcontent(), report.getIshandle()},
 		new int[] { Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER }) == 1;
