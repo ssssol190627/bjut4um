@@ -29,12 +29,15 @@
 	</nav>
 	</div>
 	<div>
-
+	<table class="table table-hover table-bordered">
+		<thead>
 		<c:forEach items="${usermessages}" var="usermessage" >
 			<br>
         	${usermessage.messagecontent }${usermessage.messagetime }
         	<br>
         </c:forEach> 
+        		</tbody> 
+	</table>
 	</div>
 </body>
 </html>
