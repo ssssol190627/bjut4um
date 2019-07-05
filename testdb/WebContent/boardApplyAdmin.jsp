@@ -8,7 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- 引入 Bootstrap -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-	<title>管理举报信息</title>
+	<title>管理板块信息</title>
 	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath }/css/style_home.css" type="text/css" />
 	<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
