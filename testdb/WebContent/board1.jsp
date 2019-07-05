@@ -23,7 +23,7 @@
 <body>
 
 	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" style="position:fixed;top:0px;">
-		<a class="navbar-brand mr-auto mr-lg-0" href="index.jsp">Bjut4um</a>		
+		<a class="navbar-brand mr-auto mr-lg-0" href="/testdb/home1">Bjut4um</a>		
       		<div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
         		<ul class="navbar-nav"> 
 	          		<li class="nav-item">
@@ -31,10 +31,12 @@
 	          		</li>  
 	          		<li class="nav-item">
 	            		<a class="nav-link" href="#">💗</a>
-	          		</li> 	
+	          		</li>
+	          		<c:if test="${CurrentUser!=null }">
 	          		<li class="nav-item">
 	            		<a class="nav-link" href="/testdb/accountCenter">个人中心</a>
 	          		</li> 
+	          		</c:if>
         		</ul>
       		</div>
 	</nav>

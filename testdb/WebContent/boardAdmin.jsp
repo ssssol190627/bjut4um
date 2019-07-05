@@ -59,7 +59,7 @@
 </head>
 <body >
 	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-		<a class="navbar-brand mr-auto mr-lg-0" href="home1.jsp">Bjut4um</a>		
+		<a class="navbar-brand mr-auto mr-lg-0" href="home1">Bjut4um</a>		
       		<div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
         		<ul class="navbar-nav">
         			<li class="nav-item">

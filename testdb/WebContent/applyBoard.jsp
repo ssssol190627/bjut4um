@@ -27,7 +27,7 @@
 <body>
 
 	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" style="position:fixed;top:0px;">
-		<a class="navbar-brand mr-auto mr-lg-0" href="index.jsp">Bjut4um</a>		
+		<a class="navbar-brand mr-auto mr-lg-0" href="home1">Bjut4um</a>		
       		<div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
         		<ul class="navbar-nav"> 
         			<li class="nav-item">
@@ -92,7 +92,7 @@
 			    	申请板块管理员
 			 </div>
 			 <div class="panel-body">
-				 <form action="userPreference.jsp" name="applyBoard">
+				 <form action="/testdb/applyforAdmin" name="applyBoard">
 				 <label>板块名</label> <br> 
 				 	<select name="boardname" class="form-control" style="margin:10px 10px 20px 0px">
 				 	 	<c:forEach items="${AllBoard}" var="AllBoard">
