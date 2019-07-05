@@ -31,10 +31,16 @@
 	<div>
 	<table class="table table-hover table-bordered">
 		<thead>
+			<tr>
+			<th>消息</th>
+			</tr>
+		</thead>
+		</tbody>
 		<c:forEach items="${usermessages}" var="usermessage" >
-			<br>
-        	${usermessage.messagecontent }${usermessage.messagetime }
-        	<br>
+		<tr>
+        	<td id="">${usermessage.messagecontent }${usermessage.messagetime }</td>
+        	</tr>
+        	
         </c:forEach> 
         		</tbody> 
 	</table>

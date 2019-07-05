@@ -48,8 +48,13 @@
 			</h3>
 		</div>
 	<div class="panel-body">		
-		<form method="post" action="/testdb/addPost">
-			<input type="submit" value="发布新帖" name="发布新帖"/>
+<form method="post" action="/testdb/addPost">
+			<c:if test ="${CurrentUser == null }">			
+				<input type="submit" value="发布新帖，请先登录" name="发布新帖，请先登录" disabled="disabled"/>
+			</c:if>
+			<c:if test ="${CurrentUser != null }">			
+				<input type="submit" value="发布新帖" name="发布新帖"/>
+			</c:if>
 		</form>
 	</div>
 	<table class="table">

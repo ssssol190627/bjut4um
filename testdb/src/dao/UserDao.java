@@ -171,123 +171,11 @@ public class UserDao {
 	 * 
 	 */
 	public boolean updatePassword(User user) {
-		String sql = "update User set password = ? where id = ?";
+		String sql = "update user set password = ? where id = ?";
 		Object userObj[] = new Object[] { user.getPassword(), user.getId() };
 		return jdbcTemplate.update(sql, userObj) == 1;
 	}
 
-	/**
-	 * 添加用户
-	 * 
-	 */
-	public boolean addUser(User user) {
-		String sql = "insert into user(id,username,password,email,isExist,isBoardAdmin,isForumAdmin) values(?,?,?,?,?,?,?)";
-		return jdbcTemplate.update(sql,
-				new Object[] { user.getId(), user.getUsername(), user.getPassword(), user.getEmail(), user.getIsExist(),
-						user.getIsBoardAdmin(), user.getIsForumAdmin() },
-				new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER,
-						Types.INTEGER }) == 1;
-	}
-
-	/**
-	 * 添加举报
-	 * 
-	 */
-	public boolean addReport(Report report) {
-		String sql = "insert into Report(reportid,boardid,postid,floorid,userid,reporttime,reportbrief,reportcontent,isHandle) values(?,?,?,?,?,?,?,?,?)";
-		return jdbcTemplate.update(sql,
-				new Object[] { report.getReportid(), report.getBoardid(), report.getPostid(), report.getFloorid(),
-						report.getUserid(), report.getReporttime(), report.getReportbrief(), report.getReportcontent(),
-						report.getIshandle() },
-				new int[] { Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR,
-						Types.VARCHAR, Types.VARCHAR, Types.INTEGER }) == 1;
-	}
-
-	/**
-	 * 添加回复楼层
-	 * 
-	 */
-	public boolean addFloor(Floor floor) {
-		String sql = "insert into floor(boardid,postid,id,ansfloorid,userid,floortime,floorcontent,isGood,isBanned,isExist) values(?,?,?,?,?,?,?,?,?,?)";
-		return jdbcTemplate.update(sql,
-				new Object[] { floor.getBoardid(), floor.getPostid(), floor.getFloorid(), floor.getAnsfloorid(),
-						floor.getUserid(), floor.getFloortime(), floor.getFloorcontent(), floor.getIsgood(),
-						floor.getIsbanned(), floor.getIsexist() },
-				new int[] { Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR,
-						Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER }) == 1;
-	}
-
-    /**
-     * 闁俺绻冮悽銊﹀煕閸氬秵鐓＄拠銏㈡暏閹达拷
-     * 
-     */
-    public List<User> queryByName(String name) {
-    	String sql = "select id,username,password,email,isExist,isBoardAdmin,isForumAdmin from user where username = '"+name +"'" ;
-    	return jdbcTemplate.query(sql, new UserMapper());
-    }
-    
-    /**
-     * 闁俺绻冮柇顔绢唸閺屻儴顕楅悽銊﹀煕
-     * 
-     */
-    public List<User> queryByEmail(String email) {
-    	String sql = "select id,username,password,email,isExist,isBoardAdmin,isForumAdmin from user where email = '"+email +"'" ;
-    	return jdbcTemplate.query(sql, new UserMapper());
-    }
-    
-    /**
-     * 闁俺绻冮悽銊﹀煕ID閺屻儴顕楅悽銊﹀煕
-     * 
-     */
-    public List<User> queryByID(Integer id) {
-    	String sql = "select * from user where id = "+id ;
-    	return jdbcTemplate.query(sql, new UserMapper());
-    }
-    
-    /** 
-     * 閼惧嘲褰囬張锟介崥搴濈娑擃亞鏁ら幋锟�
-    * 
-    */
-   public List<User> forLastUser() {
-	    String sql = "select * from user order by id desc LIMIT 1" ;
-   		return jdbcTemplate.query(sql, new UserMapper());
-   }
-   
-   /** 
-    * 閼惧嘲褰囬張锟介崥搴濈娑擃亜鐪伴弫锟�
-   * 
-   */
-  public List<Floor> forLastFloor(int postid) {
-	   String sql = "select * from floor where postid ="+postid+" order by id desc LIMIT 1";
-	   return jdbcTemplate.query(sql, new FloorMapper());
-  }
-
-    /**
-     * 闁俺绻冮悽銊﹀煕閸氬秵鐓＄拠銏㈡暏閹村嘲褰傞惃鍕瑯鐎涳拷
-     * 
-     */
-    public List<Post> queryForPostedByUser(Integer id) {
-    	String sql = "select * from post where userid = "+id ;
-    	return jdbcTemplate.query(sql, new PostMapper());
-    }
-    
-    /**
-     * 闁俺绻冮悽銊﹀煕閸氬秵鐓＄拠銏㈡暏閹村嘲娲栨径宥囨畱鐢牕鐡�
-     * 
-     */
-    public List<Floor> queryForReplyedByUser(Integer id) {
-    	String sql = "select boardid,postid,id,ansfloorid,userid,floortime,floorcontent,isGood,isBanned,isExist from floor where userid = "+id ;
-    	return jdbcTemplate.query(sql, new FloorMapper());
-    }
-    
-    /**
-     * 闁俺绻冪敮鏍х摍ID閺屻儴顕楅崶鐐差槻濡ょ厧鐪�
-     * 
-     */
-    public List<Floor> queryForReplyedByPost(Integer id) {
-    	String sql = "select * from floor where  isExist = 1 and postid = "+id ;
-    	return jdbcTemplate.query(sql, new FloorMapper());
-    }
     
     /**
      * 閫氳繃甯栧瓙ID鏌ヨ鎵�鏈夊洖澶嶆ゼ灞�
@@ -298,42 +186,6 @@ public class UserDao {
     	return jdbcTemplate.query(sql, new FloorMapper());
     }
     
-    /**
-     * 闁俺绻冪敮鏍х摍ID閺屻儴顕楃敮鏍х摍
-     * 
-     */
-    public List<Post> queryForPostByPostId(Integer id) {
-    	String sql = "select * from post where id = "+id ;
-    	return jdbcTemplate.query(sql, new PostMapper());
-    }
-    
-    /**
-     *閺屻儴顕楅幍锟介張澶婄瑯鐎涳拷
-     * 
-     */
-    public List<Post> queryForAllPost() {
-    	String sql = "select * from post" ;
-    	return jdbcTemplate.query(sql, new PostMapper());
-    }
-    
-    /** 
-     * 閼惧嘲褰囬張锟介崥搴濈娑擃亙濡囬幎锟�
-    * 
-    */
-   public List<Report> forLastReport() {
-	   String sql = "select * from report order by reportid desc LIMIT 1" ;
-   		return jdbcTemplate.query(sql, new ReportMapper());
-   }
-    
-    /**
-     * 閺囧瓨鏁奸悽銊﹀煕鐎靛棛鐖�
-     * 
-     */
-    public boolean updatePassword(User user) {
-    	String sql = "update User set password = ? where id = ?";
-    	Object userObj[] = new Object[] { user.getPassword(), user.getId() };
-    	return jdbcTemplate.update(sql, userObj) == 1;
-    }
     
     /**
      * 濞ｈ濮為悽銊﹀煕

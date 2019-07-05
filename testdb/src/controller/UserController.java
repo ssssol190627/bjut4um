@@ -124,11 +124,7 @@ public class UserController {
     	}
     	currentuser.setPassword(passwordnew);
     	boolean result = dao.updatePassword(currentuser);
-    	if(result) {
-    		return "accountCenter.jsp";
-    	}else {
-    		return "userPreferences.jsp";
-    	}
+    	return "accountCenter.jsp";
     }
 
 
