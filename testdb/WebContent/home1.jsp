@@ -29,9 +29,17 @@
 	          		</li> 
 	          		<c:if test="${CurrentUser!=null }">
 	          				<li class="nav-item">
-	            				<a class="nav-link" href="boardAdmin">个人中心</a>
-	          				</li> 			          			
+	            				<a class="nav-link" href="/testdb/accountCenter">个人中心</a>
+	          				</li> 
+	          				<li class="nav-item">
+	            				<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>
+	          				</li>		          			
 	          		</c:if>
+	          			<c:if test="${CurrentUser==null }">
+	          			          				<li class="nav-item">
+	            				<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>
+	          				</li>
+	          				</c:if>	
 	          		<li class="nav-item">
 	            		<a class="nav-link" href="quit" style="position:fixed;right:50px;">退出登录</a>
 	          		</li>   

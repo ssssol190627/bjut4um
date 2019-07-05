@@ -32,8 +32,18 @@
       		<a class="nav-link" href="userPreferences">改密码</a>
     		</li>
     		<li class="nav-item">
-      		<a class="nav-link disabled" href="home1">回主页</a>
+      		<a class="nav-link" href="home1">回主页</a>
     		</li>
+    		<c:if test="${CurrentUser!=null}">
+    		<li><span> </span>
+    			<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>
+    			</li>
+    		</c:if>
+    		<c:if test="${CurrentUser==null}">
+    		<li><span> </span>
+    			<a class="nav-link disabled" href="#">未登录</a>
+    			<li>
+    		</c:if>
   		</ul>
 	</nav>
 	<h3 class="footer">我的贴子</h3>
