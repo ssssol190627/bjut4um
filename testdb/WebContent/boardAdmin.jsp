@@ -84,7 +84,6 @@
 		<a href="/testdb/good">加精</a>
 		<a href="banAndDelete.jsp">封禁和删除</a>
 		<a href="home1">回主页</a>-->
-	</div>
 
 	<div class="selftemp">
 	<div class="row">

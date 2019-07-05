@@ -17,6 +17,12 @@
   	<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script> 
   	<style> 
 		.accountCentercontainer{ font-size:14px} 
+		.table-responsive{
+  			vertical-align:middle;
+  			text-align:center; 
+  			vertical-align:middle;
+  			padding:10px 10px 10px 10px;
+  		}
 	</style>
 </head>
 <body>
@@ -81,13 +87,14 @@
     		</li>
   		</ul>
 	</nav>
-
+	<div class="table-responsive">
 	<form action="/testdb/banAndDelete">
-		<br>帖子关键词：<br>
-		<input type="text" name="searchPostByKeyWord" placeholder="searchPostByKeyWord" class="inputtable" >
-		<input type="submit" name="submit" value="搜索">
+		帖子关键词：
+		<input type="text" name="searchPostByKeyWord" placeholder="searchPostByKeyWord" class="inputtable" style="padding-left;padding-right;margin-left;margin-right;width:90%">
+		<input type="submit" name="submit" value="搜索" >
 		<br>
 	</form>
+	</div>
 	<div id="context1" style="background-color:white; border: 1px solid red;width:128px;display:none" ></div>
 
 	<h3 class="footer">搜索结果</h3>

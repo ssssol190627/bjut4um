@@ -16,10 +16,61 @@
   	<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script> 
   	<style> 
 		.accountCentercontainer{ font-size:14px} 
+		.table-responsive{
+  			margin:0px 0px 0px 0px;
+  		}
 	</style>
 </head>
 <body>
-
+		<script type="text/javascript">
+		$(document).ready(function(){
+			$(".inputtable").keydown(function(){
+			    $(".inputtable").css("background-color","#FFFFCC");
+			  });
+			$(".inputtable").keyup(function(){
+				$(".inputtable").css("background-color","#D6D6FF");
+				var content=$(this).val();
+			  	//如果当前搜索内容为空，无须进行查询
+			  	if(content==""){
+			      	$("#context1").css("display","none");
+			      	return ;
+			  	}
+			  	//由于浏览器的缓存机制 所以我们每次传入一个时间
+			  	var time=new Date().getTime();
+			  	$.ajax({
+			      	type:"get",
+			      	//新建一个名为findBooksAjaxServlet的servlet
+			      	url:"/testdb/findPostsAjaxServlet",
+			      	data:{name:content,time:time},
+			      	success:function(data){
+				        //拼接html
+				        var res=data.split(",");
+				        var html="";
+				        for(var i=0;i<res.length;i++){
+				        	 //每一个div还有鼠标移出、移入点击事件
+				         	  html+="<div onclick='setSearch_onclick(this)' onmouseout='changeBackColor_out(this)' onmouseover='changeBackColor_over(this)'>"+res[i]+"</div>";
+				      	}
+				       	$("#context1").html(html);
+				        //显示为块级元素
+				       	$("#context1").css("display","block");
+			      	}
+			  });
+			});
+		});
+		//鼠标移动到内容上
+	 	function changeBackColor_over(div){
+	     	$(div).css("background-color","#CCCCCC");
+	 	}
+	 	//鼠标离开内容
+	 	function changeBackColor_out(div){
+	     	$(div).css("background-color","");
+		 }
+	 	//将点击的内容放到搜索框
+	 	function setSearch_onclick(div){
+	     	$(".inputtable").val(div.innerText);
+	    	 $("#context1").css("display","none");
+	 	}
+	</script>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   		<ul class="navbar-nav">
     		<li class="nav-item active">
@@ -29,6 +80,7 @@
 	</nav>
 
 	<h3 class="footer">板块申请信息</h3>
+	<div class="table-responsive">
 	<table class="table table-hover">
 		<thead>
    			<tr>
@@ -62,9 +114,10 @@
     </c:forEach>
 		</tbody> 
 	</table>
-
+</div>
 
 	<h3 class="footer">板块管理员申请信息</h3>
+	<div class="table-responsive">
 	<table class="table table-hover">
 		<thead>
    			<tr>
@@ -99,6 +152,6 @@
     </c:forEach>
 		</tbody> 
 	</table>
-
+</div>
 </body>
 </html>
