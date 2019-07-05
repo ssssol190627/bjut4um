@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -94,10 +95,9 @@
 				 <form action="userPreference.jsp" name="applyBoard">
 				 <label>板块名</label> <br> 
 				 	<select name="boardname" class="form-control" style="margin:10px 10px 20px 0px">
-						<option value="情感天地" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">情感天地</option>
-						<option value="荒野求生" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">荒野求生</option>
-						<option value="工大学习" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">工大学习</option>
-						<option value="工大生活" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">工大生活</option>
+				 	 	<c:forEach items="${AllBoard}" var="AllBoard">
+				 	 		<option value="${AllBoard.boardname }">${AllBoard.boardname }</option>
+						</c:forEach>
 					</select>
 					<br> <label>申请理由</label> <br> 
 						<textarea class="form-control" name="a" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;"></textarea>

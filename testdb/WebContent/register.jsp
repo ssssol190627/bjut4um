@@ -25,7 +25,7 @@
 			    			<h3 class="panel-title">欢迎来到注册页面</h3>
 			 			</div>
 			  		<div class="panel-body">
-			    	<form accept-charset="UTF-8" action="home1.jsp">
+			    	<form accept-charset="UTF-8" action="checkingregister">
                     <fieldset>
                     	<div class="form-group">
 			    		    <input class="form-control" placeholder="工大邮箱" name="email" type="email">
