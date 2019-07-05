@@ -16,12 +16,6 @@
   	<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script> 
   	<style> 
 		.accountCentercontainer{ font-size:14px} 
-		.table-responsive{
-  			vertical-align:middle;
-  			text-align:center; 
-  			vertical-align:middle;
-  			padding:10px 10px 10px 10px;
-  		}
 	</style>
 </head>
 <body>
@@ -88,19 +82,17 @@
     		
   		</ul>
 	</nav>
-	<div class="table-responsive">
 	<form action="/testdb/good">
-		帖子关键词：
-		<input type="text" name="searchPostByKeyWord" placeholder="searchPostByKeyWord" class="inputtable" style="padding-left;padding-right;margin-left;margin-right;width:70%">
+		<br>帖子关键词：<br>
+		<input type="text" name="searchPostByKeyWord" placeholder="searchPostByKeyWord" class="inputtable" >
 		<input type="submit" name="submit" value="搜索">
 		<br>
 	</form>
 	<div id="context1" style="background-color:white; border: 1px solid red;width:128px;display:none" ></div>
-	</div>
+
 
 	<h3 class="footer">搜索结果</h3>
-	<div class="table-responsive">
-	<table class="table table-hover table-bordered">
+	<table class="table table-hover">
 		<thead>
    			<tr>
 		       	<th>所属板块</th>
@@ -126,11 +118,9 @@
 		</c:forEach>
 		</tbody> 
 	</table>
-	</div>
 	
 	<h3 class="footer">已加精列表</h3>
-	<div class="table-responsive">
-	<table class="table table-hover table-bordered">
+	<table class="table table-hover">
 		<thead>
    			<tr>
 		       	<th>所属板块</th>
@@ -156,6 +146,6 @@
 		</c:forEach>
 		</tbody> 
 	</table>
-	</div>
+
 </body>
 </html>

@@ -11,49 +11,10 @@
 	<title>管理举报信息</title>
 	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath }/css/style_home.css" type="text/css" />
-	<link rel="stylesheet" href="style_home.css" type="text/css" />
 	<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
   	<script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
   	<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script> 
   	<style> 
-  		.table-responsive{
-  			margin:20px 20px 20px 20px;
-  			padding:20px 20px 20px 20px;
-  		}
-  		.black_overlay{ 
-            display: none; 
-            position: absolute; 
-            top: 0%; 
-            left: 0%; 
-            width: 100%; 
-            height: 100%; 
-            background-color: black; 
-            z-index:1001; 
-            -moz-opacity: 0.8; 
-            opacity:.80; 
-            filter: alpha(opacity=88); 
-        } 
-        .white_content { 
-            display: none; 
-            position: absolute; 
-            top: 25%; 
-            left: 25%; 
-            width: 55%; 
-            height: 55%; 
-            padding: 20px; 
-            border: 10px solid orange; 
-            background-color: white; 
-            z-index:1002; 
-            overflow: auto; 
-        }
-		.accountCentercontainer{ font-size:14px} 
-		.selftemp{
-			padding:40px 40px 40px 40px;
-		}
-
-		.col-sm-6{
-			padding:40px 40px 40px 40px;
-		}
 		.accountCentercontainer{ font-size:14px} 
 	</style>
 
@@ -67,6 +28,31 @@
 	</script>
 </head>
 <body>
+	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+		<a class="navbar-brand mr-auto mr-lg-0" href="index.jsp">Bjut4um</a>		
+      		<div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+        		<ul class="navbar-nav">
+        			<li class="nav-item">
+	            		<a class="nav-link" href="#">💗</a>
+	          		</li>  
+					<li class="nav-item">
+	            		<a class="nav-link" href="accountCenter">个人中心</a>
+	          		</li> 
+	          		<li class="nav-item active">
+		    			<c:if test = "${CurrentUser.isForumAdmin == 1}">
+							<a class="nav-link" href="superAdmin">返回</a>
+						</c:if>
+						<c:if test = "${CurrentUser.isForumAdmin != 1}">
+							<a class="nav-link" href="boardAdmin">返回</a>
+						</c:if>
+		    		</li>
+	          		<li class="nav-item">
+	            		<a class="nav-link" href="quit" style="position:fixed;right:50px;">退出登录</a>
+	          		</li>
+        		</ul>
+      		</div>
+	</nav>
+<h1 class="footer">管理员管理页面-举报信息</h1>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   		<ul class="navbar-nav">
     		<li class="nav-item active">
@@ -79,8 +65,6 @@
     		</li>
   		</ul>
 	</nav>
-	<h3 class="footer">管理员管理页面-举报信息</h3>
-	<div class="table-responsive">
 	<table class="table table-hover">
 		<thead>
    			<tr>
@@ -118,6 +102,5 @@
 	</c:forEach>
 		</tbody> 
 	</table>
-	</div>
 </body>
 </html>
