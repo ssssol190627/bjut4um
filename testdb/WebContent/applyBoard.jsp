@@ -52,7 +52,7 @@
 		<li class="dropdown">
 			<a href="#" id="myTabDrop1" class="dropdown-toggle" 
 		   			data-toggle="dropdown">申请状态 
-			<b class="caret"></b>
+			<!--  <b class="caret"></b> -->
 			</a>
 			<ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
 				<li><a href="#status" tabindex="-1" data-toggle="tab">板块申请状态</a></li>
@@ -92,15 +92,18 @@
 			 </div>
 			 <div class="panel-body">
 				 <form action="userPreference.jsp" name="applyBoard">
-				 	<select name="boardname">
+				 <label>板块名</label> <br> 
+				 	<select name="boardname" class="form-control" style="margin:10px 10px 20px 0px">
 						<option value="情感天地" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">情感天地</option>
 						<option value="荒野求生" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">荒野求生</option>
 						<option value="工大学习" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">工大学习</option>
 						<option value="工大生活" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">工大生活</option>
 					</select>
+					<br> <label>申请理由</label> <br> 
 						<textarea class="form-control" name="a" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;"></textarea>
 					    <!-- <textarea name="a" style="width:200px;height:50px;">申请理由</textarea> -->
-					    <input type="submit">提交申请</input>
+					    <br>
+					    <input type="submit" value="提交申请"></input>
 				</form>
 			</div>
 			</div>
