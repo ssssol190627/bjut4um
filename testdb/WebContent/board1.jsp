@@ -23,7 +23,7 @@
 <body>
 
 	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" style="position:fixed;top:0px;">
-		<a class="navbar-brand mr-auto mr-lg-0" href="index.jsp">Bjut4um</a>		
+		<a class="navbar-brand mr-auto mr-lg-0" href="/testdb/home1">Bjut4um</a>		
       		<div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
         		<ul class="navbar-nav"> 
 	          		<li class="nav-item">
@@ -31,10 +31,23 @@
 	          		</li>  
 	          		<li class="nav-item">
 	            		<a class="nav-link" href="#">💗</a>
-	          		</li> 	
+	          		</li>
+	          		<c:if test="${CurrentUser!=null }">
 	          		<li class="nav-item">
 	            		<a class="nav-link" href="/testdb/accountCenter">个人中心</a>
 	          		</li> 
+	          		</c:if>
+	          		
+                    <c:if test="${CurrentUser!=null}"><span> </span>
+                    <li class="nav-item">
+    							<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>
+    				</li> 
+    				</c:if>
+    				<c:if test="${CurrentUser==null}"><span> </span>
+    				<li class="nav-item">
+    					<a class="nav-link disabled" href="#">未登录</a>
+    				</li>
+    				</c:if>
         		</ul>
       		</div>
 	</nav>
@@ -48,8 +61,13 @@
 			</h3>
 		</div>
 	<div class="panel-body">		
-		<form method="post" action="/testdb/addPost">
-			<input type="submit" value="发布新帖" name="发布新帖"/>
+<form method="post" action="/testdb/addPost">
+			<c:if test ="${CurrentUser == null }">			
+				<input type="submit" value="发布新帖，请先登录" name="发布新帖，请先登录" disabled="disabled"/>
+			</c:if>
+			<c:if test ="${CurrentUser != null }">			
+				<input type="submit" value="发布新帖" name="发布新帖"/>
+			</c:if>
 		</form>
 	</div>
 	<table class="table">

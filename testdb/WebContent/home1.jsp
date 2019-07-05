@@ -21,15 +21,25 @@
 <body>
 
 	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-		<a class="navbar-brand mr-auto mr-lg-0" href="index.jsp">Bjut4um</a>		
+		<a class="navbar-brand mr-auto mr-lg-0" href="/testdb/home1">Bjut4um</a>		
       		<div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
         		<ul class="navbar-nav">
         			<li class="nav-item">
 	            		<a class="nav-link" href="#">💗</a>
-	          		</li>  
-					<li class="nav-item">
-	            		<a class="nav-link" href="accountCenter">个人中心</a>
 	          		</li> 
+	          		<c:if test="${CurrentUser!=null }">
+	          				<li class="nav-item">
+	            				<a class="nav-link" href="/testdb/accountCenter">个人中心</a>
+	          				</li> 
+	          				<li class="nav-item">
+	            				<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>
+	          				</li>		          			
+	          		</c:if>
+	          			<c:if test="${CurrentUser==null }">
+	          			          				<li class="nav-item">
+	            				<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>
+	          				</li>
+	          				</c:if>	
 	          		<li class="nav-item">
 	            		<a class="nav-link" href="quit" style="position:fixed;right:50px;">退出登录</a>
 	          		</li>   

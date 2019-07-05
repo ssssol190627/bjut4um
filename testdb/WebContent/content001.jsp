@@ -86,6 +86,14 @@
                 <c:if test="${CurrentUser==null }">
                         <a class="navbar-brand mr-auto mr-lg-0" href="#">Bjut4um</a>
                 </c:if>
+                    		<c:if test="${CurrentUser!=null}">
+    		<span> </span>
+    			<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>	
+    		</c:if>
+    		<c:if test="${CurrentUser==null}">
+    		<span> </span>
+    			<a class="nav-link disabled" href="#">未登录</a>
+    		</c:if>
                 <button class="navbar-toggler p-0 border-0" type="button"
                         data-toggle="offcanvas">
                         <span class="navbar-toggler-icon"></span>

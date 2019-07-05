@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,15 +27,25 @@
 <body>
 
 	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" style="position:fixed;top:0px;">
-		<a class="navbar-brand mr-auto mr-lg-0" href="index.jsp">Bjut4um</a>		
+		<a class="navbar-brand mr-auto mr-lg-0" href="home1">Bjut4um</a>		
       		<div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
         		<ul class="navbar-nav"> 
         			<li class="nav-item">
 	            		<a class="nav-link" href="#">💗</a>
 	          		</li> 	
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="accountCenter.jsp">个人中心</a>
-	          		</li> 
+	          		<c:if test="${CurrentUser!=null }">
+	          				<li class="nav-item">
+	            				<a class="nav-link" href="/testdb/accountCenter">个人中心</a>
+	          				</li> 
+	          				<li class="nav-item">
+	            				<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>
+	          				</li>		          			
+	          		</c:if>
+	          			<c:if test="${CurrentUser==null }">
+	          			          				<li class="nav-item">
+	            				<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>
+	          				</li>
+	          		</c:if>	
         		</ul>
       		</div>
 	</nav>
@@ -52,7 +63,7 @@
 		<li class="dropdown">
 			<a href="#" id="myTabDrop1" class="dropdown-toggle" 
 		   			data-toggle="dropdown">申请状态 
-			<b class="caret"></b>
+			<!--  <b class="caret"></b> -->
 			</a>
 			<ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
 				<li><a href="#status" tabindex="-1" data-toggle="tab">板块申请状态</a></li>
@@ -91,16 +102,18 @@
 			    	申请板块管理员
 			 </div>
 			 <div class="panel-body">
-				 <form action="userPreference.jsp" name="applyBoard">
-				 	<select name="boardname">
-						<option value="情感天地" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">情感天地</option>
-						<option value="荒野求生" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">荒野求生</option>
-						<option value="工大学习" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">工大学习</option>
-						<option value="工大生活" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">工大生活</option>
+				 <form action="/testdb/applyforAdmin" name="applyBoard">
+				 <label>板块名</label> <br> 
+				 	<select name="boardname" class="form-control" style="margin:10px 10px 20px 0px">
+				 	 	<c:forEach items="${AllBoard}" var="AllBoard">
+				 	 		<option value="${AllBoard.boardname }">${AllBoard.boardname }</option>
+						</c:forEach>
 					</select>
+					<br> <label>申请理由</label> <br> 
 						<textarea class="form-control" name="a" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;"></textarea>
 					    <!-- <textarea name="a" style="width:200px;height:50px;">申请理由</textarea> -->
-					    <input type="submit">提交申请</input>
+					    <br>
+					    <input type="submit" value="提交申请"></input>
 				</form>
 			</div>
 			</div>

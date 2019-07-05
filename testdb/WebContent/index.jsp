@@ -20,7 +20,7 @@
 <body>
 
 	 <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-		<a class="navbar-brand mr-auto mr-lg-0" href="index.jsp">Bjut4um</a>		
+		<a class="navbar-brand mr-auto mr-lg-0" href="home1">Bjut4um</a>		
       		<div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
         		<ul class="navbar-nav">
 					<li class="nav-item" style="position:fixed;right:100px;">
@@ -39,13 +39,12 @@
 	
 	<h1 class="header">欢迎来到主页</h1>   
     <div class="list-group">
-  		<a href="board\1" class="list-group-item">情感天地</a>
-  		<a href="board\2" class="list-group-item">荒野求生</a>
-  		<a href="board\3" class="list-group-item">娱乐明星</a>
-  		<a href="board\4" class="list-group-item">追剧狂</a>
-  		<a href="board\5" class="list-group-item">爱小说</a>
-  		<a href="board\6" class="list-group-item">工大生活</a>
-  		<a href="board\7" class="list-group-item">工大学习</a>
+  		<a href="board\1" class="list-group-item">荒野求生</a>
+  		<a href="board\2" class="list-group-item">娱乐明星</a>
+  		<a href="board\3" class="list-group-item">追剧狂</a>
+  		<a href="board\4" class="list-group-item">爱小说</a>
+  		<a href="board\5" class="list-group-item">工大生活</a>
+  		<a href="board\6" class="list-group-item">工大学习</a>
 	</div>
 
 	<h3 class="footer">

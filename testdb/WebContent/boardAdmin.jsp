@@ -48,18 +48,18 @@
         }
 		.accountCentercontainer{ font-size:14px} 
 		.selftemp{
-			padding:40px 40px 40px 40px;
+			padding:30px 30px 30px 30px;
 		}
 
 		.col-sm-6{
-			padding:40px 40px 40px 40px;
+			padding:23px 23px 23px 23px;
 		}
 		
 	</style>
 </head>
 <body >
 	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-		<a class="navbar-brand mr-auto mr-lg-0" href="index.jsp">Bjut4um</a>		
+		<a class="navbar-brand mr-auto mr-lg-0" href="home1">Bjut4um</a>		
       		<div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
         		<ul class="navbar-nav">
         			<li class="nav-item">
@@ -84,7 +84,7 @@
 		<a href="/testdb/good">加精</a>
 		<a href="banAndDelete.jsp">封禁和删除</a>
 		<a href="home1">回主页</a>-->
-	</div>
+	
 
 	<div class="selftemp">
 	<div class="row">
@@ -92,7 +92,7 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">管理举报信息</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <p class="card-text">管理举报信息</p>
         <a href="reportAdmin" class="btn btn-primary">管理</a>
       </div>
     </div>
@@ -101,7 +101,7 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">加精</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <p class="card-text">将帖子内容设为精华</p>
         <a href="/testdb/good" class="btn btn-primary">管理</a>
       </div>
     </div>
@@ -112,17 +112,8 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">封禁和删除</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <p class="card-text">封禁帖子和删除帖子</p>
         <a href="banAndDelete.jsp" class="btn btn-primary">管理</a>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">回主页</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-        <a href="home1" class="btn btn-primary">管理</a>
       </div>
     </div>
   </div>

@@ -56,9 +56,13 @@ public class UserController {
 		List<Board> board = dao.queryAllBoard();
 		List<User> user = dao.queryByName(username);
 		if (user.isEmpty()) {
+			session.setAttribute("logInWrongType", 1);
 			return "login.jsp";
 		}
 		if (user.get(0).getPassword().equals(password)) {
+			int i =3;
+			model.addAttribute("logInWrongType", i);
+			session.setAttribute("logInWrongType", i);
 			model.addAttribute("CurrentUser", user.get(0));
 			session.setAttribute("CurrentUser", user.get(0));
 			model.addAttribute("AllBoard", board);
@@ -66,6 +70,7 @@ public class UserController {
     		return "home1.jsp";
     	}
     	else {
+    		session.setAttribute("logInWrongType", 2);
     		return "login.jsp";
     	}
     }
@@ -124,11 +129,7 @@ public class UserController {
     	}
     	currentuser.setPassword(passwordnew);
     	boolean result = dao.updatePassword(currentuser);
-    	if(result) {
-    		return "accountCenter.jsp";
-    	}else {
-    		return "userPreferences.jsp";
-    	}
+    	return "accountCenter.jsp";
     }
 
 
@@ -182,17 +183,20 @@ public class UserController {
     	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
     	if(!email.contains("bjut.edu.cn")) {
+    		session.setAttribute("checkregister",0);
     		model.addAttribute("checkemaillegal","this email address is not for bjut");
     		return "register.jsp";
     	}
     	UserDao dao = (UserDao) context.getBean("dao");
     	List<User> existedemail = dao.queryByEmail(email);
     	if(!existedemail.isEmpty()) {
+    		session.setAttribute("checkregister",1);
     		model.addAttribute("checkemailexisted","this email address has already been registered");
     		return "register.jsp";
     	}
     	List<User> existeduser = dao.queryByName(username);
     	if(!existeduser.isEmpty()) {
+    		session.setAttribute("checkregister", 2);
     		model.addAttribute("checkusernameexisted", "this name has been used");
     		return "register.jsp";
     	}
@@ -209,6 +213,7 @@ public class UserController {
     		user.setIsForumAdmin(0);
     		boolean result = dao.addUser(user);
         	if (result) {
+        		session.setAttribute("checkregister",3);
         		model.addAttribute("msg", "<script>alert('添加成功！')</script>");
     			return "home1.jsp";
         	}
