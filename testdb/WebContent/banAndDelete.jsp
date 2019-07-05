@@ -7,10 +7,22 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath }/css/style_home.css" type="text/css" />
-	<title>封禁和删除</title>
-	<script src="${pageContext.request.contextPath }/js/jquery-3.4.1.min.js"></script>
+	<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+  	<script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+  	<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script> 
+	  	<style> 
+		.accountCentercontainer{ font-size:14px} 
+		.table-responsive{
+  			vertical-align:middle;
+  			text-align:center; 
+  			vertical-align:middle;
+  			padding:10px 10px 10px 10px;
+  		}
+	</style>
 </head>
 <body>
 	<script type="text/javascript">
@@ -74,15 +86,17 @@
     		</li>
   		</ul>
 	</nav>
+	<div class="table-responsive">
 	<form action="/testdb/banAndDelete">
-		<br>帖子关键词：<br>
-		<input type="text" name="searchPostByKeyWord" placeholder="searchPostByKeyWord" class="inputtable" >
+		帖子关键词：
+		<input type="text" name="searchPostByKeyWord" placeholder="searchPostByKeyWord"class="inputtable" style="padding-left;padding-right;margin-left;margin-right;width:90%" >
 		<input type="submit" name="submit" value="搜索">
 		<br>
 	</form>
 	<div id="context1" style="background-color:white; border: 1px solid red;width:128px;display:none" ></div>
-
+	</div>
 	<h3 class="footer">搜索结果</h3>
+	<div class="table-responsive">
 	<table class="table table-hover">
 		<thead>
    			<tr>
@@ -116,7 +130,7 @@
 		</c:forEach>
 		</tbody> 
 	</table>
-	<br>
+	</div>
 
 	
 </body>
