@@ -37,14 +37,17 @@
 	            		<a class="nav-link" href="/testdb/accountCenter">个人中心</a>
 	          		</li> 
 	          		</c:if>
-                    		<c:if test="${CurrentUser!=null}">
-    		<span> </span>
-    			<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>	
-    		</c:if>
-    		<c:if test="${CurrentUser==null}">
-    		<span> </span>
-    			<a class="nav-link disabled" href="#">未登录</a>
-    		</c:if>
+	          		
+                    <c:if test="${CurrentUser!=null}"><span> </span>
+                    <li class="nav-item">
+    							<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>
+    				</li> 
+    				</c:if>
+    				<c:if test="${CurrentUser==null}"><span> </span>
+    				<li class="nav-item">
+    					<a class="nav-link disabled" href="#">未登录</a>
+    				</li>
+    				</c:if>
         		</ul>
       		</div>
 	</nav>
