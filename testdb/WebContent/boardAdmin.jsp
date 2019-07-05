@@ -69,7 +69,7 @@
 	            		<a class="nav-link" href="accountCenter">个人中心</a>
 	          		</li> 
 	          		<li class="nav-item">
-	            		<a class="nav-link" href="quit" style="position:fixed;right:50px;">退出登录</a>
+	            		<a class="nav-link" href="quit" style="position:float:right;">退出登录</a>
 	          		</li>
         		</ul>
       		</div>

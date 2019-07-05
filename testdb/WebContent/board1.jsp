@@ -27,7 +27,7 @@
       		<div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
         		<ul class="navbar-nav"> 
 	          		<li class="nav-item">
-	            		<a class="nav-link" href="/testdb/home1" style="position:fixed;right:50px;">返回主页</a>
+	            		<a class="nav-link" href="/testdb/home1" style="float:right;">返回主页</a>
 	          		</li>  
 	          		<li class="nav-item">
 	            		<a class="nav-link" href="#">💗</a>
