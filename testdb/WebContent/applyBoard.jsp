@@ -127,24 +127,26 @@
 		 </div>
 		 <div class="panel-body">
 			<table border="1" class="table table-bordered table-striped table-hover">
-	        <th style="width: 70%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">申请类别</th>
+	        <tr>
+	        <th style="width: 70% ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">申请类别</th>
 	        <th>申请时间</th>
 	        <th>审核状态</th>
-	        <tr class="success">
-	            <td>申请读书板块</td>
-	            <td>2019-06-30</td>
-	            <td>成功</td>
 	        </tr>
-	        <tr>
-	            <td>申请留学板块</td>
-	            <td>2019-06-30</td>
-	            <td>请等待</td>
-	        </tr>
-	        	<tr class="error">
-	            <td>申请免费电影板块</td>
-	            <td>2019-06-30</td>
-	            <td>拒绝</td>
-	        </tr>
+	        <c:forEach items="${admined}" var="admin" varStatus="loop">
+        	<tr>
+ 	 			<td>申请成为${boardnames.get(loop.count-1) }板块管理员</td>
+            	<td>${admin.applytime }</td>
+            	<c:if test="${admin.ishandle == 0}">
+            		<td>待处理</td>
+            	</c:if>
+            	<c:if test="${admin.ishandle == 1}">
+            		<td>通过</td>
+            	</c:if>
+            	<c:if test="${admin.ishandle == 2}">
+            		<td>驳回</td>
+            	</c:if>
+ 	 		</tr>
+		</c:forEach>
 	        </table>
 	    </div>
 	    </div>
@@ -158,19 +160,26 @@
 		 </div>
 		 <div class="panel-body">
 			<table border="1" class="table table-bordered table-striped table-hover">
-			<th style="width: 70%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">申请类别</th>
+			<tr>
+			<th style="width: 70% ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">申请类别</th>
 		        <th>申请时间</th>
 		        <th>审核状态</th>
-		        <tr class="success">
-		            <td>申请身为娱乐板块管理员</td>
-		            <td>2019-06-30</td>
-		            <td>通过</td>
 		        </tr>
-		        <tr class="error">
-		            <td>申请身为校园生活板块管理员</td>
-		            <td>2019-06-30</td>
-		            <td>通过</td>
-		        </tr>
+		        <c:forEach items="${boarded}" var="board">
+        	<tr>
+ 	 			<td>申请${board.boardname }板块</td>
+            	<td>${board.applytime }</td>
+            	<c:if test="${board.ishandle == 0}">
+            		<td>待处理</td>
+            	</c:if>
+            	<c:if test="${board.ishandle == 1}">
+            		<td>通过</td>
+            	</c:if>
+            	<c:if test="${board.ishandle == 2}">
+            		<td>驳回</td>
+            	</c:if>
+ 	 		</tr>
+		</c:forEach>
 	        </table>
 	      </div>
 	      </div>
