@@ -82,7 +82,7 @@
 				<li><a href="#ejb" tabindex="-1" data-toggle="tab">板块管理员申请状态</a></li>
 			</ul>
 		</li>
-	
+	</ul>
 	
 	</ul>
 	<div id="myTabContent" class="tab-content">
