@@ -219,9 +219,9 @@
 	        		</c:forEach>	
 				</tbody>
         	</table> 
-			<--<%-- 构建分页导航 --%>
+			<%-- 构建分页导航 --%>
 			<c:if test="${floorpage.totalPage > 1}">
-		        	<a href="/testdb/accountCenter/?postpage=1">首页&nbsp;</a>
+		        	<a href="/testdb/accountCenter/?floorpage=1">首页&nbsp;</a>
 		    </c:if>	
 			<%--如果当前页为第一页时，就没有上一页这个超链接显示 --%>
 			<c:if test="${floorpage.totalPage > 1}">
