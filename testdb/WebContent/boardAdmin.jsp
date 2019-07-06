@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,20 +67,10 @@
       		
       		<div class="collapse navbar-collapse" id="navbarsExample01">
         		<ul class="navbar-nav mr-auto">
-					<c:if test="${CurrentUser!=null }">
+					<c:if test="${CurrentUser != null }">
 						<li class="nav-item">
 		      				<span class="nav-link disabled">您好，${CurrentUser.username}</span>
 		      			</li>
-		      			<c:if test ="${CurrentUser.isBoardAdmin !=0 }">
-	          				<li class="nav-item">
-	            				<a class="nav-link" href="/testdb/boardAdmin">返回管理板块</a>
-	          				</li> 
-	          			</c:if>
-	          			<c:if test ="${CurrentUser.isForumAdmin !=0 }">	          		
-		          			<li class="nav-item">
-		            			<a class="nav-link" href="/testdb/superAdmin">返回管理论坛</a>
-		          			</li>
-	          			</c:if>
 		      			<li class="nav-item">
 	       					<a class="nav-link" href="/testdb/home1">主页</a>
 	     				</li>
@@ -91,7 +82,7 @@
 	            			<a class="nav-link" href="/testdb/quit">退出登录</a>
 	          			</li>
 	          		</c:if>
-				    <c:if test="${CurrentUser==null }">
+				    <c:if test="${CurrentUser == null }">
 				    	<li class="nav-item">
 							<span class="nav-link disabled">未登录</span>
 						</li>
@@ -105,6 +96,7 @@
         		</ul>
       		</div>
 	</nav>
+ <c:if test="${CurrentUser.isBoardAdmin != 0 }">
 <h1 class="header">板块管理员管理页面</h1>
 	<!--  <div class="accountCentercontainer">
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -124,7 +116,7 @@
       <div class="card-body">
         <h5 class="card-title">管理举报信息</h5>
         <p class="card-text">管理举报信息</p>
-        <a href="reportAdmin" class="btn btn-primary">管理</a>
+        <a href="/testdb/reportAdmin" class="btn btn-primary">管理</a>
       </div>
     </div>
   </div>
@@ -144,12 +136,17 @@
       <div class="card-body">
         <h5 class="card-title">封禁和删除</h5>
         <p class="card-text">封禁帖子和删除帖子</p>
-        <a href="banAndDelete.jsp" class="btn btn-primary">管理</a>
+        <a href="/testdb/banAndDelete" class="btn btn-primary">管理</a>
       </div>
     </div>
   </div>
 </div>
 </div>
+</c:if>
+	<c:if test="${CurrentUser.isBoardAdmin == 0}">
+		<font color="red">您没有权限访问此页面，您可以</font>
+		<a href="/testdb/applyBoard">申请成为板块管理员</a>
+	</c:if>
 <h6 class="footer">© www.bjut4um.cn</h6>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>

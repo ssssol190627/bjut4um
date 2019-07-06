@@ -421,7 +421,7 @@ public class UserController {
      * 
      */
 	@RequestMapping(value = "/boardAdmin")
-    public String toBoardAdmin() {
+    public String toBoardAdmin(Model model, HttpSession session) {
     	 return "/boardAdmin.jsp";
     }
 

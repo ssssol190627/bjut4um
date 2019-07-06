@@ -67,7 +67,7 @@
         		</ul>
       		</div>
 	</nav>
-
+ <c:if test="${CurrentUser.isForumAdmin == 1 }">
 	<h3 class="footer">板块申请信息</h3>
 	<table class="table table-hover">
 		<thead>
@@ -138,9 +138,17 @@
 			<c:if test = "${applyadmin.ishandle == 1 }">
 				<td>已通过</td>
 			</c:if>
+			<c:if test = "${applyadmin.ishandle == 2 }">
+				<td>已驳回</td>
+			</c:if>
    		</tr>
     </c:forEach>
 	</table>
+	</c:if>
+ <c:if test="${CurrentUser.isForumAdmin == 0 }">
+ 	<font color="red">您没有权限访问此页面，</font>
+	<a href="/testdb/home1">返回主页</a>
+ </c:if>
 	<h6 class="footer">© www.bjut4um.cn</h6>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>

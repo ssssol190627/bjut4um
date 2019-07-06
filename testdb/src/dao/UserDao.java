@@ -350,7 +350,7 @@ public class UserDao {
 	 * 
 	 */
 	public boolean updateHandle(Report report) {
-		String sql = "update Report set isHandle = ? where reportid = ?";
+		String sql = "update report set isHandle = ? where reportid = ?";
 		Object reportObj[] = new Object[] { report.getIshandle(), report.getReportid() };
 		return jdbcTemplate.update(sql, reportObj) == 1;
 	}

@@ -65,6 +65,7 @@
         		</ul>
       		</div>
 	</nav>
+ <c:if test="${CurrentUser.isForumAdmin == 1 }">
 <h1 class="header">超级管理员管理页面</h1>
 
 <div class="selftemp">
@@ -74,7 +75,7 @@
       <div class="card-body">
         <h5 class="card-title">管理举报信息</h5>
         <p class="card-text">管理举报信息</p>
-        <a href="reportAdmin" class="btn btn-primary">管理</a>
+        <a href="/testdb/reportAdmin" class="btn btn-primary">管理</a>
       </div>
     </div>
   </div>
@@ -83,7 +84,7 @@
       <div class="card-body">
         <h5 class="card-title">管理板块信息</h5>
         <p class="card-text">管理板块信息</p>
-        <a href="boardApplyAdmin" class="btn btn-primary">管理</a>
+        <a href="/testdb/boardApplyAdmin" class="btn btn-primary">管理</a>
       </div>
     </div>
   </div>
@@ -103,13 +104,18 @@
       <div class="card-body">
         <h5 class="card-title">封禁和删除</h5>
         <p class="card-text">封禁帖子和删除帖子</p>
-        <a href="banAndDelete.jsp" class="btn btn-primary">管理</a>
+        <a href="/testdb/banAndDelete" class="btn btn-primary">管理</a>
       </div>
     </div>
   </div>
 </div>
 
 </div>
+</c:if>
+ <c:if test="${CurrentUser.isForumAdmin != 1 }">
+ 	<font color="red">您没有权限访问此页面，</font>
+	<a href="/testdb/home1">返回主页</a>
+ </c:if>
 <h6 class="footer">© www.bjut4um.cn</h6>
 	    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>

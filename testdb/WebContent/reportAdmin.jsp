@@ -44,12 +44,12 @@
 		      			</li>
 		      			<c:if test ="${CurrentUser.isBoardAdmin !=0 }">
 	          				<li class="nav-item">
-	            				<a class="nav-link" href="boardAdmin">返回管理板块</a>
+	            				<a class="nav-link" href="/testdb/boardAdmin">返回管理板块</a>
 	          				</li> 
 	          			</c:if>
 	          			<c:if test ="${CurrentUser.isForumAdmin !=0 }">	          		
 		          			<li class="nav-item">
-		            			<a class="nav-link" href="superAdmin.jsp">返回管理论坛</a>
+		            			<a class="nav-link" href="/testdb/superAdmin">返回管理论坛</a>
 		          			</li>
 	          			</c:if>
 		      			<li class="nav-item">
@@ -77,6 +77,7 @@
         		</ul>
       		</div>
 	</nav>
+	 <c:if test="${CurrentUser.isBoardAdmin != 0 || CurrentUser.isForumAdmin == 1 }">
 	<h1 class="footer">管理员管理页面-举报信息</h1>
 	<table class="table table-hover">
 		<thead>
@@ -115,6 +116,11 @@
 	</c:forEach>
 		</tbody> 
 	</table>
+	</c:if>
+	<c:if test="${CurrentUser.isBoardAdmin ==0  && CurrentUser.isForumAdmin ==0 }">
+		<font color="red">您没有权限访问此页面，您可以</font>
+		<a href="/testdb/applyBoard">申请成为板块管理员</a>
+	</c:if>
 	<h6 class="footer">© www.bjut4um.cn</h6>
 	    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>

@@ -97,12 +97,12 @@
 	     				</li>
 	     				<c:if test ="${CurrentUser.isBoardAdmin !=0 }">
 	          				<li class="nav-item">
-	            				<a class="nav-link" href="boardAdmin">管理板块</a>
+	            				<a class="nav-link" href="/testdb/boardAdmin">管理板块</a>
 	          				</li> 
 	          			</c:if>
 	          			<c:if test ="${CurrentUser.isForumAdmin !=0 }">	          		
 		          			<li class="nav-item">
-		            			<a class="nav-link" href="superAdmin.jsp">管理论坛</a>
+		            			<a class="nav-link" href="/testdb/superAdmin">管理论坛</a>
 		          			</li>
 	          			</c:if>
 	          			<li class="nav-item">
