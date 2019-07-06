@@ -313,6 +313,24 @@ public class UserDao {
 
 		return p;
 	}
+	
+	public List<Floor> findThisUserFloorPage(int startIndex, int pageSize, Integer userid) {
+		String sql = "select * from floor where userid = '" + userid + "'  and isExist = 1 limit " + startIndex + "," + pageSize;
+		return jdbcTemplate.query(sql, new FloorMapper());
+	}
+
+	public Page<Floor> findAllUserFloorWithPage(int pageNum, int pageSize, Integer userid) {
+		List<Floor> allFloor = queryForReplyedByUser(userid);
+		int totalRecord = allFloor.size();
+
+		Page p = new Page(pageNum, pageSize, totalRecord);
+
+		int startIndex = p.getStartIndex();
+		List<Floor> thisPagePostList = findThisUserFloorPage(startIndex, pageSize, userid);
+		p.setList(thisPagePostList);
+
+		return p;
+	}
 
 	/**
 	 * 鏌ヨ鎵�鏈夋澘鍧�

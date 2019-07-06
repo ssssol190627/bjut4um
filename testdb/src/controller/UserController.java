@@ -87,36 +87,45 @@ public class UserController {
     	UserDao dao = (UserDao) context.getBean("dao");
     	
     	//List<Post>  post = dao.queryForPostedByUser(currentuser.getId());
-    	List<Floor> floor = dao.queryForReplyedByUser(currentuser.getId());
+    	//List<Floor> floor = dao.queryForReplyedByUser(currentuser.getId());
     	//session.setAttribute("posted", post);
-    	session.setAttribute("floored", floor);
+    	//session.setAttribute("floored", floor);
     	
 		int postPageNum = 1;
+		int userFloorPageNum = 1;
+		int flag=0;
 		if (request.getQueryString() != null) {
-			if(request.getHeader("Referer").toString().contains("postpage"))
+			if(request.getParameter("postpage")!=null) {
 				postPageNum = Integer.parseInt(request.getParameter("postpage").toString());
-		}
+				flag=0;
+			}				
+			if(request.getParameter("floorpage")!=null) {				
+				userFloorPageNum = Integer.parseInt(request.getParameter("floorpage").toString());
+				flag=1;
+			}				
+		}		
+		if (request.getQueryString() == null) {
+			postPageNum=1;
+			userFloorPageNum=1;
+		}	
 		int pageSize = 10;
 		Page p = dao.findAllUserPostWithPage(postPageNum, pageSize, currentuser.getId());
 		model.addAttribute("postPage", p);
 		session.setAttribute("postPage", p);
 		int si = p.getStartIndex();
 		List<Post> pl = p.getList();
-		//List<Board> bl = dao.queryBoardByBoardId(boardid);
-		//Board nowboard = bl.get(0);
-		// List<User> ul;
 		session.setAttribute("posted", pl);
-		// User user=queryUserNameById()
-		// String boardname = nowboard.getBoardname();
-		//model.addAttribute("nowBoard", nowboard);
-		//session.setAttribute("nowBoard", nowboard);
-		//model.addAttribute("postuser", ul);
-		//session.setAttribute("postuser", ul);
-		//model.addAttribute("CurrentPost", pl);
-		//session.setAttribute("CurrentPost", pl);
-		
-		
-    	return "/accountCenter.jsp";
+		int userFloorPageSize = 10;
+		Page p_1 = dao.findAllUserFloorWithPage(userFloorPageNum, userFloorPageSize, currentuser.getId());
+		model.addAttribute("floorpage", p_1);
+		session.setAttribute("floorpage", p_1);
+		int si_1 = p_1.getStartIndex();
+		List<Floor> pl_1 = p_1.getList();
+		session.setAttribute("floored", pl_1);
+		if(flag==0)
+			return "/accountCenter.jsp";
+		else
+			return "/accountCenter2.jsp";
     }
     
     /**

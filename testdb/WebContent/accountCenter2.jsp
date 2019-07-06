@@ -116,12 +116,12 @@
 	-->
 	
 		<ul id="board_tap" class="nav nav-tabs">
-		<li class="active">
+		<li>
 			<a href="#myPost" data-toggle="tab">
 			我的帖子
 			</a>
 		</li>
-		<li>
+		<li class="active">
 			<a href="#myReply" data-toggle="tab">
 			我的回复
 			</a>
@@ -129,7 +129,7 @@
 	</ul>
 	
 	<div id="myTabContent" class="tab-content">
-	<div class="tab-pane fade in active" id="myPost">
+	<div class="tab-pane fade" id="myPost">
 		<main role="main" class="container"> 
 		 	<table class="table table-hover">
 				<thead>
@@ -201,7 +201,7 @@
 	共${postPage.totalPage }页，${postPage.totalRecord}帖子
 		</main>
 	</div>
-	<div class="tab-pane fade" id="myReply">
+	<div class="tab-pane fade in active" id="myReply">
 		<main role="main" class="container"> 
 			<table class="table table-hover">
 				<thead>
@@ -219,9 +219,9 @@
 	        		</c:forEach>	
 				</tbody>
         	</table> 
-			<--<%-- 构建分页导航 --%>
+			<%-- 构建分页导航 --%>
 			<c:if test="${floorpage.totalPage > 1}">
-		        	<a href="/testdb/accountCenter/?postpage=1">首页&nbsp;</a>
+		    <a href="/testdb/accountCenter/?floorpage=1">首页&nbsp;</a>
 		    </c:if>	
 			<%--如果当前页为第一页时，就没有上一页这个超链接显示 --%>
 			<c:if test="${floorpage.totalPage > 1}">
