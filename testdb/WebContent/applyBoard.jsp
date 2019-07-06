@@ -44,24 +44,19 @@
       		
       		<div class="collapse navbar-collapse" id="navbarsExample01">
         		<ul class="navbar-nav mr-auto">
-					<c:if test="${CurrentUser!=null }">
-						<li class="nav-item">
-		      				<span class="nav-link disabled">您好，${CurrentUser.username}</span>
-		      			</li>
 		      			<c:if test="${CurrentUser!=null }">
+		      				<li class="nav-item">
+	            				<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>
+	          				</li>	
 	          				<li class="nav-item">
 	            				<a class="nav-link" href="/testdb/accountCenter">个人中心</a>
-	          				</li> 
-	          				<li class="nav-item">
-	            				<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>
-	          				</li>		          			
+	          				</li> 	          			
 	          			</c:if>
 	          			<c:if test="${CurrentUser==null }">
 	          			   	<li class="nav-item">
 	            				<a class="nav-link disabled" href="#">未登录</a>
 	          				</li>
 	          			</c:if>
-	          		</c:if>
         		</ul>
       		</div>
 	</nav>
