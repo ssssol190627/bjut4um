@@ -260,7 +260,7 @@ public class UserDao {
 
 	public List<Post> findThisBoardPage(int startIndex, int pageSize, int boardid) {
 		String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,numPost,isGood,isBanned,isExist from post where boardid = '"
-				+ boardid + "' and isBanned = 0 and isExist = 1 limit " + startIndex + "," + pageSize;
+				+ boardid + "' and isBanned = 0 and isExist = 1 ORDER BY newTime DESC limit " + startIndex + "," + pageSize;
 		return jdbcTemplate.query(sql, new PostMapper());
 	}
 

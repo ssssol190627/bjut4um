@@ -105,7 +105,7 @@
 	     				</li>
 
 	          			<li class="nav-item">
-	            			<a class="nav-link" href="quit">退出登录</a>
+	            			<a class="nav-link" href="/testdb/quit">退出登录</a>
 	          			</li>
 	          		</c:if>
 				    <c:if test="${CurrentUser==null }">
@@ -113,10 +113,10 @@
 							<span class="nav-link disabled">未登录</span>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="loginpage">登录</a>
+							<a class="nav-link" href="/testdb/loginpage">登录</a>
 						</li>
 						<li class="nav-item">
-	            			<a class="nav-link" href="registerpage">注册</a>
+	            			<a class="nav-link" href="/testdb/registerpage">注册</a>
 	          			</li> 
 			   		</c:if>
         		</ul>

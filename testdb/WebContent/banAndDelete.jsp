@@ -89,12 +89,12 @@
 		      			</li>
 		      			<c:if test ="${CurrentUser.isBoardAdmin !=0 }">
 	          				<li class="nav-item">
-	            				<a class="nav-link" href="boardAdmin">返回管理板块</a>
+	            				<a class="nav-link" href="/testdb/boardAdmin">返回管理板块</a>
 	          				</li> 
 	          			</c:if>
 	          			<c:if test ="${CurrentUser.isForumAdmin !=0 }">	          		
 		          			<li class="nav-item">
-		            			<a class="nav-link" href="superAdmin.jsp">返回管理论坛</a>
+		            			<a class="nav-link" href="/testdb/superAdmin">返回管理论坛</a>
 		          			</li>
 	          			</c:if>
 		      			<li class="nav-item">
@@ -105,7 +105,7 @@
 	     				</li>
 
 	          			<li class="nav-item">
-	            			<a class="nav-link" href="quit">退出登录</a>
+	            			<a class="nav-link" href="/testdb/quit">退出登录</a>
 	          			</li>
 	          		</c:if>
 				    <c:if test="${CurrentUser==null }">
@@ -113,10 +113,10 @@
 							<span class="nav-link disabled">未登录</span>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="loginpage">登录</a>
+							<a class="nav-link" href="/testdb/loginpage">登录</a>
 						</li>
 						<li class="nav-item">
-	            			<a class="nav-link" href="registerpage">注册</a>
+	            			<a class="nav-link" href="/testdb/registerpage">注册</a>
 	          			</li> 
 			   		</c:if>
         		</ul>

@@ -314,9 +314,11 @@ public class UserController {
 		report.setUserid(currentuser.getId());
 		report.setReportbrief(reporttype);
 		report.setReportcontent(reportreason);
-		Date date = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
-		report.setReporttime(dateFormat.format(date));
+		//Date date = new Date();
+		//SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 璁剧疆鏃ユ湡鏍煎紡
+		String nowtime = df.format(new Date());
+		report.setReporttime(nowtime);
 		report.setIshandle(0);
 		List<Report> lastreport = dao.forLastReport();
 		Integer id;
@@ -520,7 +522,7 @@ public class UserController {
 				int messageid=dao.queryAllMessage().size()+1;
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 璁剧疆鏃ユ湡鏍煎紡
 				String nowtime = df.format(new Date());
-				String goodReason="鎮ㄧ殑甯栧瓙"+goodPost.getTitle()+"琚姞绮惧暒锛侊紒";
+				String goodReason="您的帖子"+goodPost.getTitle()+"被加精了！";
 				Message message=new Message(messageid,goodPost.getUserid(),nowtime,goodReason,currentuser.getId());
 				dao.addMessage(message);
 			}
@@ -642,9 +644,11 @@ public class UserController {
     	applyingboard.setBoardname(boardname);
     	applyingboard.setApplyingreason(boardreason);
     	applyingboard.setUserid(currentuser.getId());
-    	Date date = new Date();
-    	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
-    	applyingboard.setApplytime(dateFormat.format(date));
+    	//Date date = new Date();
+    	//SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
+    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 璁剧疆鏃ユ湡鏍煎紡
+		String nowtime = df.format(new Date());
+    	applyingboard.setApplytime(nowtime);
     	applyingboard.setIshandle(0);
     	
     	boolean result = dao.addApplyingboard(applyingboard);    	
@@ -688,9 +692,11 @@ public class UserController {
     	newapply.setBoardid(board.get(0).getBoardid());
     	newapply.setApplyingreason(applyreason);
     	newapply.setUserid(currentuser.getId());
-    	Date date = new Date();
-    	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
-    	newapply.setApplytime(dateFormat.format(date));
+    	//Date date = new Date();
+    	//SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 璁剧疆鏃ユ湡鏍煎紡
+		String nowtime = df.format(new Date());
+    	newapply.setApplytime(nowtime);
     	newapply.setIshandle(0);
     	
     	boolean result = dao.addApplyingadmin(newapply); 
@@ -938,9 +944,11 @@ public class UserController {
     	newfloor.setAnsfloorid(ansfloorid);
     	newfloor.setUserid(currentuser.getId());
     	newfloor.setFloorcontent(replycontent);
-    	Date date = new Date();
-    	SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
-    	newfloor.setFloortime(dateFormat.format(date));
+    	//Date date = new Date();
+    	//SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMddhhmmss");
+    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 璁剧疆鏃ユ湡鏍煎紡
+		String nowtime = df.format(new Date());
+    	newfloor.setFloortime(nowtime);
     	newfloor.setIsBanned(0);
     	newfloor.setIsGood(0);
     	newfloor.setIsExist(1);
@@ -1027,7 +1035,7 @@ public class UserController {
 				int messageid=dao.queryAllMessage().size()+1;
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 璁剧疆鏃ユ湡鏍煎紡
 				String nowtime = df.format(new Date());
-				String messageContent="鎮ㄧ殑甯栧瓙"+bannedPost.getTitle()+"鐢变簬"+bdReason+"锛岃灏佺浜嗐��";
+				String messageContent="您的帖子"+bannedPost.getTitle()+"因为"+bdReason+"，被封禁了";
 				Message message=new Message(messageid,bannedPost.getUserid(),nowtime,messageContent,currentuser.getId());
 				dao.addMessage(message);
 			}
@@ -1038,7 +1046,7 @@ public class UserController {
 				int messageid=dao.queryAllMessage().size()+1;
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 璁剧疆鏃ユ湡鏍煎紡
 				String nowtime = df.format(new Date());
-				String messageContent="鎮ㄧ殑甯栧瓙"+deletedPost.getTitle()+"鐢变簬"+bdReason+"锛岃鍒犻櫎浜嗐��";
+				String messageContent="您的帖子"+deletedPost.getTitle()+"因为"+bdReason+"，被删除了。";
 				Message message=new Message(messageid,deletedPost.getUserid(),nowtime,messageContent,currentuser.getId());
 				dao.addMessage(message);
 			}
