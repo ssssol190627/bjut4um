@@ -60,16 +60,34 @@
                         }
                 }
                 function replyFloor(loopCount,ansFloor,floorUser,floorContent){
-                        var s="<%=session.getAttribute("CurrentUser")%>";
-                if (s == "null") {
-                        alert("请先登录");
-                        document.getElementById("replyContent").readOnly = true;
-                } else {
-                        document.getElementById("showReplyContent").textContent = "回复："
-                                        + floorUser + ":" + floorContent;
-                        document.getElementById("ansfloorId").value = ansFloor;
+                    var s="<%=session.getAttribute("CurrentUser")%>";
+	                if (s == "null") {
+	                        alert("请先登录");
+	                        document.getElementById("replyContent").readOnly = true;
+	                } else {
+	                        document.getElementById("showReplyContent").textContent = "回复："
+	                                        + floorUser + ":" + floorContent;
+	                        document.getElementById("ansfloorId").value = ansFloor;
+	                }
                 }
-        }
+                function clickReport1(){
+                	var s="<%=session.getAttribute("CurrentUser")%>";
+	                if (s == "null") 
+	                        alert("请先登录");
+	                else{
+	                	document.getElementById("light0").style.display="block";
+	                	document.getElementById("fade0").style.display="block";
+	                }               	
+                }
+                function clickReport2(){
+                	var s="<%=session.getAttribute("CurrentUser")%>";
+	                if (s == "null") 
+	                        alert("请先登录");
+	                else{
+	                	document.getElementById("light").style.display="block";
+	                	document.getElementById("fade").style.display="block";
+	                }               	
+                }
 </script>
 </head>
 <body class="bg-light">
@@ -139,7 +157,7 @@
                         id="clickToReplyPost" href="javascript:void(0)"
                         onclick="replyPost('${postuser.username }','${post.postcontent }')">回复</a>|
                         <a href="javascript:void(0)"
-                        onclick="document.getElementById('light0').style.display='block';document.getElementById('fade0').style.display='block'">举报</a>
+                        onclick="javascript:clickReport1();">举报</a>
                 </small>
                 <div id="light0" class="white_content">
                         <form action="/testdb/post/report">
@@ -155,6 +173,7 @@
                                         name="reportReason" value=""> <input type="submit"
                                         name="submit" value="确定"
                                         onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">
+                                		<button type="button" onclick="document.getElementById('light0').style.display='none';document.getElementById('fade0').style.display='none'">返回</button>
                                 <br>
                         </form>
                 </div>
@@ -190,7 +209,7 @@
                                         id="clickToReplyFloor" href="javascript:void(0)"
                                         onclick="replyFloor('${loop.count}','${floor.floorid }','${flooruser.get(loop.count-1)}','${floor.floorcontent }')">回复</a>|
                                         <a href="javascript:void(0)"
-                                        onclick="document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">举报</a>
+                                        onclick="javascript:clickReport2();">举报</a>
                                 </small>
                                 <div id="light" class="white_content">
                                         <form action="/testdb/post/report">
@@ -207,6 +226,7 @@
                                                         type="text" name="reportReason" value=""> <input
                                                         type="submit" name="submit" value="确定"
                                                         onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">
+                                               			<button type="button" onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">返回</button>
                                                 <br>
                                         </form>
                                 </div>
@@ -286,15 +306,22 @@
                 <div class="panel-body">
                         <form action="/testdb/post/${post.postid }/postReply"
                                 name="postAReply">
-
-                                <textarea class="form-control" name="replyContent" id="log"
+								<c:if test="${CurrentUser!=null }">
+									<textarea class="form-control" name="replyContent" id="log"
                                         placeholder="这里写内容"
                                         style="width: 100%; height: 150px; overflow: auto; word-break: break-all; resize: none; margin-bottom: 10px;"></textarea>
-                                <input type="submit" id="course" name="回复" class="btn btn-inverse"
+									<input type="submit" id="course" name="回复" class="btn btn-inverse"
                                         role="button" /> <input type="hidden" name="postId"
                                         value="${post.postid }" /> <input type="hidden" name="ansfloorId"
                                         id="ansfloorId" /> <input type="hidden" name="nowPage"
                                         value="${page.pageNum }" />
+								</c:if>
+                                <c:if test="${CurrentUser==null }">
+                                	<textarea class="form-control" name="replyContent" id="log"
+                                        placeholder="回复请先登录" readonly="readonly"
+                                        style="width: 100%; height: 150px; overflow: auto; word-break: break-all; resize: none; margin-bottom: 10px;"></textarea>
+                                </c:if>
+
                         </form>
                 </div>
         </div>
