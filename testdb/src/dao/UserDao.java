@@ -380,7 +380,7 @@ public class UserDao {
 	 * 
 	 */
 	public boolean updateFloor(Floor floor) {
-		String sql = "update Floor set isBanned = ? , isExist = ? where postid = ? and id = ?";
+		String sql = "update floor set isBanned = ? , isExist = ? where postid = ? and id = ?";
 		Object floorObj[] = new Object[] { floor.getIsBanned(), floor.getIsExist(),floor.getPostid(),floor.getFloorid() };
 		return jdbcTemplate.update(sql, floorObj) == 1;
 	}

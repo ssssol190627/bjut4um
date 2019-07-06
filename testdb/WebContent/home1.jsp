@@ -17,66 +17,65 @@
 	<link rel="stylesheet" href="https://getbootstrap.com/docs/4.1/examples/offcanvas/offcanvas.css" type="text/css" />
 	<link rel="stylesheet" href="${pageContext.request.contextPath }/css/style_home.css" type="text/css" />
 	<link rel="stylesheet" href="style_home.css" type="text/css" />
-	
 
 </head>
 <body>
 	<h1 class="header">欢迎来到主页</h1>
 	
-	<div class="list-group">
+	 <div class="list-group">
 		<c:forEach items="${AllBoard}" var="AllBoard">
+			<tr>
 			<a class="list-group-item" id="title${AllBoard.boardname }" href="  /testdb/board/${AllBoard.boardid}">${AllBoard.boardname }</a>
 			</tr>
 		</c:forEach>
 	</div>
+
 	
-	<nav class="narvbar navbar-dark bg-dark fixed-top" style="width:100%;">
-		<a class="navbar-brand" href="/testdb/home1" style="float:left;">Bjut4um</a>
-       		<c:if test="${CurrentUser!=null }">
-				<ul class="navbar-nav mr-auto" style="float:left">
-     				<li class="nav-item">
-       				<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>
-     				</li>
-     			</ul>	          			
-     		</c:if>
-   			<c:if test="${CurrentUser==null }">
-   			    <li class="nav-item">
-     				<a class="nav-link disabled" href="#">未登录</a>
-   				</li>
-   			</c:if>	
-		 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation" style="float:right;">
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" style="width:100%;">
+		<a class="navbar-brand" href="/testdb/home1">Bjut4um</a>
+		 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
         	<span class="navbar-toggler-icon"></span>
       	</button>
-				
+      		
       		<div class="collapse navbar-collapse" id="navbarsExample01">
-        		<ul class="navbar-nav">
-				<c:if test="${CurrentUser!=null }">
-					 <li class="nav-item">
-       				<a class="nav-link" href="/testdb/accountCenter">个人中心</a>
-     				</li> 
-	          	</c:if>  
-	          		<c:if test ="${CurrentUser.isBoardAdmin !=0 }">	   
-	          			<c:if test ="${CurrentUser.isForumAdmin !=1 }">
+        		<ul class="navbar-nav mr-auto">
+					<c:if test="${CurrentUser!=null }">
+						<li class="nav-item">
+		      				<span class="nav-link disabled">您好，${CurrentUser.username}</span>
+		      			</li>
+		      			<li class="nav-item">
+	       					<a class="nav-link" href="/testdb/accountCenter">个人中心</a>
+	     				</li>
+	     				<c:if test ="${CurrentUser.isBoardAdmin !=0 }">
 	          				<li class="nav-item">
-	            				<a class="nav-link" href="boardAdmin">板块管理员入口</a>
+	            				<a class="nav-link" href="boardAdmin">管理板块</a>
 	          				</li> 
-	          			</c:if>       			          			
-	          		</c:if>
-	          		<c:if test ="${CurrentUser.isForumAdmin !=0 }">	          		
+	          			</c:if>
+	          			<c:if test ="${CurrentUser.isForumAdmin !=0 }">	          		
+		          			<li class="nav-item">
+		            			<a class="nav-link" href="superAdmin.jsp">管理论坛</a>
+		          			</li>
+	          			</c:if>
 	          			<li class="nav-item">
-	            			<a class="nav-link" href="superAdmin.jsp">超级管理员入口</a>
+	            			<a class="nav-link" href="quit">退出登录</a>
+	          			</li>
+	          		</c:if>
+				    <c:if test="${CurrentUser==null }">
+				    	<li class="nav-item">
+							<span class="nav-link disabled">未登录</span>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="loginpage">登录</a>
+						</li>
+						<li class="nav-item">
+	            			<a class="nav-link" href="registerpage">注册</a>
 	          			</li> 
-	          		</c:if> 	
-	          		<c:if test="${CurrentUser!=null }">
-	          			          		<li class="nav-item" >
-	            		<a class="nav-link" href="quit" >退出登录</a>
-	          		</li> 
-	          		</c:if>  
+			   		</c:if>
         		</ul>
       		</div>
 	</nav>
 
-<h3 class="footer">Copyright bjut4um.cn</h3>
+<h6 class="footer">© www.bjut4um.cn</h6>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
     <script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/popper.min.js"></script>

@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="/docs/4.1/assets/img/favicons/favicon.ico">
-    <title>申请新版块/申请成为板块管理员</title>
+    <title>申请新块/管理员</title>
     <!-- Bootstrap core CSS -->
     <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <!-- Custom styles for this template -->
@@ -43,7 +43,7 @@
 	          		</c:if>
 	          			<c:if test="${CurrentUser==null }">
 	          			          				<li class="nav-item">
-	            				<a class="nav-link disabled" href="#">您好，${CurrentUser.username}</a>
+	            				<a class="nav-link disabled" href="#">未登录</a>
 	          				</li>
 	          		</c:if>	
         		</ul>
@@ -104,13 +104,13 @@
 			 <div class="panel-body">
 				 <form action="/testdb/applyforAdmin" name="applyBoard">
 				 <label>板块名</label> <br> 
-				 	<select name="boardname" class="form-control" style="margin:10px 10px 20px 0px">
+				 	<select name="boardid" class="form-control" style="margin:10px 10px 20px 0px">
 				 	 	<c:forEach items="${AllBoard}" var="AllBoard">
-				 	 		<option value="${AllBoard.boardname }">${AllBoard.boardname }</option>
+				 	 		<option value="${AllBoard.boardid }">${AllBoard.boardname }</option>
 						</c:forEach>
 					</select>
 					<br> <label>申请理由</label> <br> 
-						<textarea class="form-control" name="a" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;"></textarea>
+						<textarea class="form-control" name="applyreason" style="width: 100%; height: 150px ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;"></textarea>
 					    <!-- <textarea name="a" style="width:200px;height:50px;">申请理由</textarea> -->
 					    <br>
 					    <input type="submit" value="提交申请"></input>
@@ -237,6 +237,6 @@
         </tr>
     </table>
     -->
-
+<h6 class="footer">© www.bjut4um.cn</h6>
 </body>
 </html>

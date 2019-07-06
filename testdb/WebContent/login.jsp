@@ -11,6 +11,7 @@
 	 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
+		<h3 class="footer">登录</h3>
     <!-- Custom styles for this template -->
     <script>
     	$(document).ready(function(){
@@ -66,5 +67,6 @@
 		</div>
 	</div>   
 	</div>
+	<h6 class="footer">© www.bjut4um.cn</h6>
 </body>
 </html>

@@ -21,8 +21,12 @@
 	</style>
 </head>
 <body>
-		<h1 class="header">欢迎来到主页</h1>   
-    <div class="list-group">
+		<h1 class="header">欢迎来到Bjut4um网站</h1>
+		<br>
+		<br>
+		<br>
+		<br>  
+    <!-- <div class="list-group">
   		<a href="board\1" class="list-group-item">荒野求生</a>
   		<a href="board\2" class="list-group-item">娱乐明星</a>
   		<a href="board\3" class="list-group-item">追剧狂</a>
@@ -36,7 +40,12 @@
   		<a href="board\6" class="list-group-item">工大学习</a>
   		<a href="board\6" class="list-group-item">工大学习</a>
   		<a href="board\6" class="list-group-item">工大学习</a>
-	</div>
+	</div> -->
+		<% 		
+		response.setHeader("Refresh", "0;URL=/testdb/home1"); 
+		%>
+	
+
 	 <nav class="navbar navbar-dark bg-dark fixed-top" style="width:100%;" >
 		<a class="navbar-brand" href="home1">Bjut4um</a>
 		<!-- <a class="nav-link" href="#">💗</a>	 -->	
@@ -68,9 +77,9 @@
 	</div>-->
 
 	<h5 class="footer">
-		Copyright bjut4um.cn
+		正在为您自动跳转
 	</h5>
-
+	<h6 class="footer">© www.bjut4um.cn</h6>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>

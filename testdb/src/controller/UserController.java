@@ -34,7 +34,7 @@ import java.util.Date;
 public class UserController {
 	/**
 	 * 
-	 * ��ת��¼����
+	 * 锟斤拷转锟斤拷录锟斤拷锟斤拷
 	 * 
 	 */
 	@RequestMapping(value = "/loginpage")
@@ -44,7 +44,7 @@ public class UserController {
 
 	/**
 	 * 
-	 * ��¼
+	 * 锟斤拷录
 	 * 
 	 */
 	@RequestMapping(value = "/login")
@@ -77,7 +77,7 @@ public class UserController {
 	
     /**
      * 
-     * ����������Ľ��棬��ʾ���ҵ����ӡ������ҵĻ�����
+     * 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷慕锟斤拷妫拷锟绞撅拷锟斤拷业锟斤拷锟斤拷印锟斤拷锟斤拷锟斤拷业幕锟斤拷锟斤拷锟�
      * 
      */
     @RequestMapping(value = "/accountCenter")
@@ -95,7 +95,7 @@ public class UserController {
     
     /**
      * 
-     * �����޸��������
+     * 锟斤拷锟斤拷锟睫革拷锟斤拷锟斤拷锟斤拷锟�
      * 
      */
     @RequestMapping(value = "/userPreferences")
@@ -105,7 +105,7 @@ public class UserController {
     
     /**
      * 
-     * 添加回帖
+     * 娣诲姞鍥炲笘
      * 
      */
     @RequestMapping(value = "/addPost")
@@ -115,7 +115,7 @@ public class UserController {
     
     /**
      * 
-     * �޸�����
+     * 锟睫革拷锟斤拷锟斤拷
      * 
      */
     @RequestMapping(value = "/updatePassword")
@@ -135,7 +135,7 @@ public class UserController {
 
 	/**
 	 * 
-	 * 返回主页界面
+	 * 杩斿洖涓婚〉鐣岄潰
 	 * 
 	 */
 	@RequestMapping(value = "/home1")
@@ -143,29 +143,30 @@ public class UserController {
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		UserDao dao = (UserDao) context.getBean("dao");
 		List<Board> board = dao.queryAllBoard();
-		if (session.getAttribute("CurrentUser") == null) {
-			return "/index.jsp";
-		} else {
 			model.addAttribute("AllBoard", board);
 			session.setAttribute("AllBoard", board);
 			return "/home1.jsp";
-		}
 	}
     
     /**
      * 
-     * 退出登录
+     * 閫�鍑虹櫥褰�
      * 
      */
     @RequestMapping(value = "/quit")
-    public String QuitbyUser(HttpSession session) {
-    	session.invalidate();
-    	return "index.jsp";
+    public String QuitbyUser(Model model,HttpSession session) {
+    	session.setAttribute("CurrentUser", null);
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		UserDao dao = (UserDao) context.getBean("dao");
+		List<Board> board = dao.queryAllBoard();
+			model.addAttribute("AllBoard", board);
+			session.setAttribute("AllBoard", board);
+    	return "/home1.jsp";
     }
     
     /**
      * 
-     * 跳转注册界面
+     * 璺宠浆娉ㄥ唽鐣岄潰
      * 
      */
     @RequestMapping(value = "/registerpage")
@@ -175,7 +176,7 @@ public class UserController {
     
 	/**
      * 
-     * 注册
+     * 娉ㄥ唽
      * 
      */
     @RequestMapping(value = "/checkingregister")
@@ -214,7 +215,7 @@ public class UserController {
     		boolean result = dao.addUser(user);
         	if (result) {
         		session.setAttribute("checkregister",3);
-        		model.addAttribute("msg", "<script>alert('添加成功！')</script>");
+        		model.addAttribute("msg", "<script>alert('娣诲姞鎴愬姛锛�')</script>");
     			return "home1.jsp";
         	}
         	else {
@@ -225,7 +226,7 @@ public class UserController {
     
     /**
      * 
-     * 跳转帖子显示界面
+     * 璺宠浆甯栧瓙鏄剧ず鐣岄潰
      * 
      */
     @RequestMapping(value = "/post/{postid}")
@@ -285,7 +286,7 @@ public class UserController {
 
 	/**
 	 * 
-	 * 举报
+	 * 涓炬姤
 	 * 
 	 */
 	@RequestMapping(value = "/post/report")
@@ -328,16 +329,16 @@ public class UserController {
 
 		boolean result = dao.addReport(report);
 		if (result) {
-			model.addAttribute("msg", "<script>alert('添加成功！')</script>");
+			model.addAttribute("msg", "<script>alert('娣诲姞鎴愬姛锛�')</script>");
 			return "/content001.jsp";
 		} else {
-			return "/index.jsp";
+			return "/home1.jsp";
 		}
 	}
 
 	/**
 	 * 
-	 * 进入板块
+	 * 杩涘叆鏉垮潡
 	 * 
 	 */
 	@RequestMapping(value = "/board/{boardid}")
@@ -348,11 +349,11 @@ public class UserController {
 			request.setCharacterEncoding("utf-8");
 			String newPostTitle = request.getParameter("title");	
 			String newPostContent = request.getParameter("content");
-			if ((!newPostTitle.isEmpty()) && (!newPostContent.isEmpty())) {
+			if ((newPostTitle!=null) && (newPostContent!=null)) {
 				Post post = new Post();
 				Board board = (Board) session.getAttribute("nowBoard");
 				User user = (User) session.getAttribute("CurrentUser");
-				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 璁剧疆鏃ユ湡鏍煎紡
 				String nowtime = df.format(new Date());
 				post.setBoardid(board.getBoardid());
 				post.setTitle(newPostTitle);
@@ -403,7 +404,7 @@ public class UserController {
 
 	/**
 	 * 
-	 * 从板块进入相应帖子中
+	 * 浠庢澘鍧楄繘鍏ョ浉搴斿笘瀛愪腑
 	 * 
 	 */
 	@RequestMapping(value = "/board/{boardid}/post/{postid}")
@@ -414,7 +415,7 @@ public class UserController {
 	
     /**
      * 
-     * 从主页进入板块管理员界面
+     * 浠庝富椤佃繘鍏ユ澘鍧楃鐞嗗憳鐣岄潰
      * 
      */
 	@RequestMapping(value = "/boardAdmin")
@@ -424,7 +425,7 @@ public class UserController {
 
     /**
      * 
-     * 从板块管理员界面进入管理举报信息界面
+     * 浠庢澘鍧楃鐞嗗憳鐣岄潰杩涘叆绠＄悊涓炬姤淇℃伅鐣岄潰
      * 
      */
 	@RequestMapping(value = "/reportAdmin")
@@ -445,7 +446,7 @@ public class UserController {
 
 	/**
 	 * 
-	 * 管理举报信息
+	 * 绠＄悊涓炬姤淇℃伅
 	 * 
 	 */
 	@RequestMapping(value = "/manageReport")
@@ -496,7 +497,7 @@ public class UserController {
   
 	/**
 	 * 
-	 * 管理员加精
+	 * 绠＄悊鍛樺姞绮�
 	 * 
 	 */
 	@RequestMapping(value = "/good")
@@ -517,9 +518,9 @@ public class UserController {
 				Post goodPost=dao.queryForPostByPostId(goodPostId).get(0);
 				dao.addGood(goodPost);
 				int messageid=dao.queryAllMessage().size()+1;
-				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 璁剧疆鏃ユ湡鏍煎紡
 				String nowtime = df.format(new Date());
-				String goodReason="您的帖子"+goodPost.getTitle()+"被加精啦！！";
+				String goodReason="鎮ㄧ殑甯栧瓙"+goodPost.getTitle()+"琚姞绮惧暒锛侊紒";
 				Message message=new Message(messageid,goodPost.getUserid(),nowtime,goodReason,currentuser.getId());
 				dao.addMessage(message);
 			}
@@ -594,7 +595,7 @@ public class UserController {
 	}
 	
 	/**
-     * 从个人主页进入申请界面
+     * 浠庝釜浜轰富椤佃繘鍏ョ敵璇风晫闈�
      * 
      */
 	@RequestMapping(value = "/applyBoard")
@@ -620,7 +621,7 @@ public class UserController {
     }
 	
     /**
-     * 申请一个新的板块
+     * 鐢宠涓�涓柊鐨勬澘鍧�
      * 
      */
 	@RequestMapping(value = "/applyNewboard")
@@ -663,17 +664,18 @@ public class UserController {
     }
 	
     /**
-     * 申请成为板块管理员
+     * 鐢宠鎴愪负鏉垮潡绠＄悊鍛�
      * 
      */
 	@RequestMapping(value = "/applyforAdmin")
-    public String toApplyforAdmin(@RequestParam("boardname") String boardname, @RequestParam("applyreason") String applyreason,HttpSession session) {   
+    public String toApplyforAdmin(@RequestParam("boardid") String boardid, @RequestParam("applyreason") String applyreason,HttpSession session) {   
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
     	UserDao dao = (UserDao) context.getBean("dao");
     	
     	User currentuser = (User)session.getAttribute("CurrentUser");
     	List<Applyingadmin> applying = dao.forLastApplyingadmin();
-    	List<Board> board = dao.queryByBoardName(boardname);
+    	Integer boardId = Integer.parseInt(boardid);
+    	List<Board> board = dao.queryBoardByBoardId(boardId);
     	Integer applyingid;
     	if(applying.size()==0) {
     		applyingid = 0;
@@ -712,7 +714,7 @@ public class UserController {
     }
 	
     /**
-     * 从个人主页进入站内消息界面
+     * 浠庝釜浜轰富椤佃繘鍏ョ珯鍐呮秷鎭晫闈�
      * 
      */
 	@RequestMapping(value = "/adminMessage")
@@ -728,7 +730,7 @@ public class UserController {
 	}
 	
     /**
-     * 返回超级管理员界面
+     * 杩斿洖瓒呯骇绠＄悊鍛樼晫闈�
      * 
      */
 	@RequestMapping(value = "/superAdmin")
@@ -737,7 +739,7 @@ public class UserController {
 	}
 
     /**
-     * 超级管理员管理板块信息
+     * 瓒呯骇绠＄悊鍛樼鐞嗘澘鍧椾俊鎭�
      * 
      */
 	@RequestMapping(value = "/boardApplyAdmin")
@@ -772,7 +774,7 @@ public class UserController {
 	}
     
 	/**
-     * 超级管理员管理板块申请
+     * 瓒呯骇绠＄悊鍛樼鐞嗘澘鍧楃敵璇�
      * 
      */
 	@RequestMapping(value = "/manageApplyboard")
@@ -820,7 +822,7 @@ public class UserController {
 	}
 	
     /**
-     * 超级管理员管理管理员申请
+     * 瓒呯骇绠＄悊鍛樼鐞嗙鐞嗗憳鐢宠
      * 
      */
 	@RequestMapping(value = "/manageApplyAdmin")
@@ -865,16 +867,16 @@ public class UserController {
     
 	
     /**
-     * ajax查数据库
+     * ajax鏌ユ暟鎹簱
      * @throws IOException 
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
         response.setContentType("text/html;charset=utf-8");
         request.setCharacterEncoding("utf-8");
-        //获取搜索框输入的内容
+        //鑾峰彇鎼滅储妗嗚緭鍏ョ殑鍐呭
         String name=request.getParameter("name");
-        //向server层调用相应的业务     
+        //鍚憇erver灞傝皟鐢ㄧ浉搴旂殑涓氬姟     
         
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
     	UserDao dao = (UserDao) context.getBean("dao");
@@ -886,12 +888,12 @@ public class UserController {
     		else
     			res=res+","+pl.get(i).getTitle();
     	}
-        //返回结果
+        //杩斿洖缁撴灉
         response.getWriter().write(res);
     }
 
     /**
-     * ajax查数据库_2
+     * ajax鏌ユ暟鎹簱_2
      * @throws IOException 
      */
     @RequestMapping(value = "/findPostsAjaxServlet")
@@ -903,7 +905,7 @@ public class UserController {
     
     /**
     *
-    * 回复
+    * 鍥炲
     *
     */
     @RequestMapping(value = "/post/{postid}/postReply")
@@ -1003,7 +1005,7 @@ public class UserController {
     
     /**
 	 * 
-	 * 管理员封禁和删除 TODO
+	 * 绠＄悊鍛樺皝绂佸拰鍒犻櫎 TODO
      * @throws UnsupportedEncodingException 
 	 * 
 	 */
@@ -1023,9 +1025,9 @@ public class UserController {
 				Post bannedPost=dao.queryForPostByPostId(bannedPostId).get(0);
 				dao.setBanned(bannedPost);
 				int messageid=dao.queryAllMessage().size()+1;
-				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 璁剧疆鏃ユ湡鏍煎紡
 				String nowtime = df.format(new Date());
-				String messageContent="您的帖子"+bannedPost.getTitle()+"由于"+bdReason+"，被封禁了。";
+				String messageContent="鎮ㄧ殑甯栧瓙"+bannedPost.getTitle()+"鐢变簬"+bdReason+"锛岃灏佺浜嗐��";
 				Message message=new Message(messageid,bannedPost.getUserid(),nowtime,messageContent,currentuser.getId());
 				dao.addMessage(message);
 			}
@@ -1034,14 +1036,14 @@ public class UserController {
 				Post deletedPost=dao.queryForPostByPostId(deletedPostId).get(0);
 				dao.setDeleted(deletedPost);
 				int messageid=dao.queryAllMessage().size()+1;
-				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置日期格式
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 璁剧疆鏃ユ湡鏍煎紡
 				String nowtime = df.format(new Date());
-				String messageContent="您的帖子"+deletedPost.getTitle()+"由于"+bdReason+"，被删除了。";
+				String messageContent="鎮ㄧ殑甯栧瓙"+deletedPost.getTitle()+"鐢变簬"+bdReason+"锛岃鍒犻櫎浜嗐��";
 				Message message=new Message(messageid,deletedPost.getUserid(),nowtime,messageContent,currentuser.getId());
 				dao.addMessage(message);
 			}
 		}
-		//如果是超级管理员
+		//濡傛灉鏄秴绾х鐞嗗憳
 		if (currentuser.getIsForumAdmin() != 0) {
 			if (request.getHeader("Referer").toString().contains("banAndDelete")) {
 				String searchPostByKeyWord = request.getParameter("searchPostByKeyWord");
@@ -1064,7 +1066,7 @@ public class UserController {
 			}
 			
 		}
-		//是板块管理员
+		//鏄澘鍧楃鐞嗗憳
 		else if (currentuser.getIsBoardAdmin() != 0) {
 			if (request.getHeader("Referer").toString().contains("banAndDelete")) {
 			String searchPostByKeyWord = request.getParameter("searchPostByKeyWord");
@@ -1088,7 +1090,7 @@ public class UserController {
 			}
 		}
 		else {
-			return "index.jsp";
+			return "/home1.jsp";
 		}
 		return "banAndDelete.jsp";
 	}

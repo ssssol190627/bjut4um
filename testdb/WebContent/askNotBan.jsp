@@ -32,5 +32,6 @@
         <textarea name="askNotBanReason" style="width:200px;height:50px;">申请理由</textarea>
         <input type="submit" value="确定"></input>
     </form>
+    <h6 class="footer">© www.bjut4um.cn</h6>
 </body>
 </html>

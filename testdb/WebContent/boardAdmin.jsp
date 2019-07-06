@@ -58,19 +58,50 @@
 	</style>
 </head>
 <body >
-	<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-		<a class="navbar-brand mr-auto mr-lg-0" href="home1">Bjut4um</a>		
-      		<div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
-        		<ul class="navbar-nav">
-        			<li class="nav-item">
-	            		<a class="nav-link" href="#">💗</a>
-	          		</li>  
-					<li class="nav-item">
-	            		<a class="nav-link" href="accountCenter">个人中心</a>
-	          		</li> 
-	          		<li class="nav-item">
-	            		<a class="nav-link" href="quit" style="position:float:right;">退出登录</a>
-	          		</li>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" style="width:100%;">
+		<a class="navbar-brand" href="/testdb/home1">Bjut4um</a>
+		 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+        	<span class="navbar-toggler-icon"></span>
+      	</button>
+      		
+      		<div class="collapse navbar-collapse" id="navbarsExample01">
+        		<ul class="navbar-nav mr-auto">
+					<c:if test="${CurrentUser!=null }">
+						<li class="nav-item">
+		      				<span class="nav-link disabled">您好，${CurrentUser.username}</span>
+		      			</li>
+		      			<c:if test ="${CurrentUser.isBoardAdmin !=0 }">
+	          				<li class="nav-item">
+	            				<a class="nav-link" href="boardAdmin">返回管理板块</a>
+	          				</li> 
+	          			</c:if>
+	          			<c:if test ="${CurrentUser.isForumAdmin !=0 }">	          		
+		          			<li class="nav-item">
+		            			<a class="nav-link" href="superAdmin.jsp">返回管理论坛</a>
+		          			</li>
+	          			</c:if>
+		      			<li class="nav-item">
+	       					<a class="nav-link" href="/testdb/home1">主页</a>
+	     				</li>
+		      			<li class="nav-item">
+	       					<a class="nav-link" href="/testdb/accountCenter">个人中心</a>
+	     				</li>
+
+	          			<li class="nav-item">
+	            			<a class="nav-link" href="quit">退出登录</a>
+	          			</li>
+	          		</c:if>
+				    <c:if test="${CurrentUser==null }">
+				    	<li class="nav-item">
+							<span class="nav-link disabled">未登录</span>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="loginpage">登录</a>
+						</li>
+						<li class="nav-item">
+	            			<a class="nav-link" href="registerpage">注册</a>
+	          			</li> 
+			   		</c:if>
         		</ul>
       		</div>
 	</nav>
@@ -119,5 +150,10 @@
   </div>
 </div>
 </div>
+<h6 class="footer">© www.bjut4um.cn</h6>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/popper.min.js"></script>
+    <script src="https://getbootstrap.com/docs/4.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

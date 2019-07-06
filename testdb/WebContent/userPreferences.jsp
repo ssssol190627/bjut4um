@@ -41,5 +41,6 @@
 		</div>
 	</div>   
 	</div>
+	<h6 class="footer">© www.bjut4um.cn</h6>
 </body>
 </html>
