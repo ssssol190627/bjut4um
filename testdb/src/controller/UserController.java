@@ -81,16 +81,42 @@ public class UserController {
      * 
      */
     @RequestMapping(value = "/accountCenter")
-    public String toAccountCenter(Model model, HttpSession session) {
+    public String toAccountCenter(Model model, HttpSession session,HttpServletRequest request) {
     	ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
     	User currentuser = (User)session.getAttribute("CurrentUser");
     	UserDao dao = (UserDao) context.getBean("dao");
     	
-    	List<Post>  post = dao.queryForPostedByUser(currentuser.getId());
+    	//List<Post>  post = dao.queryForPostedByUser(currentuser.getId());
     	List<Floor> floor = dao.queryForReplyedByUser(currentuser.getId());
-    	session.setAttribute("posted", post);
+    	//session.setAttribute("posted", post);
     	session.setAttribute("floored", floor);
-    	return "accountCenter.jsp";
+    	
+		int postPageNum = 1;
+		if (request.getQueryString() != null) {
+			if(request.getHeader("Referer").toString().contains("postpage"))
+				postPageNum = Integer.parseInt(request.getParameter("postpage").toString());
+		}
+		int pageSize = 10;
+		Page p = dao.findAllUserPostWithPage(postPageNum, pageSize, currentuser.getId());
+		model.addAttribute("postPage", p);
+		session.setAttribute("postPage", p);
+		int si = p.getStartIndex();
+		List<Post> pl = p.getList();
+		//List<Board> bl = dao.queryBoardByBoardId(boardid);
+		//Board nowboard = bl.get(0);
+		// List<User> ul;
+		session.setAttribute("posted", pl);
+		// User user=queryUserNameById()
+		// String boardname = nowboard.getBoardname();
+		//model.addAttribute("nowBoard", nowboard);
+		//session.setAttribute("nowBoard", nowboard);
+		//model.addAttribute("postuser", ul);
+		//session.setAttribute("postuser", ul);
+		//model.addAttribute("CurrentPost", pl);
+		//session.setAttribute("CurrentPost", pl);
+		
+		
+    	return "/accountCenter.jsp";
     }
     
     /**

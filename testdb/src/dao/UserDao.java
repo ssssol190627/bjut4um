@@ -277,6 +277,25 @@ public class UserDao {
 		return p;
 	}
 
+	public List<Post> findThisUserPostPage(int startIndex, int pageSize, Integer userid) {
+		String sql = "select boardid,id,title,userid,posttime,newTime,postcontent,numPost,isGood,isBanned,isExist from post where userid = '"
+				+ userid + "' and isBanned = 0 and isExist = 1 ORDER BY newTime DESC limit " + startIndex + "," + pageSize;
+		return jdbcTemplate.query(sql, new PostMapper());
+	}
+	
+	public Page<Post> findAllUserPostWithPage(int pageNum, int pageSize, Integer userid) {
+		List<Post> allPost = queryForPostedByUser(userid);
+		int totalRecord = allPost.size();
+
+		Page p = new Page(pageNum, pageSize, totalRecord);
+
+		int startIndex = p.getStartIndex();
+		List<Post> thisPagePostList = findThisUserPostPage(startIndex, pageSize, userid);
+		p.setList(thisPagePostList);
+
+		return p;
+	}
+
 	public List<Floor> findThisPostPage(int startIndex, int pageSize, int postid) {
 		String sql = "select * from floor where postid = '" + postid + "'  and isExist = 1 limit " + startIndex + "," + pageSize;
 		return jdbcTemplate.query(sql, new FloorMapper());
