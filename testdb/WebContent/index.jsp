@@ -76,10 +76,13 @@
   		<a href="board\6" class="list-group-item">工大学习</a>
 	</div>-->
 
-	<h5 class="footer">
-		正在为您自动跳转
-	</h5>
-	<h6 class="footer">© www.bjut4um.cn</h6>
+	
+		<h2>正在为您自动跳转，同样欢迎您使用手机访问手机页面</h2>
+	<div class="footer">
+	<h5 >© www.bjut4um.cn</h5>
+	我们同样为移动端进行了适配，欢迎使用手机访问<br>
+	<a href="https://github.com/ssssol190627/bjut4um">联系我们·Github主页</a>
+	</div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>

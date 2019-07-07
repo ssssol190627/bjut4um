@@ -32,6 +32,10 @@
         <textarea name="askNotBanReason" style="width:200px;height:50px;">申请理由</textarea>
         <input type="submit" value="确定"></input>
     </form>
-    <h6 class="footer">© www.bjut4um.cn</h6>
+    	<div class="footer">
+	<h5 >© www.bjut4um.cn</h5>
+	我们同样为移动端进行了适配，欢迎使用手机访问<br>
+	<a href="https://github.com/ssssol190627/bjut4um">联系我们·Github主页</a>
+	</div>
 </body>
 </html>

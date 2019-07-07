@@ -195,7 +195,12 @@
  	<font color="red">您没有权限访问此页面，</font>
 	<a href="/testdb/home1">返回主页</a>
  </c:if>
-	<h6 class="footer">© www.bjut4um.cn</h6>
+	
+	<div class="footer">
+	<h5 >© www.bjut4um.cn</h5>
+	我们同样为移动端进行了适配，欢迎使用手机访问<br>
+	<a href="https://github.com/ssssol190627/bjut4um">联系我们·Github主页</a>
+	</div>
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
     <script src="https://getbootstrap.com/docs/4.0/assets/js/vendor/popper.min.js"></script>
