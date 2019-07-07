@@ -134,40 +134,7 @@
 	<div class="tab-pane fade" id="status">
 		<main role="main" class="container"> 
 		<div class="panel panel-success">
-		<div class="panel-heading">
-		    	申请板块状态
-		 </div>
-		 <div class="panel-body">
-			<table border="1" class="table table-bordered table-striped table-hover">
-	        <tr>
-	        <th style="width: 70% ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">申请类别</th>
-	        <th>申请时间</th>
-	        <th>审核状态</th>
-	        </tr>
-	        <c:forEach items="${admined}" var="admin" varStatus="loop">
-        	<tr>
- 	 			<td>申请成为${boardnames.get(loop.count-1) }板块管理员</td>
-            	<td>${admin.applytime }</td>
-            	<c:if test="${admin.ishandle == 0}">
-            		<td>待处理</td>
-            	</c:if>
-            	<c:if test="${admin.ishandle == 1}">
-            		<td>通过</td>
-            	</c:if>
-            	<c:if test="${admin.ishandle == 2}">
-            		<td>驳回</td>
-            	</c:if>
- 	 		</tr>
-		</c:forEach>
-	        </table>
-	    </div>
-	    </div>
-		</main>
-	</div>
-	<div class="tab-pane fade" id="ejb">
-	    <main role="main" class="container"> 
-	    <div class="panel panel-success">
-		<div class="panel-heading">
+			<div class="panel-heading">
 		  	申请板块管理员状态
 		 </div>
 		 <div class="panel-body">
@@ -194,6 +161,39 @@
 		</c:forEach>
 	        </table>
 	      </div>
+	    </div>
+		</main>
+	</div>
+	<div class="tab-pane fade" id="ejb">
+	    <main role="main" class="container"> 
+	    <div class="panel panel-success">
+			<div class="panel-heading">
+		    	申请板块状态
+		 </div>
+		 <div class="panel-body">
+			<table border="1" class="table table-bordered table-striped table-hover">
+	        <tr>
+	        <th style="width: 70% ;overflow: auto;word-break: break-all; resize: none;margin-bottom:5px;">申请类别</th>
+	        <th>申请时间</th>
+	        <th>审核状态</th>
+	        </tr>
+	        <c:forEach items="${admined}" var="admin" varStatus="loop">
+        	<tr>
+ 	 			<td>申请成为${boardnames.get(loop.count-1) }板块管理员</td>
+            	<td>${admin.applytime }</td>
+            	<c:if test="${admin.ishandle == 0}">
+            		<td>待处理</td>
+            	</c:if>
+            	<c:if test="${admin.ishandle == 1}">
+            		<td>通过</td>
+            	</c:if>
+            	<c:if test="${admin.ishandle == 2}">
+            		<td>驳回</td>
+            	</c:if>
+ 	 		</tr>
+		</c:forEach>
+	        </table>
+	    </div>
 	      </div>
 	      </main>
 	</div>
