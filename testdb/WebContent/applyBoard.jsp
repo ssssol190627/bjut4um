@@ -135,7 +135,7 @@
 		<main role="main" class="container"> 
 		<div class="panel panel-success">
 			<div class="panel-heading">
-		  	申请板块管理员状态
+		  	申请板块状态
 		 </div>
 		 <div class="panel-body">
 			<table border="1" class="table table-bordered table-striped table-hover">
@@ -168,7 +168,7 @@
 	    <main role="main" class="container"> 
 	    <div class="panel panel-success">
 			<div class="panel-heading">
-		    	申请板块状态
+		    	申请板块管理员状态
 		 </div>
 		 <div class="panel-body">
 			<table border="1" class="table table-bordered table-striped table-hover">
