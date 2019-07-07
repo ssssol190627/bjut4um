@@ -57,22 +57,22 @@ public class Floor {
 	public void setFloorcontent(String floorcontent) {
 		this.floorcontent = floorcontent;
 	}
-	public Integer getIsgood() {
+	public Integer getIsGood() {
 		return isGood;
 	}
-	public void setIsgood(Integer isGood) {
+	public void setIsGood(Integer isGood) {
 		this.isGood=isGood;
 	}
-	public Integer getIsbanned() {
+	public Integer getIsBanned() {
 		return isBanned;
 	}
-	public void setIsbanned(Integer isBanned) {
+	public void setIsBanned(Integer isBanned) {
 		this.isBanned=isBanned;
 	}
-	public Integer getIsexist() {
+	public Integer getIsExist() {
 		return isExist;
 	}
-	public void setIsexist(Integer isExist) {
+	public void setIsExist(Integer isExist) {
 		this.isExist=isExist;
 	}
 }

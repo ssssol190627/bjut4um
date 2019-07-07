@@ -9,7 +9,13 @@ public class Message {
 	private Integer adminid;
 	
 	public Message() {}
-	
+	public Message(Integer messageid,Integer userid,String messagetime,String messagecontent,Integer adminid) {
+		this.messageid=messageid;
+		this.userid=userid;
+		this.messagetime=messagetime;
+		this.messagecontent=messagecontent;
+		this.adminid=adminid;
+	}
 	public Integer getMessageid() {
 		return messageid;
 	}

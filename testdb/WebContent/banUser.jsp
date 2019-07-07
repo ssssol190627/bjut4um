@@ -8,7 +8,7 @@
 </head>
 <body>
 	<div class="nav">
-		<a href="superAdmin.jsp">返回</a>
+		<a href="/testdb/superAdmin">返回</a>
 	</div>
 	<form action="boardAdmin.jsp">
 		<br>用户名模糊搜索：<br>
