@@ -165,7 +165,12 @@
    			</tr>
 		</thead>
 		<tbody>
-						<c:forEach items="${searchedPost}" var="searchedPost" varStatus="loop">
+			<c:choose>
+				<c:when test="${empty searchedPost}">
+					<tr>无记录<tr>
+				</c:when>
+				<c:otherwise>
+					<c:forEach items="${searchedPost}" var="searchedPost" varStatus="loop">
 			<tr>
 				<td id="board${sboardNameList.get(loop.count-1) }">${sboardNameList.get(loop.count-1) }</td>
 				<td id="title${searchedPost.title }"><a href="  /testdb/post/${searchedPost.postid}">${searchedPost.title }</a></td>
@@ -185,6 +190,9 @@
 
 				</td>
 		</c:forEach>
+				</c:otherwise>
+			</c:choose>
+						
 		</tbody> 
 	</table>
 			    </div>
